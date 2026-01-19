@@ -4,7 +4,7 @@ import { AuthService } from './auth/AuthService';
 import { ROUTES } from './routes';
 
 // Components (lazy load mejor para producción)
-import LoginForm from './auth/login/LoginController';
+import Login from './auth/login/Login';
 import Dashboard from './owners/dashboard/Dashboard';
 //import AdminUsers from './admin/Users/AdminUsers';
 //import OwnerEscapeRooms from './owner/EscapeRooms/OwnerEscapeRooms';
@@ -48,7 +48,7 @@ const AppRouter: React.FC = () => {
             {/* Public Routes */}
             <Route path={ROUTES.LOGIN} element={
                 <PublicRoute>
-                    <LoginForm />
+                    <Login />
                 </PublicRoute>
             } />
             

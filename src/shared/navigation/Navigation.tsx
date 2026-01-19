@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthService } from '../../auth/AuthService';
 import { ROUTES } from '../../routes';
+import './Navigation.css'
 
 const Navigation: React.FC = () => {
     const navigate = useNavigate();
@@ -40,8 +41,9 @@ const Navigation: React.FC = () => {
                         )}
                         
                         <button onClick={handleLogout} className="logout-btn">
-                            Logout ({user?.email})
+                            Logout
                         </button>
+                        {user?.email}
                     </>
                 ) : (
                     <Link to={ROUTES.LOGIN}>Login</Link>
