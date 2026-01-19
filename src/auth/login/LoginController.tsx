@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { AuthService } from '../AuthService';
 import { LoginCredentials } from '../../users/UserModel';
-import './LoginForm.css';
+import './LoginController.css';
 
 const LoginForm: React.FC = () => {
     const [credentials, setCredentials] = useState<LoginCredentials>({
@@ -17,17 +17,24 @@ const LoginForm: React.FC = () => {
         setError(null);
         
         try {
-            const response = await AuthService.login(credentials);
+            const res = await AuthService.login(credentials);
             
-            if (response.success) {
-                localStorage.setItem('auth_token', response.data.token);
-                localStorage.setItem('user', JSON.stringify(response.data.user));
-                window.location.href = '/dashboard';
+            if (res.success) {
+                localStorage.setItem('auth_token', res.data.token);
+                localStorage.setItem('user', JSON.stringify(res.data.user));
+
+                if (res.data.user.role_name === 'owner') {
+                    window.location.href = '/owner/dashboard';
+                } else if (res.data.user.role_name === 'admin') {
+                    window.location.href = '/admin/dashboard';
+                } else {
+                    window.location.href = '/customer/dashboard';
+                }
             } else {
-                setError(response.message);
+                setError(res.message);
             }
         } catch (err) {
-            setError('Login failed. Please try again.');
+            setError('Error de identificación. Por favor, inténtelo nuevamente.');
         } finally {
             setLoading(false);
         }
@@ -36,12 +43,12 @@ const LoginForm: React.FC = () => {
     return (
         <div className="login-container">
             <form className="login-form" onSubmit={handleSubmit}>
-                <h2>🔐 EscapeBooking Login</h2>
+                <h2>Acceso</h2>
                 
                 {error && <div className="error-message">{error}</div>}
                 
                 <div className="form-group">
-                    <label>Email</label>
+                    <label>E-mail</label>
                     <input
                         type="email"
                         value={credentials.email}
@@ -55,7 +62,7 @@ const LoginForm: React.FC = () => {
                 </div>
                 
                 <div className="form-group">
-                    <label>Password</label>
+                    <label>Contraseña</label>
                     <input
                         type="password"
                         value={credentials.password}
@@ -69,14 +76,14 @@ const LoginForm: React.FC = () => {
                 </div>
                 
                 <button type="submit" disabled={loading}>
-                    {loading ? 'Logging in...' : 'Login'}
+                    {loading ? 'Identificando...' : 'Acceder'}
                 </button>
                 
                 <div className="test-credentials">
-                    <h4>Test Accounts:</h4>
-                    <p><strong>Admin:</strong> admin@escapebooking.com / password</p>
+                    <h4>Cuentas de prueba:</h4>
+                    {/* <p><strong>Admin:</strong> admin@escapebooking.com / password</p> */}
                     <p><strong>Owner:</strong> madrid@escaperooms.com / password</p>
-                    <p><strong>Customer:</strong> juan.perez@gmail.com / password</p>
+                    {/* <p><strong>Customer:</strong> juan.perez@gmail.com / password</p> */}
                 </div>
             </form>
         </div>

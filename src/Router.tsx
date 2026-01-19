@@ -23,8 +23,12 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requiredRole 
     
     const user = AuthService.getCurrentUser();
     
-    if (requiredRole && user?.role_name !== requiredRole) {
-        return <Navigate to={ROUTES.DASHBOARD} />;
+    if (requiredRole && user?.role_name === 'owner') {
+        //return <Navigate to={ROUTES.OWNER_DASHBOARD} />;
+    } else if (requiredRole && user?.role_name === 'admin') {
+
+    } else {
+
     }
     
     return <>{children}</>;
@@ -33,7 +37,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requiredRole 
 // Public Route (redirect if already logged in)
 const PublicRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     if (AuthService.isAuthenticated()) {
-        return <Navigate to={ROUTES.DASHBOARD} />;
+        return <Navigate to={ROUTES.OWNER_DASHBOARD} />;
     }
     return <>{children}</>;
 };
@@ -48,36 +52,15 @@ const AppRouter: React.FC = () => {
                 </PublicRoute>
             } />
             
-            {/* Protected Routes */}
-            <Route path={ROUTES.DASHBOARD} element={
-                <ProtectedRoute>
+            {/* Owner Routes */}
+            <Route path={ROUTES.OWNER_DASHBOARD} element={
+                <ProtectedRoute requiredRole="owner">
                     <Dashboard />
                 </ProtectedRoute>
-            } />
-            
-            {/* Admin Routes */}
-            {/* <Route path={ROUTES.ADMIN_USERS} element={
-                <ProtectedRoute requiredRole="admin">
-                    <AdminUsers />
-                </ProtectedRoute>
-            } /> */}
-            
-            {/* Owner Routes */}
-            {/* <Route path={ROUTES.OWNER_ESCAPE_ROOMS} element={
-                <ProtectedRoute requiredRole="owner">
-                    <OwnerEscapeRooms />
-                </ProtectedRoute>
-            } /> */}
-            
-            {/* Customer Routes */}
-            {/* <Route path={ROUTES.CUSTOMER_BROWSE} element={
-                <ProtectedRoute requiredRole="customer">
-                    <CustomerBrowse />
-                </ProtectedRoute>
-            } /> */}
+            } /> 
             
             {/* Default Route */}
-            <Route path="/" element={<Navigate to={ROUTES.DASHBOARD} />} />
+            <Route path="/" element={<Navigate to={ROUTES.OWNER_DASHBOARD} />} />
             
             {/* 404 Route */}
             <Route path="*" element={<div>404 - Page Not Found</div>} />
