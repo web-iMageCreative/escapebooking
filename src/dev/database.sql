@@ -1,3 +1,5 @@
+-- NOMBRE DE LA BASE DE DATOS: escapebooking
+
 CREATE TABLE roles (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(50) UNIQUE NOT NULL, -- 'owner', 'customer', 'admin'
