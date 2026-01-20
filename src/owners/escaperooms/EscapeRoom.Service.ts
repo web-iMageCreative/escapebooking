@@ -1,0 +1,35 @@
+import { EscapeRoomModel, Province } from './EscapeRoom.Model';
+import { ApiResponse } from '../../shared/models/Response.Model';
+
+const API_BASE_URL = 'http://localhost/api-php';
+
+export class EscapeRoomService {
+  static async create(data: EscapeRoomModel): Promise<ApiResponse> {
+    const response = await fetch(`${API_BASE_URL}/escaperooms/create.php`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    });
+    
+    if (!response.ok) {
+        throw new Error('Login failed');
+    }
+    
+    return await response.json();
+  }
+
+  static async getProvinces(): Promise<ApiResponse> {
+    const res = await fetch(`${API_BASE_URL}/shared/provinces/get.php`);
+    
+    if (!res.ok) {
+      throw new Error('Error en la carga de provincias');
+    }
+
+    const resp = await res.json();
+
+    return resp;
+  }
+
+}

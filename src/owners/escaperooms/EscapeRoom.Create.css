@@ -1,0 +1,22 @@
+.escaperoom-form .form-group {
+  display: flex;
+  margin-bottom: 30px;
+}
+.escaperoom-form .col-label {
+  flex: 1 1 50%;
+}
+
+.escaperoom-form .col-value {
+  flex: 1 1 50%;
+}
+
+.escaperoom-form .form-group label {
+  font-size: 18px;
+  font-weight: bolder;
+}
+
+.escaperoom-form .form-group .description {
+  font-size: 13px;
+  max-width: 400px;
+  margin: 5px 0 20px;
+}

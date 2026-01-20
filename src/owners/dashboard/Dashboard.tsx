@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { AuthService } from '../../auth/AuthService';
 import { User } from '../../users/UserModel';
 import './Dashboard.css';
+import { ROUTES } from '../../routes';
+import { Link, useNavigate } from 'react-router-dom';
+
 
 const Dashboard: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -62,9 +65,7 @@ const Dashboard: React.FC = () => {
 
             {user.role_name === 'owner' && (
               <>
-                <button className="action-btn">Mis EscapeRooms</button>
-                <button className="action-btn">Añadir nueva Sala</button>
-                <button className="action-btn">Ver Reservas</button>
+                <Link to={ROUTES.OWNER_ESCAPE_ROOMS_CREATE}>Crear nuevo negocio</Link>
               </>
             )}
           </div>

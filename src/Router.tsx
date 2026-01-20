@@ -6,8 +6,9 @@ import { ROUTES } from './routes';
 // Components (lazy load mejor para producción)
 import Login from './auth/login/Login';
 import Dashboard from './owners/dashboard/Dashboard';
+import EscapeRoom from './owners/escaperooms/EscapeRoom';
+import EscapeRoomCreate from './owners/escaperooms/EscapeRoom.Create';
 //import AdminUsers from './admin/Users/AdminUsers';
-//import OwnerEscapeRooms from './owner/EscapeRooms/OwnerEscapeRooms';
 //import CustomerBrowse from './customer/Browse/CustomerBrowse';
 
 // Protected Route component
@@ -58,7 +59,19 @@ const AppRouter: React.FC = () => {
                     <Dashboard />
                 </ProtectedRoute>
             } /> 
+
+            <Route path={ROUTES.OWNER_ESCAPE_ROOMS} element={
+                <ProtectedRoute requiredRole="owner">
+                    <EscapeRoom />
+                </ProtectedRoute>
+            } /> 
             
+            <Route path={ROUTES.OWNER_ESCAPE_ROOMS_CREATE} element={
+                <ProtectedRoute requiredRole="owner">
+                    <EscapeRoomCreate />
+                </ProtectedRoute>
+            } /> 
+
             {/* Default Route */}
             <Route path="/" element={<Navigate to={ROUTES.OWNER_DASHBOARD} />} />
             

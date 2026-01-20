@@ -4,7 +4,7 @@ const API_BASE_URL = 'http://localhost/api-php/auth';
 
 export class AuthService {
     static async login(credentials: LoginCredentials): Promise<AuthResponse> {
-        const response = await fetch(`${API_BASE_URL}/login.php`, {
+        const res = await fetch(`${API_BASE_URL}/login.php`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -12,11 +12,11 @@ export class AuthService {
             body: JSON.stringify(credentials)
         });
         
-        if (!response.ok) {
+        if (!res.ok) {
             throw new Error('Login failed');
         }
         
-        return await response.json();
+        return await res.json();
     }
     
     static logout(): void {

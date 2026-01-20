@@ -7,7 +7,8 @@ export const ROUTES = {
   
   // Owner routes
   OWNER_DASHBOARD: 'owner/dashboard',
-  // OWNER_ESCAPE_ROOMS: '/owner/escape-rooms',
+  OWNER_ESCAPE_ROOMS: '/owner/escape-rooms',
+  OWNER_ESCAPE_ROOMS_CREATE: '/owner/escape-rooms/new',
   // OWNER_BOOKINGS: '/owner/bookings',
   
   // Customer routes
