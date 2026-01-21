@@ -1,13 +1,19 @@
+.escaperoom-form {
+  max-width: 800px;
+}
+
 .escaperoom-form .form-group {
   display: flex;
   margin-bottom: 30px;
 }
 .escaperoom-form .col-label {
   flex: 1 1 50%;
+  padding: 20px;
 }
 
 .escaperoom-form .col-value {
   flex: 1 1 50%;
+  padding: 20px;
 }
 
 .escaperoom-form .form-group label {
@@ -19,4 +25,10 @@
   font-size: 13px;
   max-width: 400px;
   margin: 5px 0 20px;
+}
+
+.escaperoom-form input,
+.escaperoom-form select,
+.escaperoom-form textarea {
+  width: 100%;
 }
