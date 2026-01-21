@@ -1,12 +1,36 @@
 -- NOMBRE DE LA BASE DE DATOS: escapebooking
 
+-- 1. AUTONOMOUS_COMMUNITIES TABLE
+CREATE TABLE autonomous_communities (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    code VARCHAR(2) UNIQUE NOT NULL,  -- Código CA
+    name VARCHAR(50) UNIQUE NOT NULL, -- Nombre completo
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_name (name)
+);
+
+-- 2. PROVINCES TABLE
+CREATE TABLE provinces (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    code VARCHAR(2) UNIQUE NOT NULL,  -- Código provincia INE
+    name VARCHAR(50) NOT NULL,
+    autonomous_community_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (autonomous_community_id) 
+        REFERENCES autonomous_communities(id) ON DELETE CASCADE,
+    INDEX idx_name (name),
+    INDEX idx_community (autonomous_community_id),
+    UNIQUE KEY unique_province (code, autonomous_community_id)
+);
+
+-- 3. ROLES TABLE
 CREATE TABLE roles (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(50) UNIQUE NOT NULL, -- 'owner', 'customer', 'admin'
     description VARCHAR(255)
 );
 
--- 2. USERS TABLE (simplified)
+-- 4. USERS TABLE (simplified)
 CREATE TABLE users (
     id INT PRIMARY KEY AUTO_INCREMENT,
     email VARCHAR(255) UNIQUE NOT NULL,
@@ -20,7 +44,7 @@ CREATE TABLE users (
     INDEX idx_role (role_id)
 );
 
--- 3. OWNERS TABLE (essential fields only)
+-- 5. OWNERS TABLE (essential fields only)
 CREATE TABLE owners (
     user_id INT PRIMARY KEY,
     business_name VARCHAR(255) NOT NULL,
@@ -31,7 +55,7 @@ CREATE TABLE owners (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- 4. CUSTOMERS TABLE (essential fields only)
+-- 6. CUSTOMERS TABLE (essential fields only)
 CREATE TABLE customers (
     user_id INT PRIMARY KEY,
     first_name VARCHAR(100) NOT NULL,
@@ -42,6 +66,7 @@ CREATE TABLE customers (
     INDEX idx_name (first_name, last_name)
 );
 
+-- 7. ESCAPEROOMS TABLE
 CREATE TABLE escaperooms (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL,
@@ -52,7 +77,7 @@ CREATE TABLE escaperooms (
     FOREIGN KEY (province) REFERENCES provinces(id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (owner) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
     INDEX idx_name (name)
-)
+);
 
 INSERT IGNORE INTO roles (name, description) VALUES 
 ('owner', 'Propietario de negocios de EscapeRooms'),
@@ -87,14 +112,6 @@ INSERT INTO customers (user_id, first_name, last_name, phone) VALUES
 (6, 'María', 'García', '+34777888999'),
 (7, 'Alex', 'Smith', '+34888999000');
 
-CREATE TABLE autonomous_communities (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    code VARCHAR(2) UNIQUE NOT NULL,  -- Código CA
-    name VARCHAR(50) UNIQUE NOT NULL, -- Nombre completo
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    INDEX idx_name (name)
-);
-
 INSERT INTO autonomous_communities (code, name) VALUES
 ('01', 'Andalucía'),
 ('02', 'Aragón'),
@@ -116,18 +133,6 @@ INSERT INTO autonomous_communities (code, name) VALUES
 ('18', 'Ceuta'),
 ('19', 'Melilla');
 
-CREATE TABLE provinces (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    code VARCHAR(2) UNIQUE NOT NULL,  -- Código provincia INE
-    name VARCHAR(50) NOT NULL,
-    autonomous_community_id INT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (autonomous_community_id) 
-        REFERENCES autonomous_communities(id) ON DELETE CASCADE,
-    INDEX idx_name (name),
-    INDEX idx_community (autonomous_community_id),
-    UNIQUE KEY unique_province (code, autonomous_community_id)
-);
 
 -- Inserción completa de provincias con sus CCAA
 INSERT INTO provinces (code, name, autonomous_community_id) VALUES
