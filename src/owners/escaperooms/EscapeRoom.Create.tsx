@@ -44,20 +44,18 @@ const EscapeRoomCreate: React.FC = () => {
     setLoading(true);
     setError(null);
 
-    // console.log(data);
-
     try {
       const res = await EscapeRoomService.create(data);
 
       if (res.success) {
 
-        /*.... CODE ...*/
+        window.location.href = '/owner/dashboard';
 
       } else {
         setError(res.message);
       }
-    } catch (err) {
-      setError('Error de guardado. Por favor, inténtelo nuevamente.');
+    } catch (err: any) {
+      setError(err.message);
     } finally {
       setLoading(false);
     }
@@ -119,7 +117,6 @@ const EscapeRoomCreate: React.FC = () => {
                 description: e.target.value
               })}
               placeholder="Descripción del Negocio"
-              cols={5}
               required
             ></textarea>
           </div>

@@ -52,7 +52,7 @@ CREATE TABLE escaperooms (
     FOREIGN KEY (province) REFERENCES provinces(id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (owner) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
     INDEX idx_name (name)
-)
+);
 
 INSERT IGNORE INTO roles (name, description) VALUES 
 ('owner', 'Propietario de negocios de EscapeRooms'),
