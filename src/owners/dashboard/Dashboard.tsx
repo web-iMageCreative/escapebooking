@@ -40,34 +40,14 @@ const Dashboard: React.FC = () => {
         <h1>Dashboard</h1>
         <div className="user-info">
           <span>Bienvenido, <strong>{user.email}</strong></span>
-          <span className="role-badge">{user.role_name}</span>
-          <button onClick={handleLogout} className="logout-btn">
-            Salir
-          </button>
         </div>
       </header>
 
       <div className="dashboard-content">
         <div className="dashboard-card">
-          <h3>Información del Usuario</h3>
-          <div className="user-details">
-            <p><strong>ID:</strong> {user.id}</p>
-            <p><strong>Email:</strong> {user.email}</p>
-            <p><strong>Rol:</strong> {user.role_name}</p>
-            <p><strong>Activo:</strong> {user.is_active ? '✅ Yes' : '❌ No'}</p>
-            <p><strong>Miembro desde:</strong> {new Date(user.created_at).toLocaleDateString()}</p>
-          </div>
-        </div>
-
-        <div className="dashboard-card">
           <h3>Acciones rápidas</h3>
           <div className="actions">
-
-            {user.role_name === 'owner' && (
-              <>
-                <Link to={ROUTES.OWNER_ESCAPE_ROOMS_CREATE}>Crear nuevo negocio</Link>
-              </>
-            )}
+            <Link to={ROUTES.OWNER_ESCAPE_ROOMS_CREATE}>Crear nuevo negocio</Link>
           </div>
         </div>
 
