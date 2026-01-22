@@ -12,3 +12,15 @@ export interface Province {
   code:string,
   name:string
 }
+
+export interface EscapeRoomFormProps {
+  initialData: EscapeRoomModel;
+  provinces: Province[];
+  loading: boolean;
+  error: string | null;
+  onSubmit: (data: EscapeRoomModel) => void;
+  onCancel: () => void;
+  title?: string;
+  submitText?: string;
+  cancelText?: string;
+}

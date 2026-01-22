@@ -27,12 +27,11 @@ export class EscapeRoomService {
     const res = await fetch(`${API_BASE_URL}/shared/provinces/get.php`);
 
     if (!res.ok) {
-      throw new Error('Error en la carga de provincias');
+      const resJson = await res.json()
+      throw new Error(resJson.message);
     }
 
-    const resp = await res.json();
-
-    return resp;
+    return await res.json();
   }
 
 }

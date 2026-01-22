@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { AuthService } from '../../auth/AuthService';
-import { User } from '../../users/UserModel';
+import { Owner } from '../../users/UserModel';
 import './Dashboard.css';
 import { ROUTES } from '../../routes';
 import { Link, useNavigate } from 'react-router-dom';
 
 
 const Dashboard: React.FC = () => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<Owner | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

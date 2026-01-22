@@ -7,6 +7,13 @@ export interface User {
   updated_at: string;
 }
 
+export interface Owner extends User {
+  business_name: string,
+  phone: string,
+  address: string,
+  city: string
+}
+
 export interface LoginCredentials {
   email: string;
   password: string;
