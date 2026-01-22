@@ -117,6 +117,7 @@ const EscapeRoomCreate: React.FC = () => {
                 description: e.target.value
               })}
               placeholder="Descripción del Negocio"
+              rows={6}
               required
             ></textarea>
           </div>
@@ -157,7 +158,7 @@ const EscapeRoomCreate: React.FC = () => {
             <option value="0">-- Elige una --</option>
             { provinces.map((opcion) => (
               <option key={opcion.id} value={opcion.id}>
-                {opcion.name + "(" + opcion.code + ")"}
+                {opcion.name + " (" + opcion.code + ")"}
               </option>
             )) }
           </select>
@@ -167,6 +168,10 @@ const EscapeRoomCreate: React.FC = () => {
         <div className="form-actions">
           <button type="submit" disabled={loading}>
             {loading ? 'Creando...' : 'Guardar'}
+          </button>
+
+          <button type="button" onClick={ () => window.location.href = '/owner/dashboard'}>
+            Cancelar
           </button>
         </div>
         

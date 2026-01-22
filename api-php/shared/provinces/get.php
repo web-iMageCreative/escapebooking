@@ -16,7 +16,7 @@ require_once '../Database.php';
 $db = new Database();
 
 try {
-$query = "SELECT id, code, name FROM provinces";
+$query = "SELECT id, code, name FROM provinces ORDER BY name";
     
     $provinces = $db->fetchAll($query);
     
