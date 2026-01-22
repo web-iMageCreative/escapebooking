@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: http://localhost:3000'); // Específico
+header('Access-Control-Allow-Origin: http://localhost:3000');
 header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
 header('Access-Control-Allow-Credentials: true');
@@ -16,14 +16,15 @@ require_once '../Database.php';
 $db = new Database();
 
 try {
-$query = "SELECT id, code, name FROM provinces ORDER BY name";
+    $query = "SELECT id, code, name FROM provinces ORDER BY name";
     
     $provinces = $db->fetchAll($query);
     
     if (!$provinces) {
         throw new Exception('Invalid credentials');
     }
-echo json_encode([
+
+    echo json_encode([
         'success' => true,
         'message' => 'Provincias cargadas...',
         'data' => $provinces
