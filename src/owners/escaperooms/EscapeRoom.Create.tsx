@@ -3,7 +3,11 @@ import { EscapeRoomModel, Province } from './EscapeRoom.Model';
 import { EscapeRoomService } from './EscapeRoom.Service';
 import { AuthService } from '../../auth/AuthService';
 import { User } from '../../users/UserModel';
+<<<<<<< HEAD
 import EscapeRoomForm from './EscapeRoom.Form';
+=======
+import { data } from 'react-router-dom';
+>>>>>>> 11682d5965858f98ea7eb4fe6dffe13e20a181f5
 
 const EscapeRoomCreate: React.FC = () => {
     const [provinces, setProvinces] = useState<Province[]>([]);

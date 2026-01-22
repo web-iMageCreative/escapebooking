@@ -34,4 +34,25 @@ export class EscapeRoomService {
     return await res.json();
   }
 
+  static async getEscaperooms( userId: number ): Promise<ApiResponse> {
+    const res = await fetch(`${API_BASE_URL}/owners/escaperooms/getRead.php?userid=${userId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    
+    if (!res.ok) {
+      const respuesta = await res.json();
+      console.log(respuesta);
+      throw new Error('Error en la carga de escaperooms');
+    }
+
+    const respuesta = await res.json();
+    console.log(respuesta);
+
+    return respuesta;
+  }
+
 }
