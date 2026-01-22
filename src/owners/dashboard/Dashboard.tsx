@@ -48,6 +48,7 @@ const Dashboard: React.FC = () => {
           <h3>Acciones rápidas</h3>
           <div className="actions">
             <Link to={ROUTES.OWNER_ESCAPE_ROOMS_CREATE}>Crear nuevo negocio</Link>
+            <Link to={ROUTES.OWNER_ESCAPE_ROOMS}>Ver Escaperooms</Link>
           </div>
         </div>
 
