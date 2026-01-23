@@ -12,16 +12,17 @@ const EscapeRoom: React.FC = () => {
   const currentUser: User = AuthService.getCurrentUser();
 
 
-  useEffect( () => {
+  useEffect(() => {
     getEscaperooms();
   }, []);
 
   const getEscaperooms = async () => {
     try {
-      const res = await EscapeRoomService.getEscaperooms( currentUser.id );
+      const res = await EscapeRoomService.getEscaperooms(currentUser.id);
       setData(res.data);
-    } catch {
-      setError('Error en la carga de Escaperooms');
+    } catch(err: any) {
+      const errMessage = err?.message || 'Error en la carga de Escaperooms';
+      setError(errMessage);
     } finally {
       return;
     }

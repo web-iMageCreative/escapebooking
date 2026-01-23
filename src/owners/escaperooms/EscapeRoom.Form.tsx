@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { EscapeRoomFormProps, EscapeRoomModel, Province } from './EscapeRoom.Model';
+import  { Snackbar, Alert } from '@mui/material';
 import './EscapeRoom.Form.css';
 
 
@@ -14,10 +15,19 @@ const EscapeRoomForm: React.FC<EscapeRoomFormProps> = ({
   submitText = "Guardar",
   cancelText = "Cancelar"
 }) => {
-  const [data, setData] = React.useState<EscapeRoomModel>(initialData);
-  const [provinceSelected, setProvinceSelected] = React.useState(
-    initialData.province.toString()
-  );
+  const [data, setData] = useState<EscapeRoomModel>(initialData);
+  const [provinceSelected, setProvinceSelected] = useState<string>(initialData.province.toString());
+  const [open, setOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    if ( error !== null ) {
+      setOpen(true);
+    } else {
+      setOpen(false);
+    }
+  }, [error]);
+
+  const handleSnackbarClose = () => { setOpen(false); }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -163,10 +173,23 @@ const EscapeRoomForm: React.FC<EscapeRoomFormProps> = ({
           </button>
         </div>
 
-        {/* Mensaje de error */}
-        {error && <div className="error-message">{error}</div>}
-
       </form>
+      
+      <Snackbar
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        open={open}
+        autoHideDuration={5000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity="error"
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          {error}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

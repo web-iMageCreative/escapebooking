@@ -1,18 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { AuthService } from '../../auth/AuthService';
 import { Owner } from '../../users/UserModel';
-import './Dashboard.css';
 import { ROUTES } from '../../routes';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import  { Snackbar, Alert } from '@mui/material';
+import './Dashboard.css';
 
 
 const Dashboard: React.FC = () => {
   const [user, setUser] = useState<Owner | null>(null);
   const [loading, setLoading] = useState(true);
+  const [open, setOpen] = useState<boolean>(false);
+  const nav = useNavigate();
+  const location = useLocation();
+  const alertData = location.state?.alert;
 
   useEffect(() => {
+    if (alertData) {
+      // Mostrar alerta
+      setOpen(true);
+      // Limpiar state después de usarlo
+      window.history.replaceState({}, document.title);
+    }
+
     if (!AuthService.isAuthenticated()) {
-      window.location.href = '/login';
+      nav('/login');
       return;
     }
 
@@ -21,9 +33,11 @@ const Dashboard: React.FC = () => {
     setLoading(false);
   }, []);
 
+  const handleSnackbarClose = () => { setOpen(false); }
+
   const handleLogout = () => {
     AuthService.logout();
-    window.location.href = '/login';
+    nav('/login');
   };
 
   if (loading) {
@@ -60,6 +74,22 @@ const Dashboard: React.FC = () => {
           <p>Existe token: {AuthService.isAuthenticated() ? '✅ SI' : '❌ NO'}</p>
         </div>
       </div>
+
+      <Snackbar
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        open={open}
+        autoHideDuration={5000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={alertData.type}
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          {alertData.message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
