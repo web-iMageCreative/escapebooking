@@ -5,6 +5,7 @@ const API_BASE_URL = 'http://localhost/api-php';
 const token = localStorage.getItem('auth_token');
 
 export class EscapeRoomService {
+  
   static async create(data: EscapeRoomModel): Promise<ApiResponse> {
     const res = await fetch(`${API_BASE_URL}/owners/escaperooms/create.php`, {
       method: 'POST',
@@ -23,6 +24,7 @@ export class EscapeRoomService {
     return await res.json();
   }
 
+
   static async getProvinces(): Promise<ApiResponse> {
     const res = await fetch(`${API_BASE_URL}/shared/provinces/get.php`);
 
@@ -33,6 +35,7 @@ export class EscapeRoomService {
 
     return await res.json();
   }
+  
 
   static async getEscaperooms( userId: number ): Promise<ApiResponse> {
     const res = await fetch(`${API_BASE_URL}/owners/escaperooms/getRead.php?userid=${userId}`, {

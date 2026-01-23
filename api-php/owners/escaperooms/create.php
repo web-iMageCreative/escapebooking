@@ -41,13 +41,14 @@ try {
     throw new Exception( 'No se pudo crear el negocio '. $params['name'] );
   }
 
+  http_response_code(200);
   echo json_encode([
     'success' => true,
     'message' => 'Creado el negocio '. $params['name'],
     'data' => []
   ]);
 } catch (Exception $e) {
-  http_response_code(403);
+  http_response_code(200);
   echo json_encode([
     'success' => false,
     'message' => $e->getMessage()
