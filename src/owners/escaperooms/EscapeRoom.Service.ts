@@ -55,4 +55,14 @@ export class EscapeRoomService {
     return respuesta;
   }
 
+  static async getEscaperoom(id: string | undefined): Promise<ApiResponse> {
+  const res = await fetch(`${API_BASE_URL}/owners/escaperooms/get.php?id=${id}`);
+
+  if (!res.ok) {
+    throw new Error('Error obteniendo escaperoom');
+  }
+
+  return res.json();
+}
+
 }

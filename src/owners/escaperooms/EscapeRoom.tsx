@@ -4,6 +4,8 @@ import { EscapeRoomModel } from './EscapeRoom.Model';
 import { EscapeRoomService } from './EscapeRoom.Service';
 import { User } from '../../users/UserModel';
 import { AuthService } from '../../auth/AuthService';
+import { ROUTES } from '../../routes';
+import { Link } from 'react-router-dom';
 
 const EscapeRoom: React.FC = () => {
   const [data, setData] = useState<EscapeRoomModel[]>([]);
@@ -32,8 +34,11 @@ const EscapeRoom: React.FC = () => {
       <h2>Todos los EscapeRooms</h2>
       <div className='lista-escaperooms'>
         {data.map(escaperoom => (
-          <div className='carta-escaperoom' key={escaperoom.id}>
-            <h3>{escaperoom.name}</h3>
+          <div className='carta-escaperoom'>
+            <div className='cabecera-escaperoom' key={escaperoom.id}>
+              <h3>{escaperoom.name}</h3>
+              <Link className='ver-ficha' to={'/owner/escape-room/' + escaperoom.id}>Ver Ficha</Link>
+            </div>
             <p>{escaperoom.description}</p>
             <p>{escaperoom.address}</p>
             <p>{escaperoom.province}</p>

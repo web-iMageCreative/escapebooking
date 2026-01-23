@@ -17,18 +17,26 @@
 }
 
 .carta-escaperoom {
-  background-color: #d4d1d1;
+  background-color: #d1d1d1;
   border: 1px solid #000000;
   border-radius: 6px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   padding: 25px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  cursor: pointer;
 }
 
 .carta-escaperoom:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+.cabecera-escaperoom {
+  display: flex;
+  justify-content: space-between;
+}
+
+.cabecera-escaperoom .ver-ficha {
+  color: #000000;
 }
 
 .carta-escaperoom h3 {

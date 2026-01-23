@@ -8,6 +8,7 @@ import Login from './auth/login/Login';
 import Dashboard from './owners/dashboard/Dashboard';
 import EscapeRoom from './owners/escaperooms/EscapeRoom';
 import EscapeRoomCreate from './owners/escaperooms/EscapeRoom.Create';
+import FichaEscapeRoom from './owners/escaperooms/FichaEscapeRoom';
 //import AdminUsers from './admin/Users/AdminUsers';
 //import CustomerBrowse from './customer/Browse/CustomerBrowse';
 
@@ -69,6 +70,12 @@ const AppRouter: React.FC = () => {
             <Route path={ROUTES.OWNER_ESCAPE_ROOMS_CREATE} element={
                 <ProtectedRoute requiredRole="owner">
                     <EscapeRoomCreate />
+                </ProtectedRoute>
+            } />
+
+            <Route path={ROUTES.OWNER_ESCAPE_ROOM} element={
+                <ProtectedRoute requiredRole="owner">
+                    <FichaEscapeRoom />
                 </ProtectedRoute>
             } /> 
 
