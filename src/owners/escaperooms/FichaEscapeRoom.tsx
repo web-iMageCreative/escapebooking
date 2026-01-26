@@ -3,6 +3,7 @@ import './FichaEscapeRoom.css';
 import { EscapeRoomModel } from './EscapeRoom.Model';
 import { EscapeRoomService } from './EscapeRoom.Service';
 import { useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 function FichaEscapeRoom() {
     const params = useParams();
@@ -38,7 +39,10 @@ function FichaEscapeRoom() {
         <div className='ficha'>
             <div className='cabecera-ficha'>
                 <h1>{escapeRoom.name}</h1>
-                <button className='btn-editar'>Editar Escaperoom</button>
+                <div className="acciones">
+                    <button className='btn-editar'>Editar Escaperoom</button>
+                    <Link className='ver-sala' to={'/owner/room/' + escapeRoom.id}>Ver Salas</Link>
+                </div>
             </div>
             <div className='contenido-ficha'>
                 <p>{escapeRoom.description}</p>
