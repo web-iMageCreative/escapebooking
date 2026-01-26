@@ -20,8 +20,8 @@ const RoomList: React.FC = () => {
         try {
             const res = await RoomService.getRooms(escaperoom_id);
             setRooms(res.data);
-        } catch {
-            setError('Error en la carga de las salas');
+        } catch(res:any) {
+            setError(res.message);
         } finally {
             return;
         }
@@ -29,6 +29,7 @@ const RoomList: React.FC = () => {
 
 
     return (<>
+        { error && <div>{error}</div>}
         <div className='contenido-rooms'>
         <h2>Salas del Escaperoom</h2>
         <div className='lista-rooms'>

@@ -13,6 +13,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import  { Snackbar, Alert } from '@mui/material';
+import { escape } from 'querystring';
 
 const EscapeRoomList: React.FC = () => {
   const [data, setData] = useState<EscapeRoomModel[]>([]);
@@ -60,26 +61,26 @@ const EscapeRoomList: React.FC = () => {
       <h2>Todos los EscapeRooms</h2>
       <div className='lista-escaperooms'>
         {data.map(escaperoom => (
-          <Card sx={{ maxWidth: 345 }}>
-          <CardMedia
-            component="img"
-            alt="logo"
-            height="140"
-            image="/assets/imgs/escaperooms/generic.jpg"
-          />
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-              {escaperoom.name}
-            </Typography>
-            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              {escaperoom.description}
-            </Typography>
-          </CardContent>
-          <CardActions>
-            <Button size="small" data-id={escaperoom.id} onClick={handleReadClick}>Ver</Button>
-            <Button size="small" data-id={escaperoom.id} onClick={handleEditClick}>Editar</Button>
-          </CardActions>
-        </Card>
+          <Card key={escaperoom.id} sx={{ maxWidth: 345 }}>
+            <CardMedia
+              component="img"
+              alt="logo"
+              height="140"
+              image="/assets/imgs/escaperooms/generic.jpg"
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="div">
+                {escaperoom.name}
+              </Typography>
+              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                {escaperoom.description}
+              </Typography>
+            </CardContent>
+            <CardActions>
+              <Button size="small" data-id={escaperoom.id} onClick={handleReadClick}>Ver</Button>
+              <Button size="small" data-id={escaperoom.id} onClick={handleEditClick}>Editar</Button>
+            </CardActions>
+          </Card>
         ))}
       </div>
 

@@ -66,12 +66,10 @@ export class EscapeRoomService {
     
     if (!res.ok) {
       const respuesta = await res.json();
-      console.log(respuesta);
       throw new Error('Error en la carga de escaperooms');
     }
 
     const respuesta = await res.json();
-    console.log(respuesta);
 
     return respuesta;
   }

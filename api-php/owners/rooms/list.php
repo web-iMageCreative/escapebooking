@@ -1,7 +1,7 @@
 <?php
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: http://localhost:3000'); // Específico
-header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
+header('Access-Control-Allow-Methods: GET, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
 header('Access-Control-Allow-Credentials: true');
 
@@ -18,9 +18,9 @@ $db = new Database();
 
 try {
     $id = $_GET['escaperoom_id'];
-    $params = array('escaperoom_id => $id');
+    $params = array('escaperoom_id' => $id);
 
-    $query = "SELECT * FROM ROOMS WHERE escaperoom_id = id:";
+    $query = "SELECT * FROM rooms WHERE escaperoom_id = :escaperoom_id";
 
     $rooms = $db->fetchAll($query, $params);
 
