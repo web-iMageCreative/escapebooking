@@ -2,15 +2,13 @@ import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthService } from './auth/AuthService';
 import { ROUTES } from './routes';
-
-// Components (lazy load mejor para producción)
 import Login from './auth/login/Login';
 import Dashboard from './owners/dashboard/Dashboard';
-import EscapeRoom from './owners/escaperooms/EscapeRoom';
+import EscapeRoomList from './owners/escaperooms/EscapeRoom.List';
 import EscapeRoomCreate from './owners/escaperooms/EscapeRoom.Create';
-import FichaEscapeRoom from './owners/escaperooms/FichaEscapeRoom';
+import EscapeRoom from './owners/escaperooms/EscapeRoom';
 import EscapeRoomUpdate from './owners/escaperooms/EscapeRoom.Update';
-import Rooms from './owners/rooms/Rooms';
+import RoomList from './owners/rooms/Room.List';
 //import AdminUsers from './admin/Users/AdminUsers';
 //import CustomerBrowse from './customer/Browse/CustomerBrowse';
 
@@ -65,7 +63,7 @@ const AppRouter: React.FC = () => {
 
             <Route path={ROUTES.OWNER_ESCAPE_ROOMS} element={
                 <ProtectedRoute requiredRole="owner">
-                    <EscapeRoom />
+                    <EscapeRoomList />
                 </ProtectedRoute>
             } /> 
             
@@ -77,13 +75,13 @@ const AppRouter: React.FC = () => {
 
             <Route path={ROUTES.OWNER_ESCAPE_ROOM} element={
                 <ProtectedRoute requiredRole="owner">
-                    <FichaEscapeRoom />
+                    <EscapeRoom />
                 </ProtectedRoute>
             } />
 
             <Route path={ROUTES.OWNER_ROOMS} element={
                 <ProtectedRoute requiredRole="owner">
-                    <Rooms />
+                    <RoomList />
                 </ProtectedRoute>
             } />  
 

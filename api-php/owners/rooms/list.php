@@ -20,11 +20,11 @@ try {
     $id = $_GET['escaperoom_id'];
     $params = array('escaperoom_id => $id');
 
-    $query = "SELECT * FROM ROOMS WHERE escaperoom_id = id:"
+    $query = "SELECT * FROM ROOMS WHERE escaperoom_id = id:";
 
     $rooms = $db->fetchAll($query, $params);
 
-    if (!rooms) {
+    if (! $rooms) {
         throw new Exception('No se han encontrado salas.');
     }
 

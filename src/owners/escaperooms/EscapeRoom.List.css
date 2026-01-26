@@ -1,0 +1,52 @@
+
+
+.contenido-escaperooms {
+  padding: 20px;
+}
+
+.contenido-escaperooms h2 {
+  margin-bottom: 40px;
+  color: #000000;
+  font-size: 35px;
+}
+
+.lista-escaperooms {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+.carta-escaperoom {
+  background-color: #d1d1d1;
+  border: 1px solid #000000;
+  border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  padding: 25px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.carta-escaperoom:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+.cabecera-escaperoom {
+  display: flex;
+  justify-content: space-between;
+}
+
+.cabecera-escaperoom .ver-ficha {
+  color: #000000;
+}
+
+.carta-escaperoom h3 {
+  color: #000000;
+  margin: 0;
+  font-size: 25px;
+}
+
+.carta-escaperoom p {
+  color: #000000;
+}
+

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import './Rooms.css';
+import './Room.List.css';
 import { RoomService } from './Room.Service';
 import { RoomModel } from './Room.Model';
 import { useParams } from 'react-router-dom';
 
-const Rooms: React.FC = () => {
+const RoomList: React.FC = () => {
     const params = useParams();
     const [rooms, setRooms] = useState<RoomModel[]>([]);
     const [loading, setLoading] = useState(false);
@@ -48,4 +48,4 @@ const Rooms: React.FC = () => {
     );
 }
 
-export default Rooms;
+export default RoomList;

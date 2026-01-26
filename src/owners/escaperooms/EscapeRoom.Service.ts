@@ -56,7 +56,7 @@ export class EscapeRoomService {
   
 
   static async getEscaperooms( userId: number ): Promise<ApiResponse> {
-    const res = await fetch(`${API_BASE_URL}/owners/escaperooms/getRead.php?userid=${userId}`, {
+    const res = await fetch(`${API_BASE_URL}/owners/escaperooms/list.php?userid=${userId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

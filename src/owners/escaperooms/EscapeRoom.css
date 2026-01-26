@@ -1,52 +1,61 @@
 
 
-.contenido-escaperooms {
-  padding: 20px;
+.ficha {
+    padding: 20px;
+    background-color: #d6d6d6;
+    border: 1px solid rgb(0, 0, 0);
+    min-height: calc(95vh - 182px);
 }
 
-.contenido-escaperooms h2 {
-  margin-bottom: 40px;
-  color: #000000;
-  font-size: 35px;
+.cabecera-ficha {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 20px;
 }
 
-.lista-escaperooms {
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-  gap: 30px;
+.acciones {
+    display: flex;
+    gap: 20px;
 }
 
-.carta-escaperoom {
-  background-color: #d1d1d1;
-  border: 1px solid #000000;
-  border-radius: 6px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  padding: 25px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+.btn-editar {
+    height: auto;
+    padding:10px 10px;
+    background: linear-gradient(135deg, #4caf50, #2e7d32);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
-.carta-escaperoom:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+.btn-editar:hover {
+    background: linear-gradient(135deg, #61b365, #388e3c);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
 }
 
-.cabecera-escaperoom {
-  display: flex;
-  justify-content: space-between;
+.btn-editar:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
 }
 
-.cabecera-escaperoom .ver-ficha {
-  color: #000000;
+.contenido-ficha {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px 20px;
+    min-height: 40vh;
+    box-shadow: inset 0 0 0 1px #96989b;
+    font-size: 15px;
 }
 
-.carta-escaperoom h3 {
-  color: #000000;
-  margin: 0;
-  font-size: 25px;
+.contenido-ficha p {
+    margin: 0;
 }
 
-.carta-escaperoom p {
-  color: #000000;
+.ver-sala {
+    color:rgb(0, 0, 0)
 }
-
