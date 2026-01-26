@@ -14,6 +14,11 @@
     padding: 0px 20px;
 }
 
+.acciones {
+    display: flex;
+    gap: 20px;
+}
+
 .btn-editar {
     height: auto;
     padding:10px 10px;
@@ -49,4 +54,8 @@
 
 .contenido-ficha p {
     margin: 0;
+}
+
+.ver-sala {
+    color:rgb(0, 0, 0)
 }
