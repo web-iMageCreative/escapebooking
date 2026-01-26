@@ -79,6 +79,17 @@ CREATE TABLE escaperooms (
     INDEX idx_name (name)
 );
 
+CREATE TABLE `rooms` (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(100) NOT NULL,
+  description TEXT,
+  duration INT(11) NOT NULL,
+  price FLOAT,
+  escaperoom_id int(11) NOT NULL,
+  FOREIGN KEY (escaperoom_id) REFERENCES escaperooms(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  INDEX idx_name (name)
+);
+
 INSERT IGNORE INTO roles (name, description) VALUES 
 ('owner', 'Propietario de negocios de EscapeRooms'),
 ('customer', 'Clientes normales'),
