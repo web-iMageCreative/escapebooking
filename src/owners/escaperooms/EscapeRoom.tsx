@@ -26,7 +26,7 @@ const EscapeRoom: React.FC = () => {
         
     const getEscaperooms = async () => {
         try {
-            const res = await EscapeRoomService.getEscaperoom( params.id );
+            const res = await EscapeRoomService.getEscaperoom( parseInt(params.id!) );
             setEscapeRoom(res.data);
         } catch {
             setError('Error en la carga de Escaperooms');

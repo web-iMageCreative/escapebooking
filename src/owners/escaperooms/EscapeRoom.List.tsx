@@ -53,6 +53,11 @@ const EscapeRoomList: React.FC = () => {
   const handleEditClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     nav('/owner/escape-rooms/edit/' + e.currentTarget.dataset.id);
   }
+
+  const handleDeleteClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    const id:number = parseInt(e.currentTarget.dataset.id!);
+    const res = await EscapeRoomService.delete(id);
+  }
   
   const handleSnackbarClose = () => { setOpen(false); }
 
@@ -79,6 +84,7 @@ const EscapeRoomList: React.FC = () => {
             <CardActions>
               <Button size="small" data-id={escaperoom.id} onClick={handleReadClick}>Ver</Button>
               <Button size="small" data-id={escaperoom.id} onClick={handleEditClick}>Editar</Button>
+              <Button size="small" data-id={escaperoom.id} onClick={handleDeleteClick}>Eliminar</Button>
             </CardActions>
           </Card>
         ))}

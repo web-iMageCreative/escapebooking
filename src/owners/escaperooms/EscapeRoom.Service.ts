@@ -7,7 +7,7 @@ const token = localStorage.getItem('auth_token');
 export class EscapeRoomService {
   
   static async create(data: EscapeRoomModel): Promise<ApiResponse> {
-    const res = await fetch(`${API_BASE_URL}/owners/escaperooms/create.php`, {
+    const response = await fetch(`${API_BASE_URL}/owners/escaperooms/create.php`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -16,16 +16,18 @@ export class EscapeRoomService {
       body: JSON.stringify(data)
     });
 
-    if (!res.ok) {
-      const resJson = await res.json()
-      throw new Error(resJson.message);
+    if (!response.ok) {
+      const result = await response.json()
+      throw new Error(result.message);
     }
 
-    return await res.json();
+    const result = await response.json();
+
+    return result;
   }
 
   static async update(data: EscapeRoomModel): Promise<ApiResponse> {
-    const res = await fetch(`${API_BASE_URL}/owners/escaperooms/update.php`, {
+    const response = await fetch(`${API_BASE_URL}/owners/escaperooms/update.php`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -34,29 +36,52 @@ export class EscapeRoomService {
       body: JSON.stringify(data)
     });
 
-    if (!res.ok) {
-      const resJson = await res.json()
-      throw new Error(resJson.message);
+    if (!response.ok) {
+      const result = await response.json()
+      throw new Error(result.message);
     }
 
-    return await res.json();
+    const result = await response.json();
+
+    return result;
   }
 
 
   static async getProvinces(): Promise<ApiResponse> {
-    const res = await fetch(`${API_BASE_URL}/shared/provinces/get.php`);
+    const response = await fetch(`${API_BASE_URL}/shared/provinces/get.php`);
 
-    if (!res.ok) {
-      const resJson = await res.json()
-      throw new Error(resJson.message);
+    if (!response.ok) {
+      const result = await response.json()
+      throw new Error(result.message);
     }
 
-    return await res.json();
+    const result = await response.json();
+
+    return result;
+  }
+
+  static async delete( id: number ): Promise<ApiResponse> {
+    const response = await fetch(`${API_BASE_URL}/owners/escaperooms/delete.php?id=${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    if (!response.ok) {
+      const result = await response.json();
+      throw new Error(result.message);
+    }
+
+    const result = await response.json();
+
+    return result;
   }
   
 
   static async getEscaperooms( userId: number ): Promise<ApiResponse> {
-    const res = await fetch(`${API_BASE_URL}/owners/escaperooms/list.php?userid=${userId}`, {
+    const response = await fetch(`${API_BASE_URL}/owners/escaperooms/list.php?userid=${userId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -64,24 +89,27 @@ export class EscapeRoomService {
       }
     });
     
-    if (!res.ok) {
-      const respuesta = await res.json();
-      throw new Error('Error en la carga de escaperooms');
+    if (!response.ok) {
+      const result = await response.json();
+      throw new Error(result.message);
     }
 
-    const respuesta = await res.json();
+    const result = await response.json();
 
-    return respuesta;
+    return result;
   }
 
-  static async getEscaperoom(id: string | undefined): Promise<ApiResponse> {
-  const res = await fetch(`${API_BASE_URL}/owners/escaperooms/get.php?id=${id}`);
+  static async getEscaperoom(id: number): Promise<ApiResponse> {
+    const response = await fetch(`${API_BASE_URL}/owners/escaperooms/get.php?id=${id}`);
 
-  if (!res.ok) {
-    throw new Error('Error obteniendo escaperoom');
+    if (!response.ok) {
+      const result = await response.json();
+      throw new Error(result.message);
+    }
+
+    const result = await response.json();
+
+    return result;
   }
-
-  return res.json();
-}
 
 }
