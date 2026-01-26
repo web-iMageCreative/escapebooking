@@ -13,13 +13,11 @@ const Dashboard: React.FC = () => {
   const [open, setOpen] = useState<boolean>(false);
   const nav = useNavigate();
   const location = useLocation();
-  const alertData = location.state?.alert;
+  const alertData = location.state?.alert || {};
 
   useEffect(() => {
-    if (alertData) {
-      // Mostrar alerta
+    if (alertData.type) {
       setOpen(true);
-      // Limpiar state después de usarlo
       window.history.replaceState({}, document.title);
     }
 

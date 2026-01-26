@@ -17,7 +17,6 @@ require_once '../../shared/Database.php';
 $db = new Database();
 
 try {
-    // $data = json_decode(file_get_contents('php://input'), true);
     $userid = $_GET['userid'];
     $params = array('userid' => $userid);
 
@@ -26,7 +25,7 @@ try {
     $escaperooms = $db->fetchAll($query, $params);
 
     if (!$escaperooms) {
-        throw new Exception('Invalid credentials');
+        throw new Exception('Error en la carga de EscapeRooms.');
     }
     
     echo json_encode([
@@ -34,9 +33,8 @@ try {
         'message' => 'Escaperooms cargados...',
         'data' => $escaperooms
     ]);
-
 } catch (Exception $e) {
-    http_response_code(401);
+    http_response_code(200);
     echo json_encode([
         'success' => false,
         'message' => $e->getMessage()

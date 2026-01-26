@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { AuthService } from '../AuthService';
 import { LoginCredentials } from '../../users/UserModel';
 import './Login.css';
+import { useNavigate } from 'react-router-dom';
 
 const Login: React.FC = () => {
   const [credentials, setCredentials] = useState<LoginCredentials>({
@@ -10,6 +11,8 @@ const Login: React.FC = () => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const nav = useNavigate();
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,7 +27,12 @@ const Login: React.FC = () => {
         localStorage.setItem('user', JSON.stringify(res.data.user));
 
         if (res.data.user.role_name === 'owner') {
-          window.location.href = '/owner/dashboard';
+          nav('/owner/dashboard', {
+            state: { alert: {
+              type: 'info',
+              message: 'Usuario identificado correctamente'
+            } }
+          });
         } else if (res.data.user.role_name === 'admin') {
           window.location.href = '/admin/dashboard';
         } else {

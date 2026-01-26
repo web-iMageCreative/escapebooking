@@ -25,15 +25,14 @@ try {
     $escaperoom = $db->fetchSingle($query, $params);
 
     if (!$escaperoom) {
-        throw new Exception('Invalid credentials');
+        throw new Exception('EscapeRoom no encontrado.');
     }
-    
+
     echo json_encode([
         'success' => true,
-        'message' => 'Escaperooms cargados...',
+        'message' => 'Escaperooms cargados.',
         'data' => $escaperoom
     ]);
-
 } catch (Exception $e) {
     http_response_code(401);
     echo json_encode([
@@ -41,6 +40,3 @@ try {
         'message' => $e->getMessage()
     ]);
 }
-?>
-
-
