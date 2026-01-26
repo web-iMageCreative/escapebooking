@@ -123,6 +123,9 @@ INSERT INTO customers (user_id, first_name, last_name, phone) VALUES
 (6, 'María', 'García', '+34777888999'),
 (7, 'Alex', 'Smith', '+34888999000');
 
+INSERT INTO `rooms` (`id`, `name`, `description`, `duration`, `price`, `escaperoom_id`) VALUES
+(1, 'Sala 1', 'Descripción de la sala', 120, 55.7, 2);
+
 INSERT INTO autonomous_communities (code, name) VALUES
 ('01', 'Andalucía'),
 ('02', 'Aragón'),
