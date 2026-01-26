@@ -4,7 +4,7 @@ import { EscapeRoomModel } from './EscapeRoom.Model';
 import { EscapeRoomService } from './EscapeRoom.Service';
 import { useParams } from 'react-router-dom';
 
-function FichaEscapeRoom() {
+const FichaEscapeRoom: React.FC = () => {
     const params = useParams();
     const id:string | undefined = params.id;
 

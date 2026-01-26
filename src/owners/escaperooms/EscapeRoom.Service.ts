@@ -24,6 +24,24 @@ export class EscapeRoomService {
     return await res.json();
   }
 
+  static async update(data: EscapeRoomModel): Promise<ApiResponse> {
+    const res = await fetch(`${API_BASE_URL}/owners/escaperooms/update.php`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(data)
+    });
+
+    if (!res.ok) {
+      const resJson = await res.json()
+      throw new Error(resJson.message);
+    }
+
+    return await res.json();
+  }
+
 
   static async getProvinces(): Promise<ApiResponse> {
     const res = await fetch(`${API_BASE_URL}/shared/provinces/get.php`);

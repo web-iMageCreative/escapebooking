@@ -27,12 +27,7 @@ const Login: React.FC = () => {
         localStorage.setItem('user', JSON.stringify(res.data.user));
 
         if (res.data.user.role_name === 'owner') {
-          nav('/owner/dashboard', {
-            state: { alert: {
-              type: 'info',
-              message: 'Usuario identificado correctamente'
-            } }
-          });
+          nav('/owner/dashboard', { state: { alert: { type: 'info', message: 'Usuario identificado correctamente' } } });
         } else if (res.data.user.role_name === 'admin') {
           window.location.href = '/admin/dashboard';
         } else {

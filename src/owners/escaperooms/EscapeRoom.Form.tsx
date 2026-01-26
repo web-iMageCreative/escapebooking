@@ -3,7 +3,6 @@ import { EscapeRoomFormProps, EscapeRoomModel, Province } from './EscapeRoom.Mod
 import  { Snackbar, Alert } from '@mui/material';
 import './EscapeRoom.Form.css';
 
-
 const EscapeRoomForm: React.FC<EscapeRoomFormProps> = ({
   initialData,
   provinces,

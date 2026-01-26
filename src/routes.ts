@@ -10,6 +10,7 @@ export const ROUTES = {
   OWNER_ESCAPE_ROOMS: '/owner/escape-rooms',
   OWNER_ESCAPE_ROOM: '/owner/escape-room/:id',
   OWNER_ESCAPE_ROOMS_CREATE: '/owner/escape-rooms/new',
+  OWNER_ESCAPE_ROOMS_UPDATE: '/owner/escape-rooms/edit/:id',
   // OWNER_BOOKINGS: '/owner/bookings',
   
   // Customer routes

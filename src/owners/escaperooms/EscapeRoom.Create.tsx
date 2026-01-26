@@ -46,14 +46,7 @@ const EscapeRoomCreate: React.FC = () => {
       const res = await EscapeRoomService.create(data);
 
       if (res.success) {
-        nav('/owner/dashboard', {
-          state: { 
-            alert: {
-              type: 'success',
-              message: res.message
-            }
-          }
-        });
+        nav('/owner/dashboard', { state: { alert: { type: 'success', message: res.message } } } );
       } else {
         setError(res.message);
       }
@@ -65,12 +58,7 @@ const EscapeRoomCreate: React.FC = () => {
   };
 
   const handleCancel = () => {
-    nav('/owner/dashboard', {
-      state: { 
-        message: 'Operación cancelada',
-        type: 'info'
-      }
-    });
+    nav('/owner/dashboard', { state: { alert: {message: 'Operación cancelada', type: 'info' } } } );
   };
 
   return (

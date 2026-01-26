@@ -28,9 +28,8 @@ const Navigation: React.FC = () => {
                         
                         {user?.role_name === 'owner' && (
                             <>
-                                <a href="#">Lorem</a>
-                                <a href="#">Ipsum</a>
-                                <a href="#">Dolor</a>
+                                <a href="#">Reservas</a>
+                                <Link to={ROUTES.OWNER_ESCAPE_ROOMS}>EscapeRooms</Link>
                             </>
                         )}
                         

@@ -33,11 +33,6 @@ const Dashboard: React.FC = () => {
 
   const handleSnackbarClose = () => { setOpen(false); }
 
-  const handleLogout = () => {
-    AuthService.logout();
-    nav('/login');
-  };
-
   if (loading) {
     return <div className="loading">Cargando datos de usuario...</div>;
   }
