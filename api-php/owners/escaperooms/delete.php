@@ -19,10 +19,30 @@ $db = new Database();
 try {
   $data = json_decode(file_get_contents('php://input'), true);
   
+  if ( ! (isset( $data['id'] ) && trim($data['id']) != '') ) throw new Exception('Falta el id del negocio');
+
+  $params = array();
+  $params['id'] = $data['id'];
+
+  $query = "DELETE FROM escaperooms WHERE id = :id";
+
+  $result = $db->execute($query, $params);
+  
+  if (!$result) {
+    throw new Exception( 'No se eliminar el EscapeRoom' );
+  }
+
+  http_response_code(200);
+  echo json_encode([
+    'success' => true,
+    'message' => 'EscapeRoom eliminado',
+    'data' => []
+  ]);
 } catch (Exception $e) {
   http_response_code(200);
   echo json_encode([
     'success' => false,
-    'message' => $e->getMessage()
+    'message' => $e->getMessage(),
+    'data' => []
   ]);
 }

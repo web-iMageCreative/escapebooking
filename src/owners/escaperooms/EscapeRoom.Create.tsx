@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 
 const EscapeRoomCreate: React.FC = () => {
   const [provinces, setProvinces] = useState<Province[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const currentUser: User = AuthService.getCurrentUser();
   const nav = useNavigate();
@@ -35,6 +35,8 @@ const EscapeRoomCreate: React.FC = () => {
     } catch (err: any) {
       const errMessage = err?.message || 'Error cargando provincias';
       setError(errMessage);
+    } finally {
+      setLoading(false);
     }
   };
 

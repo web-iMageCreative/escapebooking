@@ -1,4 +1,4 @@
-import { EscapeRoomModel, Province } from './EscapeRoom.Model';
+import { EscapeRoomModel } from './EscapeRoom.Model';
 import { ApiResponse } from '../../shared/models/Response.Model';
 
 const API_BASE_URL = 'http://localhost/api-php';
@@ -46,6 +46,26 @@ export class EscapeRoomService {
     return result;
   }
 
+  static async delete( id: number ): Promise<ApiResponse> {
+    const data = {'id': id};
+    const response = await fetch(`${API_BASE_URL}/owners/escaperooms/delete.php`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(data)
+    });
+
+    if (!response.ok) {
+      const result = await response.json();
+      throw new Error(result.message);
+    }
+
+    const result = await response.json();
+
+    return result;
+  }
 
   static async getProvinces(): Promise<ApiResponse> {
     const response = await fetch(`${API_BASE_URL}/shared/provinces/get.php`);
@@ -58,27 +78,7 @@ export class EscapeRoomService {
     const result = await response.json();
 
     return result;
-  }
-
-  static async delete( id: number ): Promise<ApiResponse> {
-    const response = await fetch(`${API_BASE_URL}/owners/escaperooms/delete.php?id=${id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      }
-    });
-
-    if (!response.ok) {
-      const result = await response.json();
-      throw new Error(result.message);
-    }
-
-    const result = await response.json();
-
-    return result;
-  }
-  
+  }  
 
   static async getEscaperooms( userId: number ): Promise<ApiResponse> {
     const response = await fetch(`${API_BASE_URL}/owners/escaperooms/list.php?userid=${userId}`, {
