@@ -1,5 +1,5 @@
 import { EscapeRoomModel } from './EscapeRoom.Model';
-import { ApiResponse } from '../../shared/models/Response.Model';
+import { ApiResponse } from '../../shared/models/apiResponse.Model';
 
 const API_BASE_URL = 'http://localhost/api-php';
 const token = localStorage.getItem('auth_token');

@@ -24,7 +24,7 @@ import {
 const EscapeRoomList: React.FC = () => {
   const [data, setData] = useState<EscapeRoomModel[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [openSnack, setOpenSnackbar] = useState<boolean>(false);
+  const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [idToDelete, setIdToDelete] = useState<number>(0);
   const currentUser: User = AuthService.getCurrentUser();
@@ -86,7 +86,7 @@ const EscapeRoomList: React.FC = () => {
   const handleSnackbarClose = () => { setOpenSnackbar(false); }
   const handleDialogClose = () => { setOpenDialog(false); }
 
-  return (<>
+  return (
     <div className='contenido-escaperooms contained'>
       <h2>Todos los EscapeRooms</h2>
       { ! loading && 
@@ -119,7 +119,7 @@ const EscapeRoomList: React.FC = () => {
 
       <Snackbar
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-        open={openSnack}
+        open={openSnackbar}
         autoHideDuration={5000}
         onClose={handleSnackbarClose}
       >
@@ -155,7 +155,6 @@ const EscapeRoomList: React.FC = () => {
         </DialogActions>
       </Dialog>
     </div>
-  </>
   );
 };
 
