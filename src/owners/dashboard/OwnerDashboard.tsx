@@ -4,10 +4,10 @@ import { Owner } from '../../users/UserModel';
 import { ROUTES } from '../../routes';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import  { Snackbar, Alert } from '@mui/material';
-import './Dashboard.css';
+import './OwnerDashboard.css';
 
 
-const Dashboard: React.FC = () => {
+const OwnerDashboard: React.FC = () => {
   const [user, setUser] = useState<Owner | null>(null);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState<boolean>(false);
@@ -87,4 +87,4 @@ const Dashboard: React.FC = () => {
   );
 };
 
-export default Dashboard;
+export default OwnerDashboard;

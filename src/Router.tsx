@@ -3,7 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthService } from './auth/AuthService';
 import { ROUTES } from './routes';
 import Login from './auth/login/Login';
-import Dashboard from './owners/dashboard/Dashboard';
+import OwnerDashboard from './owners/dashboard/OwnerDashboard';
 import EscapeRoomList from './owners/escaperooms/EscapeRoom.List';
 import EscapeRoomCreate from './owners/escaperooms/EscapeRoom.Create';
 import EscapeRoom from './owners/escaperooms/EscapeRoom';
@@ -57,7 +57,7 @@ const AppRouter: React.FC = () => {
             {/* Owner Routes */}
             <Route path={ROUTES.OWNER_DASHBOARD} element={
                 <ProtectedRoute requiredRole="owner">
-                    <Dashboard />
+                    <OwnerDashboard />
                 </ProtectedRoute>
             } /> 
 
