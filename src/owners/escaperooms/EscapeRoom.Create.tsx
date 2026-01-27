@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { EscapeRoomModel, Province } from './EscapeRoom.Model';
+import { EscapeRoomModel } from './EscapeRoom.Model';
 import { EscapeRoomService } from './EscapeRoom.Service';
 import { AuthService } from '../../auth/AuthService';
 import { User } from '../../users/UserModel';
@@ -8,8 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 const EscapeRoomCreate: React.FC = () => {
-  const [provinces, setProvinces] = useState<Province[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const currentUser: User = AuthService.getCurrentUser();
   const nav = useNavigate();
@@ -22,22 +21,6 @@ const EscapeRoomCreate: React.FC = () => {
     address: '',
     province: 0,
     owner: currentUser.id
-  };
-
-  useEffect(() => {
-    getProvinces();
-  }, []);
-
-  const getProvinces = async () => {
-    try {
-      const res = await EscapeRoomService.getProvinces();
-      setProvinces(res.data);
-    } catch (err: any) {
-      const errMessage = err?.message || 'Error cargando provincias';
-      setError(errMessage);
-    } finally {
-      setLoading(false);
-    }
   };
 
   const handleSubmit = async (data: EscapeRoomModel) => {
@@ -66,7 +49,6 @@ const EscapeRoomCreate: React.FC = () => {
   return (
     <EscapeRoomForm
       initialData={initialData}
-      provinces={provinces}
       loading={loading}
       error={error}
       onSubmit={handleSubmit}

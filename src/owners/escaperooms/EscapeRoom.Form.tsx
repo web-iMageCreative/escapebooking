@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { EscapeRoomFormProps, EscapeRoomModel } from './EscapeRoom.Model';
 import  { Snackbar, Alert } from '@mui/material';
 import './EscapeRoom.Form.css';
+import { Province } from '../../shared/models/province.Model';
+import { getProvinces } from '../../shared/data/provinces';
 
 const EscapeRoomForm: React.FC<EscapeRoomFormProps> = ({
   initialData,
-  provinces,
   loading,
   error,
   onSubmit,
@@ -14,6 +15,7 @@ const EscapeRoomForm: React.FC<EscapeRoomFormProps> = ({
   submitText = "Guardar",
   cancelText = "Cancelar"
 }) => {
+  const provinces:Province[] = getProvinces();
   const [data, setData] = useState<EscapeRoomModel>(initialData);
   const [provinceSelected, setProvinceSelected] = useState<string>(initialData.province.toString());
   const [open, setOpen] = useState<boolean>(false);

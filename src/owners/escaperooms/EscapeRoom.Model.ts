@@ -1,3 +1,5 @@
+import { Province } from "../../shared/models/province.Model";
+
 export interface EscapeRoomModel {
   id: number,
   name: string,
@@ -7,15 +9,8 @@ export interface EscapeRoomModel {
   owner: number
 }
 
-export interface Province {
-  id:number,
-  code:string,
-  name:string
-}
-
 export interface EscapeRoomFormProps {
   initialData: EscapeRoomModel;
-  provinces: Province[];
   loading: boolean;
   error: string | null;
   onSubmit: (data: EscapeRoomModel) => void;

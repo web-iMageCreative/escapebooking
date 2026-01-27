@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { EscapeRoomModel, Province } from './EscapeRoom.Model';
+import { EscapeRoomModel } from './EscapeRoom.Model';
+import { Province } from '../../shared/models/province.Model';
 import { EscapeRoomService } from './EscapeRoom.Service';
+import { getProvinces } from '../../shared/data/provinces';
 import EscapeRoomForm from './EscapeRoom.Form';
+import { ApiResponse } from '../../shared/models/Response.Model';
 
 const EscapeRoomUpdate: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const nav = useNavigate();
   const [initialData, setInitialData] = useState<EscapeRoomModel | null>(null);
-  const [provinces, setProvinces] = useState<Province[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -18,12 +20,7 @@ const EscapeRoomUpdate: React.FC = () => {
 
   const loadData = async () => {
     try {
-      const [provincesRes, escapeRoomRes] = await Promise.all([
-        EscapeRoomService.getProvinces(),
-        EscapeRoomService.getEscaperoom(parseInt(id!))
-      ]);
-
-      setProvinces(provincesRes.data);
+      const escapeRoomRes: ApiResponse = await EscapeRoomService.getEscaperoom(parseInt(id!));
       setInitialData(escapeRoomRes.data);
     } catch (err: any) {
       setError(err.message || 'Error cargando datos');
@@ -64,7 +61,6 @@ const EscapeRoomUpdate: React.FC = () => {
   return (
     <EscapeRoomForm
       initialData={initialData}
-      provinces={provinces}
       loading={loading}
       error={error}
       onSubmit={handleSubmit}
