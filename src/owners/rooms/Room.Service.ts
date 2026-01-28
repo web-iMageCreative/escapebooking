@@ -14,6 +14,80 @@ export class RoomService {
   }
 
   return res.json();
-}
+  }
+
+  static async getRoom(id: number): Promise<ApiResponse> {
+      const res = await fetch(`${API_BASE_URL}/owners/rooms/get.php?id=${id}`);
+  
+      if (!res.ok) {
+        const result = await res.json();
+        throw new Error(result.message);
+      }
+  
+      const result = await res.json();
+  
+      return result;
+    }
+
+  static async create(data: RoomModel): Promise<ApiResponse> {
+      const res = await fetch(`${API_BASE_URL}/owners/rooms/create.php`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(data)
+      });
+  
+      if (!res.ok) {
+        const result = await res.json()
+        throw new Error(result.message);
+      }
+  
+      const result = await res.json();
+  
+      return result;
+  }
+
+  static async update(data: RoomModel): Promise<ApiResponse> {
+      const res = await fetch(`${API_BASE_URL}/owners/rooms/update.php`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(data)
+      });
+  
+      if (!res.ok) {
+        const result = await res.json()
+        throw new Error(result.message);
+      }
+  
+      const result = await res.json();
+  
+      return result;
+    }
+  
+    static async delete( id: number ): Promise<ApiResponse> {
+      const data = {'id': id};
+      const res = await fetch(`${API_BASE_URL}/owners/rooms/delete.php`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(data)
+      });
+  
+      if (!res.ok) {
+        const result = await res.json();
+        throw new Error(result.message);
+      }
+  
+      const result = await res.json();
+  
+      return result;
+    }
 
 }
