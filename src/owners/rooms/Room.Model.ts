@@ -6,3 +6,14 @@ export interface RoomModel {
     price: number,
     escaperoom_id: number
 }
+
+export interface RoomFormProps {
+  initialData: RoomModel;
+  loading: boolean;
+  error: string | null;
+  onSubmit: (data: RoomModel) => void;
+  onCancel: () => void;
+  title?: string;
+  submitText?: string;
+  cancelText?: string;
+}

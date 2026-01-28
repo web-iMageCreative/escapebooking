@@ -9,6 +9,9 @@ import EscapeRoomCreate from './owners/escaperooms/EscapeRoom.Create';
 import EscapeRoom from './owners/escaperooms/EscapeRoom';
 import EscapeRoomUpdate from './owners/escaperooms/EscapeRoom.Update';
 import RoomList from './owners/rooms/Room.List';
+import RoomCreate from './owners/rooms/Room.Create';
+import Room from './owners/rooms/Room';
+
 //import AdminUsers from './admin/Users/AdminUsers';
 //import CustomerBrowse from './customer/Browse/CustomerBrowse';
 
@@ -91,7 +94,18 @@ const AppRouter: React.FC = () => {
                 </ProtectedRoute>
             } />
 
+            <Route path={ROUTES.OWNER_ROOMS_CREATE} element={
+                <ProtectedRoute requiredRole="owner">
+                    <RoomCreate />
+                </ProtectedRoute>
+            } />
 
+            <Route path={ROUTES.OWNER_ROOM} element={
+                <ProtectedRoute requiredRole="owner">
+                    <Room />
+                </ProtectedRoute>
+            } />
+            
 
             {/* Default Route */}
             <Route path="/" element={<Navigate to={ROUTES.OWNER_DASHBOARD} />} />
