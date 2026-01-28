@@ -17,3 +17,12 @@ code {
   max-width: 1333px;
   margin: 0 auto;
 }
+
+.MuiCard-root {
+  display: flex;
+  flex-direction: Column;
+}
+
+.MuiCardActions-root {
+  margin-top: auto;
+}

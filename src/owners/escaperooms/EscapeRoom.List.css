@@ -12,9 +12,17 @@
 
 .lista-escaperooms {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   flex-wrap: wrap;
-  gap: 30px;
+  gap: 20px;
+}
+
+.lista-escaperooms .MuiCard-root {
+  flex: 1 1 23%;
+}
+
+.lista-escaperooms .MuiButton-startIcon {
+  margin-right: 3px;
 }
 
 .carta-escaperoom {

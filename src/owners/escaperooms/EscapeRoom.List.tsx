@@ -20,6 +20,9 @@ import {
   Snackbar,
   Alert
   } from '@mui/material';
+import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 
 const EscapeRoomList: React.FC = () => {
   const [data, setData] = useState<EscapeRoomModel[]>([]);
@@ -92,11 +95,11 @@ const EscapeRoomList: React.FC = () => {
       { ! loading && 
         <div className='lista-escaperooms'>
           {data.map(escaperoom => (
-            <Card key={escaperoom.id} sx={{ maxWidth: 345 }}>
+            <Card key={escaperoom.id} sx={{ boxShadow: 4 }}>
               <CardMedia
                 component="img"
                 alt="logo"
-                height="140"
+                height="200"
                 image="/assets/imgs/escaperooms/generic.jpg"
               />
               <CardContent>
@@ -108,9 +111,9 @@ const EscapeRoomList: React.FC = () => {
                 </Typography>
               </CardContent>
               <CardActions>
-                <Button size="small" data-id={escaperoom.id} onClick={handleReadClick}>Ver</Button>
-                <Button size="small" data-id={escaperoom.id} onClick={handleEditClick}>Editar</Button>
-                <Button size="small" data-id={escaperoom.id} onClick={handleDeleteClick}>Eliminar</Button>
+                <Button startIcon={<ArticleOutlinedIcon />} size="small" data-id={escaperoom.id} onClick={handleReadClick}>Ver</Button>
+                <Button startIcon={<EditOutlinedIcon />} size="small" data-id={escaperoom.id} onClick={handleEditClick}>Editar</Button>
+                <Button startIcon={<DeleteOutlineOutlinedIcon />} size="small" data-id={escaperoom.id} onClick={handleDeleteClick} color="error">Eliminar</Button>
               </CardActions>
             </Card>
           ))}
