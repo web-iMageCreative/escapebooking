@@ -3,7 +3,9 @@ export interface RoomModel {
     name: string,
     description: string,
     duration: number,
-    price: number,
+    min_players: number,
+    max_players: number,
+    prices: Price[],
     escaperoom_id: number
 }
 
@@ -16,4 +18,10 @@ export interface RoomFormProps {
   title?: string;
   submitText?: string;
   cancelText?: string;
+}
+
+export interface Price {
+  id_room: number,
+  num_players: number,
+  price: number
 }

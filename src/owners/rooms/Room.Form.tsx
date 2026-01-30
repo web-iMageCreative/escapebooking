@@ -106,24 +106,46 @@ const RoomForm: React.FC<RoomFormProps> = ({
                 </div>
 
                 <div className="form-group">
-                    <div className="col label">
-                        <label htmlFor="price">Precio</label>
+                    <div className="col-label">
+                        <label htmlFor="min_players">Mínimo de jugadores</label>
                         <p className="description">
-                            Precio completo de la experiencia en €.
+                            Número mínimo de jugadores permitidos.
                         </p>
                     </div>
                     <div className="col-value">
                         <input 
                             type="number"
-                            id="price"
-                            value={data.price}
+                            id="min_players"
+                            value={data.min_players}
                             onChange={handleInputChange}
-                            placeholder="70€"
+                            placeholder="1"
                             required
                             disabled={loading} 
                         />
                     </div>
                 </div>
+
+                <div className="form-group">
+                    <div className="col-label">
+                        <label htmlFor="max_players">Máximo de jugadores</label>
+                        <p className="description">
+                            Número máximo de jugadores permitidos.
+                        </p>
+                    </div>
+                    <div className="col-value">
+                        <input 
+                            type="number"
+                            id="max_players"
+                            value={data.max_players}
+                            onChange={handleInputChange}
+                            placeholder="6"
+                            required
+                            disabled={loading} 
+                        />
+                    </div>
+                </div>
+
+                
 
                 <div className="form-actions">
                     <button

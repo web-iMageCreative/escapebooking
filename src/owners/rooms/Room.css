@@ -7,7 +7,7 @@
     min-height: calc(95vh - 182px);
 }
 
-.cabecera-ficha {
+.cabecera {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -47,11 +47,15 @@
     background: #ffffff;
     border-radius: 12px;
     padding: 20px 20px;
-    min-height: 40vh;
+    min-height: 10vh;
     box-shadow: inset 0 0 0 1px #96989b;
     font-size: 15px;
 }
 
 .contenido-ficha p {
     margin: 0;
+}
+
+.players {
+  background-color: #93a894;
 }

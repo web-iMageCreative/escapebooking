@@ -17,7 +17,9 @@ const RoomCreate: React.FC = () => {
         name: '',
         description: '',
         duration: 0,
-        price: 0,
+        min_players: 0,
+        max_players: 0,
+        prices: [],
         escaperoom_id: currentUser.id
     };
 
