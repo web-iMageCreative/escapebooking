@@ -9,14 +9,15 @@ const RoomForm: React.FC<RoomFormProps> = ({
     error,
     onSubmit,
     onCancel,
-    title = "Sala",
-    submitText = "Guardar",
-    cancelText = "Cancelar"
+    title,
+    submitText,
+    cancelText
 }) => {
     const [data, setData] = useState<RoomModel>(initialData);
     const [open, setOpen] = useState<boolean>(false);
 
     useEffect(() => {
+        setData( initialData );
         if ( error !== null ) {
           setOpen(true);
         } else {
@@ -38,7 +39,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
           [id]: value
         });
       };
-
+      
     return (
         <div className="room-form-container">
             <form onSubmit={handleSubmit} className="room-form contained">

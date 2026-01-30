@@ -92,16 +92,16 @@ CREATE TABLE `rooms` (
 );
 
 
-CREATE TABLE `price` (
+CREATE TABLE `prices` (
   `id_room` int(11) NOT NULL,
   `num_players` int(11) NOT NULL,
   `price` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-ALTER TABLE `price`
+ALTER TABLE `prices`
   ADD PRIMARY KEY (`id_room`,`num_players`);
 
-ALTER TABLE `price` ADD CONSTRAINT `precio_fk` FOREIGN KEY (`id_room`) REFERENCES `rooms`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `prices` ADD CONSTRAINT `precio_fk` FOREIGN KEY (`id_room`) REFERENCES `rooms`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 
 

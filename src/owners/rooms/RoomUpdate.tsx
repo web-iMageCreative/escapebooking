@@ -11,16 +11,7 @@ const RoomUpdate: React.FC = () => {
   const currentUser: User = AuthService.getCurrentUser();
   const { id } = useParams<{ id: string }>();
   const nav = useNavigate();
-  const [initialData, setInitialData] = useState<RoomModel>( {
-    id: 0,
-    name: '',
-    description: '',
-    duration: 0,
-    min_players: 0,
-    max_players: 0,
-    prices: [],
-    escaperoom_id: currentUser.id
-  } );
+  const [initialData, setInitialData] = useState<RoomModel>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -32,8 +23,6 @@ const RoomUpdate: React.FC = () => {
     try {
       const RoomRes: ApiResponse = await RoomService.getRoom( parseInt(id!) );
       setInitialData(RoomRes.data);
-      console.log(initialData)
-      console.log(RoomRes.data)
     } catch (err: any) {
       setError(err.message || 'Error cargando datos');
     } finally {
@@ -47,7 +36,7 @@ const RoomUpdate: React.FC = () => {
     try {
       const res = await RoomService.update(data);
       if (res.success) {
-        nav('/owner/rooms/' + initialData.escaperoom_id, { state: { alert: { type: 'success', message: res.message } } });
+        nav('/owner/rooms/' + initialData?.escaperoom_id, { state: { alert: { type: 'success', message: res.message } } });
       } else {
         setError(res.message);
       }
@@ -59,7 +48,7 @@ const RoomUpdate: React.FC = () => {
   };
 
   const handleCancel = () => {
-    nav('/owner/rooms/' + initialData.escaperoom_id, { state: { alert: { message: 'Operación cancelada', type: 'info' } } });
+    nav('/owner/rooms/' + initialData?.escaperoom_id, { state: { alert: { message: 'Operación cancelada', type: 'info' } } });
   };
 
   if (loading && !initialData) {
@@ -69,7 +58,8 @@ const RoomUpdate: React.FC = () => {
   if (!initialData) {
     return <div>Sala no encontrada</div>;
   }
-
+  
+  
   return (
     <RoomForm
       initialData={initialData}

@@ -20,7 +20,7 @@ try {
     $id = $_GET['id'];
     $params = array('id' => $id);
 
-    $query = "SELECT * FROM rooms WHERE id = :id ORDER BY name";
+    $query = "SELECT *, 0 as prices FROM rooms WHERE id = :id ORDER BY name";
 
     $room = $db->fetchSingle($query, $params);
 
