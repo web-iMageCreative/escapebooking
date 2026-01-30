@@ -5,7 +5,7 @@ import { ROUTES } from '../../routes';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import  { Snackbar, Alert } from '@mui/material';
 import './OwnerDashboard.css';
-import EscapeRoomList from '../escaperooms/EscapeRoom.List';
+import EscapeRoomList from '../escaperooms/components/EscapeRoom.List';
 
 
 const OwnerDashboard: React.FC = () => {

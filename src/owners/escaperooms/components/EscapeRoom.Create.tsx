@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { EscapeRoomModel } from './EscapeRoom.Model';
-import { EscapeRoomService } from './EscapeRoom.Service';
-import { AuthService } from '../../auth/AuthService';
-import { User } from '../../users/UserModel';
+import { EscapeRoomModel } from '../EscapeRoom.Model';
+import { EscapeRoomService } from '../EscapeRoom.Service';
+import { AuthService } from '../../../auth/AuthService';
+import { User } from '../../../users/UserModel';
 import EscapeRoomForm from './EscapeRoom.Form';
 import { useNavigate } from 'react-router-dom';
 

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { EscapeRoomModel } from './EscapeRoom.Model';
-import { EscapeRoomService } from './EscapeRoom.Service';
-import { User } from '../../users/UserModel';
-import { AuthService } from '../../auth/AuthService';
+import { EscapeRoomModel } from '../EscapeRoom.Model';
+import { EscapeRoomService } from '../EscapeRoom.Service';
+import { User } from '../../../users/UserModel';
+import { AuthService } from '../../../auth/AuthService';
 import './EscapeRoom.List.css';
 import {
   Button,

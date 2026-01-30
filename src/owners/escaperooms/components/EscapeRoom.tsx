@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import './EscapeRoom.css';
-import { EscapeRoomModel } from './EscapeRoom.Model';
-import { EscapeRoomService } from './EscapeRoom.Service';
+import { EscapeRoomModel } from '../EscapeRoom.Model';
+import { EscapeRoomService } from '../EscapeRoom.Service';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import RoomList from '../rooms/Room.List';
+import RoomList from '../../rooms/Room.List';
 
 const EscapeRoom: React.FC = () => {
     const params = useParams();

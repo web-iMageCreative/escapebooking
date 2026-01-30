@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { EscapeRoomModel } from './EscapeRoom.Model';
-import { Province } from '../../shared/models/province.Model';
-import { EscapeRoomService } from './EscapeRoom.Service';
-import { getProvinces } from '../../shared/data/provinces';
+import { EscapeRoomModel } from '../EscapeRoom.Model';
+import { Province } from '../../../shared/models/province.Model';
+import { EscapeRoomService } from '../EscapeRoom.Service';
+import { getProvinces } from '../../../shared/data/provinces';
 import EscapeRoomForm from './EscapeRoom.Form';
-import { ApiResponse } from '../../shared/models/apiResponse.Model';
+import { ApiResponse } from '../../../shared/models/apiResponse.Model';
 
 const EscapeRoomUpdate: React.FC = () => {
   const { id } = useParams<{ id: string }>();
