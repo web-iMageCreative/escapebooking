@@ -17,3 +17,7 @@ code {
   max-width: 1333px;
   margin: 0 auto;
 }
+
+.contained .contained {
+  padding: 0 !important;
+}
