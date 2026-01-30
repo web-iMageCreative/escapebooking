@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './Room.List.css';
-import { RoomService } from './Room.Service';
-import { RoomModel } from './Room.Model';
+import { RoomService } from '../Room.Service';
+import { RoomModel } from '../Room.Model';
 import { useParams } from 'react-router-dom';
 import {
   Button,

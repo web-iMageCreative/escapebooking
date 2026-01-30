@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './Room.css';
-import { RoomModel } from './Room.Model';
-import { RoomService } from './Room.Service';
+import { RoomModel } from '../Room.Model';
+import { RoomService } from '../Room.Service';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 

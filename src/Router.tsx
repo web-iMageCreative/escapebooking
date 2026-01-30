@@ -8,10 +8,10 @@ import EscapeRoomList from './owners/escaperooms/components/EscapeRoom.List';
 import EscapeRoomCreate from './owners/escaperooms/components/EscapeRoom.Create';
 import EscapeRoom from './owners/escaperooms/components/EscapeRoom';
 import EscapeRoomUpdate from './owners/escaperooms/components/EscapeRoom.Update';
-import RoomList from './owners/rooms/Room.List';
-import RoomCreate from './owners/rooms/Room.Create';
-import Room from './owners/rooms/Room';
-import RoomUpdate from './owners/rooms/RoomUpdate';
+import RoomList from './owners/rooms/components/Room.List';
+import RoomCreate from './owners/rooms/components/Room.Create';
+import Room from './owners/rooms/components/Room';
+import RoomUpdate from './owners/rooms/components/RoomUpdate';
 
 //import AdminUsers from './admin/Users/AdminUsers';
 //import CustomerBrowse from './customer/Browse/CustomerBrowse';

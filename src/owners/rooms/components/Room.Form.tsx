@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { RoomFormProps, RoomModel } from './Room.Model';
+import { RoomFormProps, RoomModel } from '../Room.Model';
 import  { Snackbar, Alert } from '@mui/material';
 import './Room.Form.css';
 

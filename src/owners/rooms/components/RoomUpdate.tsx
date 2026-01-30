@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { RoomModel, Price } from './Room.Model';
-import { RoomService } from './Room.Service';
+import { RoomModel, Price } from '../Room.Model';
+import { RoomService } from '../Room.Service';
 import RoomForm from './Room.Form';
-import { ApiResponse } from '../../shared/models/apiResponse.Model';
-import { User } from '../../users/UserModel';
-import { AuthService } from '../../auth/AuthService';
+import { ApiResponse } from '../../../shared/models/apiResponse.Model';
+import { User } from '../../../users/UserModel';
+import { AuthService } from '../../../auth/AuthService';
 
 const RoomUpdate: React.FC = () => {
   const currentUser: User = AuthService.getCurrentUser();
