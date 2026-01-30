@@ -84,11 +84,26 @@ CREATE TABLE `rooms` (
   name VARCHAR(100) NOT NULL,
   description TEXT,
   duration INT(11) NOT NULL,
-  price FLOAT,
+  min_players int(11) DEFAULT 1,
+  max_players int(11) DEFAULT NULL,
   escaperoom_id int(11) NOT NULL,
   FOREIGN KEY (escaperoom_id) REFERENCES escaperooms(id) ON DELETE CASCADE ON UPDATE CASCADE,
   INDEX idx_name (name)
 );
+
+
+CREATE TABLE `price` (
+  `id_room` int(11) NOT NULL,
+  `num_players` int(11) NOT NULL,
+  `price` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+ALTER TABLE `price`
+  ADD PRIMARY KEY (`id_room`,`num_players`);
+
+ALTER TABLE `price` ADD CONSTRAINT `precio_fk` FOREIGN KEY (`id_room`) REFERENCES `rooms`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+
 
 INSERT IGNORE INTO roles (name, description) VALUES 
 ('owner', 'Propietario de negocios de EscapeRooms'),
@@ -123,8 +138,8 @@ INSERT INTO customers (user_id, first_name, last_name, phone) VALUES
 (6, 'María', 'García', '+34777888999'),
 (7, 'Alex', 'Smith', '+34888999000');
 
-INSERT INTO `rooms` (`id`, `name`, `description`, `duration`, `price`, `escaperoom_id`) VALUES
-(1, 'Sala 1', 'Descripción de la sala', 120, 55.7, 2);
+INSERT INTO `rooms` (`id`, `name`, `description`, `duration`, `escaperoom_id`, `min_players`, `max_players`) 
+    VALUES ('5', 'Sala 378', 'as fa fas aufbdb as dfb sd bfbsdf', '160', '1', '1', '6');
 
 INSERT INTO autonomous_communities (code, name) VALUES
 ('01', 'Andalucía'),

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { RoomModel } from './Room.Model';
+import { RoomModel, Price } from './Room.Model';
 import { RoomService } from './Room.Service';
 import RoomForm from './Room.Form';
 import { ApiResponse } from '../../shared/models/apiResponse.Model';
@@ -16,7 +16,9 @@ const RoomUpdate: React.FC = () => {
     name: '',
     description: '',
     duration: 0,
-    price: 0,
+    min_players: 0,
+    max_players: 0,
+    prices: [],
     escaperoom_id: currentUser.id
   } );
   const [loading, setLoading] = useState(true);
@@ -30,6 +32,8 @@ const RoomUpdate: React.FC = () => {
     try {
       const RoomRes: ApiResponse = await RoomService.getRoom( parseInt(id!) );
       setInitialData(RoomRes.data);
+      console.log(initialData)
+      console.log(RoomRes.data)
     } catch (err: any) {
       setError(err.message || 'Error cargando datos');
     } finally {
