@@ -6,8 +6,8 @@ const token = localStorage.getItem('auth_token');
 
 export class RoomService {
 
-  static async getRooms(id: string | undefined): Promise<ApiResponse> {
-  const res = await fetch(`${API_BASE_URL}/owners/rooms/list.php?escaperoom_id=${id}`);
+  static async getRooms(escaperoomId: number): Promise<ApiResponse> {
+  const res = await fetch(`${API_BASE_URL}/owners/rooms/list.php?escaperoom_id=${escaperoomId}`);
 
   if (!res.ok) {
     throw new Error('Error obteniendo salas');

@@ -47,7 +47,7 @@ const RoomList: React.FC = () => {
     const getRooms = async () => {
         setLoading(true);
         try {
-            const res = await RoomService.getRooms(escaperoom_id);
+            const res = await RoomService.getRooms( parseInt(escaperoom_id!) );
             setRooms(res.data);
         } catch(err: any) {
             setAlertData( { 'message': err?.message, 'type': 'error' } );

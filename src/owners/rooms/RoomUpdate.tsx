@@ -18,7 +18,7 @@ const RoomUpdate: React.FC = () => {
 
   const loadData = async () => {
     try {
-      const RoomRes: ApiResponse = await RoomService.getRooms(id);
+      const RoomRes: ApiResponse = await RoomService.getRoom( parseInt(id!) );
       setInitialData(RoomRes.data);
     } catch (err: any) {
       setError(err.message || 'Error cargando datos');
@@ -33,7 +33,7 @@ const RoomUpdate: React.FC = () => {
     try {
       const res = await RoomService.update(data);
       if (res.success) {
-        nav('/owner/rooms/', { state: { alert: { type: 'success', message: res.message } } });
+        nav('/owner/rooms/'+initialData?.escaperoom_id, { state: { alert: { type: 'success', message: res.message } } });
       } else {
         setError(res.message);
       }

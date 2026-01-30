@@ -18,7 +18,13 @@
 }
 
 .lista-escaperooms .MuiCard-root {
+  display: flex;
+  flex-direction: Column;
   flex: 1 1 23%;
+}
+
+.lista-escaperooms .MuiCardActions-root {
+  margin-top: auto;
 }
 
 .lista-escaperooms .MuiButton-startIcon {

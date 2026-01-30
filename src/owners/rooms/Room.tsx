@@ -10,7 +10,7 @@ const Room: React.FC = () => {
     const params = useParams();
     const id:string | undefined = params.id;
 
-    const [Room, setRoom] = useState<RoomModel>({
+    const [room, setRoom] = useState<RoomModel>({
         id: 0,
         name: '',
         description: '',
@@ -22,12 +22,12 @@ const Room: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        getRooms();
+        getRoom();
     }, []);
         
-    const getRooms = async () => {
+    const getRoom = async () => {
         try {
-            const res = await RoomService.getRooms((params.id) );
+            const res = await RoomService.getRoom( parseInt(params.id!) );
             setRoom(res.data);
         } catch {
             setError('Error en la carga de Escaperooms');
@@ -39,13 +39,13 @@ const Room: React.FC = () => {
     return (
         <div className='ficha'>
             <div className='cabecera-ficha'>
-                <h1>{Room.name}</h1>
+                <h1>{room.name}</h1>
                 <div className="acciones">
                     <button className='btn-editar'>Editar Sala</button>
                 </div>
             </div>
             <div className='contenido-ficha'>
-                <p>{Room.description}</p>
+                <p>{room.description}</p>
             </div>
         </div>
     );

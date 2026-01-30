@@ -41,7 +41,7 @@ const EscapeRoom: React.FC = () => {
                 <h1>{escapeRoom.name}</h1>
                 <div className="acciones">
                     <button className='btn-editar'>Editar Escaperoom</button>
-                    <Link className='ver-sala' to={'/owner/room/' + escapeRoom.id}>Ver Salas</Link>
+                    <Link className='ver-sala' to={'/owner/rooms/' + escapeRoom.id}>Ver Salas</Link>
                 </div>
             </div>
             <div className='contenido-ficha'>
