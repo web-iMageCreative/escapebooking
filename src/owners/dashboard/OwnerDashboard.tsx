@@ -5,6 +5,7 @@ import { ROUTES } from '../../routes';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import  { Snackbar, Alert } from '@mui/material';
 import './OwnerDashboard.css';
+import EscapeRoomList from '../escaperooms/EscapeRoom.List';
 
 
 const OwnerDashboard: React.FC = () => {
@@ -67,6 +68,8 @@ const OwnerDashboard: React.FC = () => {
           <p>Existe token: {AuthService.isAuthenticated() ? '✅ SI' : '❌ NO'}</p>
         </div>
       </div>
+
+      <EscapeRoomList />
 
       <Snackbar
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}

@@ -29,7 +29,7 @@ const RoomCreate: React.FC = () => {
           const res = await RoomService.create(data);
     
           if (res.success) {
-            nav('/owner/rooms', { state: { alert: { type: 'success', message: res.message } } } );
+            nav('/owner/rooms/' + initialData.escaperoom_id, { state: { alert: { type: 'success', message: res.message } } } );
           } else {
             setError(res.message);
           }
@@ -41,7 +41,7 @@ const RoomCreate: React.FC = () => {
       };
     
       const handleCancel = () => {
-        nav('/owner/rooms', { state: { alert: {message: 'Operación cancelada', type: 'info' } } } );
+        nav('/owner/rooms' + initialData.escaperoom_id, { state: { alert: {message: 'Operación cancelada', type: 'info' } } } );
       };
 
       return (

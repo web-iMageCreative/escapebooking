@@ -91,7 +91,7 @@ const EscapeRoomList: React.FC = () => {
 
   return (
     <div className='contenido-escaperooms contained'>
-      <h2>Todos los EscapeRooms</h2>
+      <h2>Mis Negocios de Escape Rooms</h2>
       { ! loading && 
         <div className='lista-escaperooms'>
           {data.map(escaperoom => (

@@ -4,10 +4,11 @@ import { EscapeRoomModel } from './EscapeRoom.Model';
 import { EscapeRoomService } from './EscapeRoom.Service';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import RoomList from '../rooms/Room.List';
 
 const EscapeRoom: React.FC = () => {
     const params = useParams();
-    const id:string | undefined = params.id;
+    const id:number = parseInt(params.id!);
 
     const [escapeRoom, setEscapeRoom] = useState<EscapeRoomModel>({
         id: 0,
@@ -26,7 +27,7 @@ const EscapeRoom: React.FC = () => {
         
     const getEscaperooms = async () => {
         try {
-            const res = await EscapeRoomService.getEscaperoom( parseInt(params.id!) );
+            const res = await EscapeRoomService.getEscaperoom( id );
             setEscapeRoom(res.data);
         } catch {
             setError('Error en la carga de Escaperooms');
@@ -47,6 +48,10 @@ const EscapeRoom: React.FC = () => {
             <div className='contenido-ficha'>
                 <p>{escapeRoom.description}</p>
             </div>
+
+            { escapeRoom && 
+                <RoomList id={params.id}/>
+            }
         </div>
     );
 }

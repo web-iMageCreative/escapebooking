@@ -21,11 +21,11 @@ import {
   } from '@mui/material';
 
 
-const RoomList: React.FC = () => {
+const RoomList: React.FC<any> = ( {id} ) => {
     const params = useParams();
     const [rooms, setRooms] = useState<RoomModel[]>([]);
     const [loading, setLoading] = useState(false);
-    const escaperoom_id = params.escaperoom_id;
+    const escaperoom_id = params.escaperoom_id || id;
     const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
     const [openDialog, setOpenDialog] = useState<boolean>(false);
     const [idToDelete, setIdToDelete] = useState<number>(0);
