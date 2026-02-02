@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { EscapeRoomFormProps, EscapeRoomModel } from '../EscapeRoom.Model';
 import  { Snackbar, Alert } from '@mui/material';
-import './EscapeRoom.Form.css';
+import '../styles/EscapeRoom.Form.css';
 import { Province } from '../../../shared/models/province.Model';
 import { getProvinces } from '../../../shared/data/provinces';
 

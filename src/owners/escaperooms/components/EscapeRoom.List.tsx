@@ -4,7 +4,7 @@ import { EscapeRoomModel } from '../EscapeRoom.Model';
 import { EscapeRoomService } from '../EscapeRoom.Service';
 import { User } from '../../../users/UserModel';
 import { AuthService } from '../../../auth/AuthService';
-import './EscapeRoom.List.css';
+import '../styles/EscapeRoom.List.css';
 import {
   Button,
   Dialog,
