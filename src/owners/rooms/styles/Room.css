@@ -14,35 +14,6 @@
     padding: 0px 20px;
 }
 
-.acciones {
-    display: flex;
-    gap: 20px;
-}
-
-.btn-editar {
-    height: auto;
-    padding:10px 10px;
-    background: linear-gradient(135deg, #4caf50, #2e7d32);
-    color: #ffffff;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-}
-
-.btn-editar:hover {
-    background: linear-gradient(135deg, #61b365, #388e3c);
-    transform: translateY(-1px);
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
-}
-
-.btn-editar:active {
-    transform: translateY(0);
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
-}
-
 .contenido-ficha {
     background: #ffffff;
     border-radius: 12px;
@@ -54,8 +25,4 @@
 
 .contenido-ficha p {
     margin: 0;
-}
-
-.players {
-  background-color: #93a894;
 }

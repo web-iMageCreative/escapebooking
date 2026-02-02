@@ -14,35 +14,6 @@
     padding: 0px 20px;
 }
 
-.acciones {
-    display: flex;
-    gap: 20px;
-}
-
-.btn-editar {
-    height: auto;
-    padding:10px 10px;
-    background: linear-gradient(135deg, #4caf50, #2e7d32);
-    color: #ffffff;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-}
-
-.btn-editar:hover {
-    background: linear-gradient(135deg, #61b365, #388e3c);
-    transform: translateY(-1px);
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
-}
-
-.btn-editar:active {
-    transform: translateY(0);
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
-}
-
 .contenido-ficha {
     background: #ffffff;
     border-radius: 12px;
@@ -56,6 +27,19 @@
     margin: 0;
 }
 
-.ver-sala {
-    color:rgb(0, 0, 0)
+.actions a {
+  background: #fff;
+  border: 1px solid #d4d4d4;
+  padding: 6px 25px;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 3px 3px 1px rgba(0,0,0,0.2);
+  border-radius: 6px;
+  margin-right: 20px;
+  transition: all .3s;
+}
+
+.actions a:hover {
+  background-color: #c0dbf3;
+  box-shadow: 8px 8px 6px rgba(0,0,0,0.12);
 }

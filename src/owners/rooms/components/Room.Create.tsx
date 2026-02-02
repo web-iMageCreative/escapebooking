@@ -5,12 +5,14 @@ import { AuthService } from '../../../auth/AuthService';
 import { User } from '../../../users/UserModel';
 import  RoomForm  from './Room.Form';
 import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 const RoomCreate: React.FC = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const currentUser: User = AuthService.getCurrentUser();
     const nav = useNavigate();
+    const { escaperoom_id } = useParams<{ escaperoom_id: string }>();
 
     const initialData: RoomModel = {
         id: 0,
@@ -20,7 +22,7 @@ const RoomCreate: React.FC = () => {
         min_players: 0,
         max_players: 0,
         prices: [],
-        escaperoom_id: currentUser.id
+        escaperoom_id: parseInt(escaperoom_id!)
     };
 
     const handleSubmit = async (data: RoomModel) => {
@@ -31,7 +33,7 @@ const RoomCreate: React.FC = () => {
           const res = await RoomService.create(data);
     
           if (res.success) {
-            nav('/owner/rooms/' + initialData.escaperoom_id, { state: { alert: { type: 'success', message: res.message } } } );
+            nav('/owner/escape-room/' + initialData.escaperoom_id, { state: { alert: { type: 'success', message: res.message } } } );
           } else {
             setError(res.message);
           }
@@ -43,7 +45,7 @@ const RoomCreate: React.FC = () => {
       };
     
       const handleCancel = () => {
-        nav('/owner/rooms' + initialData.escaperoom_id, { state: { alert: {message: 'Operación cancelada', type: 'info' } } } );
+        nav('/owner/escape-room' + initialData.escaperoom_id, { state: { alert: {message: 'Operación cancelada', type: 'info' } } } );
       };
 
       return (

@@ -13,7 +13,7 @@ export const ROUTES = {
   OWNER_ESCAPE_ROOMS_UPDATE: '/owner/escape-rooms/edit/:id',
   OWNER_ROOMS: '/owner/rooms/:escaperoom_id',
   OWNER_ROOM: '/owner/room/:id',
-  OWNER_ROOMS_CREATE: '/owner/rooms/new',
+  OWNER_ROOMS_CREATE: '/owner/rooms/new/:escaperoom_id',
   OWNER_ROOMS_UPDATE: '/owner/rooms/edit/:id'
   // OWNER_BOOKINGS: '/owner/bookings',
   

@@ -42,8 +42,8 @@ const Room: React.FC = () => {
         <div className='ficha'>
             <div className='cabecera'>
                 <h1>{room.name}</h1>
-                <div className="acciones">
-                    <button className='btn-editar'>Editar Sala</button>
+                <div className="actions">
+                    <Link to={'/owner/rooms/edit/' + id}>Editar Sala</Link>
                 </div>
             </div>
             <div className='contenido-ficha'>

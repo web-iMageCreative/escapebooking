@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { RoomFormProps, RoomModel } from '../Room.Model';
+import { RoomFormProps, RoomModel, Price } from '../Room.Model';
 import  { Snackbar, Alert } from '@mui/material';
 import '../styles/Room.Form.css';
 
@@ -25,6 +25,26 @@ const RoomForm: React.FC<RoomFormProps> = ({
         }
       }, [error]);
 
+
+      useEffect(() => {
+        if (data.min_players > data.max_players) return;
+
+        const newPrices: Price[] = [];
+
+        for (let i = data.min_players; i <= data.max_players; i++) {
+
+            newPrices.push(
+            { id_room: 0, num_players: i, price: 0 }
+            );
+        }
+
+        setData(({
+            ...data,
+            prices: newPrices
+        }));
+        }, [data.min_players, data.max_players]);
+
+
   const handleSnackbarClose = () => { setOpen(false); }
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -39,6 +59,20 @@ const RoomForm: React.FC<RoomFormProps> = ({
           [id]: value
         });
       };
+    
+    const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const value  = parseInt(e.target.value!);
+        const index = parseInt(e.target.dataset.index!);
+        const newPrices: Price[] = data.prices;
+
+        newPrices[index] = { id_room: 0, num_players: data.min_players + index, price: value };
+
+        setData(({
+            ...data,
+            prices: newPrices
+        }));
+    };
+
       
     return (
         <div className="room-form-container">
@@ -146,7 +180,30 @@ const RoomForm: React.FC<RoomFormProps> = ({
                     </div>
                 </div>
 
-                
+                {(data.min_players > 0 && data.max_players > 0 && data.min_players < data.max_players &&
+                <div className="form-group">
+                    <div className="col-label">
+                    <label htmlFor='price'>Precios por cantidad de jugadores</label>
+                    </div>
+                    <div className="col-value">
+                    {data.prices.map((x, index:number) => (
+                        <div key={x.num_players} className=" "> 
+                        <label>{x.num_players} jugadores</label>
+                        <input
+                            type="number"
+                            id="price"
+                            data-index={index}
+                            min={0}
+                            value={x.price}
+                            onChange={handlePriceChange}
+                            required
+                            disabled={loading}
+                        />
+                        </div>
+                    ))}
+                    </div>
+                </div>
+                )}
 
                 <div className="form-actions">
                     <button

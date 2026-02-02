@@ -34,13 +34,19 @@ try {
   $params['max_players']    = trim($data['max_players']);
   $params['escaperoom_id']       = $data['escaperoom_id'];
 
-  $query = "INSERT INTO rooms (name, description, duration, min_players, max_players, escaperoom_id) VALUES (:name, :description, :duration, :max_players, :max_players, :escaperoom_id)";
+  $query = "INSERT INTO rooms (name, description, duration, min_players, max_players, escaperoom_id) 
+  VALUES (:name, :description, :duration, :max_players, :max_players, :escaperoom_id)";
+
+  // INSERT INTO prices (id_room, num_players, price) VALUES (id:room:, :num_players, price)
+
   
   $room = $db->execute($query, $params);
   
   if (!$room) {
     throw new Exception( 'No se pudo crear la sala '. $params['name'] );
   }
+
+  
 
   http_response_code(200);
   echo json_encode([

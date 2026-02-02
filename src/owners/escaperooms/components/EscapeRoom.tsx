@@ -5,6 +5,7 @@ import { EscapeRoomService } from '../EscapeRoom.Service';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import RoomList from '../../rooms/components/Room.List';
+import { ROUTES } from '../../../routes';
 
 const EscapeRoom: React.FC = () => {
     const params = useParams();
@@ -40,9 +41,9 @@ const EscapeRoom: React.FC = () => {
         <div className='ficha'>
             <div className='cabecera-ficha'>
                 <h1>{escapeRoom.name}</h1>
-                <div className="acciones">
-                    <button className='btn-editar'>Editar Escaperoom</button>
-                    <Link className='ver-sala' to={'/owner/rooms/' + escapeRoom.id}>Ver Salas</Link>
+                <div className="actions">
+                    <Link to={'/owner/escape-rooms/edit/' + id}>Editar Escaperoom</Link>
+                    <Link to={'/owner/rooms/new/' + escapeRoom.id}>Crear nueva Sala</Link>
                 </div>
             </div>
             <div className='contenido-ficha'>
