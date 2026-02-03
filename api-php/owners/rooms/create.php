@@ -27,31 +27,41 @@ try {
   if ( ! (isset( $data['escaperoom_id'] ) && $data['escaperoom_id'] != '') ) throw new Exception('Falta el id de la sala del Escaperoom');
   
   $params = array();
-  $params['name']        = trim( $data['name'] );
-  $params['description'] = trim( $data['description'] );
-  $params['duration']     = trim( $data['duration'] );
-  $params['min_players']    = trim($data['min_players']);
-  $params['max_players']    = trim($data['max_players']);
-  $params['escaperoom_id']       = $data['escaperoom_id'];
+  $params['name']          = trim( $data['name'] );
+  $params['description']   = trim( $data['description'] );
+  $params['duration']      = $data['duration'];
+  $params['min_players']   = $data['min_players'];
+  $params['max_players']   = $data['max_players'];
+  $params['escaperoom_id'] = $data['escaperoom_id'];
 
   $query = "INSERT INTO rooms (name, description, duration, min_players, max_players, escaperoom_id) 
-  VALUES (:name, :description, :duration, :max_players, :max_players, :escaperoom_id)";
-
-  // INSERT INTO prices (id_room, num_players, price) VALUES (id:room:, :num_players, price)
-
+  VALUES (:name, :description, :duration, :mix_players, :max_players, :escaperoom_id)";
   
   $room = $db->execute($query, $params);
-  
+
   if (!$room) {
     throw new Exception( 'No se pudo crear la sala '. $params['name'] );
   }
 
-  
+  $id_room = $db->lastId();
+
+  for ( $i = 0; $i < count($data['prices']); $i++) {
+    $params = array();
+    $params['id_room'] = $data['prices'][$i]['id_room'];
+    $params['num_players'] = $data['prices'][$i]['num_players'];
+    $params['price'] = $data['prices'][$i]['price'];
+    $query = "INSERT INTO prices (id_room, num_players, price) VALUES (:id_room, :num_players, :price)";
+    $price = $db->execute($query, $params);
+
+    if (!$price) {
+      throw new Exception( 'No se pudo crear el precio para la sala '. $params['name'] );
+    }
+  }
 
   http_response_code(200);
   echo json_encode([
     'success' => true,
-    'message' => 'Creado el negocio '. $params['name'],
+    'message' => 'Creada la sala '. $params['name'],
     'data' => []
   ]);
 } catch (Exception $e) {

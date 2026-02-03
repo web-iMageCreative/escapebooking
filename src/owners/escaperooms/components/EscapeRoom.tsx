@@ -38,7 +38,7 @@ const EscapeRoom: React.FC = () => {
     }
 
     return (
-        <div className='ficha'>
+        <div className='ficha contained'>
             <div className='cabecera-ficha'>
                 <h1>{escapeRoom.name}</h1>
                 <div className="actions">

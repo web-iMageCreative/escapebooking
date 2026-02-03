@@ -7,6 +7,14 @@
   margin-bottom: 30px;
   border-bottom: 1px solid #d4d4d4
 }
+
+.room-form .form-group.indented {
+  display: flex;
+  margin-bottom: 0;
+  margin-left: 30px;
+  border-bottom: 1px solid #d4d4d4;
+}
+
 .room-form .col-label {
   flex: 1 1 50%;
   padding: 20px 20px 20px 0;
@@ -20,6 +28,11 @@
 .room-form .form-group label {
   font-size: 18px;
   font-weight: bolder;
+  line-height: 34px;
+}
+
+.room-form .form-group.indented label {
+  font-size: 16px;
   line-height: 34px;
 }
 
