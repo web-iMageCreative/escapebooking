@@ -33,9 +33,10 @@ try {
   $params['min_players']   = $data['min_players'];
   $params['max_players']   = $data['max_players'];
   $params['escaperoom_id'] = $data['escaperoom_id'];
+  $prices = $data['prices'];
 
   $query = "INSERT INTO rooms (name, description, duration, min_players, max_players, escaperoom_id) 
-  VALUES (:name, :description, :duration, :mix_players, :max_players, :escaperoom_id)";
+  VALUES (:name, :description, :duration, :min_players, :max_players, :escaperoom_id)";
   
   $room = $db->execute($query, $params);
 
@@ -46,12 +47,12 @@ try {
   $id_room = $db->lastId();
 
   for ( $i = 0; $i < count($data['prices']); $i++) {
-    $params = array();
-    $params['id_room'] = $data['prices'][$i]['id_room'];
-    $params['num_players'] = $data['prices'][$i]['num_players'];
-    $params['price'] = $data['prices'][$i]['price'];
+    $params_price = array();
+    $params_price['id_room'] = $id_room;
+    $params_price['num_players'] = $prices[$i]['num_players'];
+    $params_price['price'] = $prices[$i]['price'];
     $query = "INSERT INTO prices (id_room, num_players, price) VALUES (:id_room, :num_players, :price)";
-    $price = $db->execute($query, $params);
+    $price = $db->execute($query, $params_price);
 
     if (!$price) {
       throw new Exception( 'No se pudo crear el precio para la sala '. $params['name'] );
