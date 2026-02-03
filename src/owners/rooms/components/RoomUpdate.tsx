@@ -24,6 +24,7 @@ const RoomUpdate: React.FC = () => {
       const RoomRes: ApiResponse = await RoomService.getRoom( parseInt(id!) );
       setInitialData(RoomRes.data);
     } catch (err: any) {
+      console.log(err);
       setError(err.message || 'Error cargando datos');
     } finally {
       setLoading(false);

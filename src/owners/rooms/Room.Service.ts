@@ -12,20 +12,20 @@ export class RoomService {
     if (!res.ok) {
       throw new Error('Error obteniendo salas');
     }
-
+    
     return res.json();
   }
 
   static async getRoom(id: number): Promise<ApiResponse> {
     const res = await fetch(`${API_BASE_URL}/owners/rooms/get.php?id=${id}`);
-
+    
     if (!res.ok) {
       const result = await res.json();
       throw new Error(result.message);
     }
 
     const result = await res.json();
-
+    console.log(result)
     return result;
   }
 

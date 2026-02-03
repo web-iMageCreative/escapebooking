@@ -95,7 +95,7 @@ CREATE TABLE `rooms` (
 CREATE TABLE `prices` (
   `id_room` int(11) NOT NULL,
   `num_players` int(11) NOT NULL,
-  `price` int(11) NOT NULL
+  `price` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 ALTER TABLE `prices`

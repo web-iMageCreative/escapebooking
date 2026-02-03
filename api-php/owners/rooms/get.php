@@ -20,12 +20,22 @@ try {
     $id = $_GET['id'];
     $params = array('id' => $id);
 
-    $query = "SELECT *, 0 as prices FROM rooms WHERE id = :id ORDER BY name";
+    $query = "SELECT * FROM rooms WHERE id = :id ORDER BY name";
 
     $room = $db->fetchSingle($query, $params);
 
+    
     if (!$room) {
         throw new Exception('Sala no encontrada.');
+    }
+   
+    $query = "SELECT * FROM prices WHERE id_room = :id";
+    $prices = $db->fetchAll($query, $params);
+
+    if ($prices) {
+        $room['prices'] = $prices;
+    } else {
+        $room['prices'] = array();
     }
 
     echo json_encode([
@@ -37,6 +47,6 @@ try {
     http_response_code(401);
     echo json_encode([
         'success' => false,
-        'message' => $e->getMessage()
+        'message' => 'asfgsdfgsdfg'
     ]);
 }

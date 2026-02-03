@@ -43,6 +43,9 @@ try {
     throw new Exception( 'No se pudo Editar la sala '. $params['name'] );
   }
 
+  $query = "UPDATE prices SET name = :name, description = :description, duration = :duration, min_players = :min_players, max_players = :max_players WHERE id = :id";
+  $price = $db->execute($query, $params_price);
+
   http_response_code(200);
   echo json_encode([
     'success' => true,

@@ -51,6 +51,7 @@ try {
     $params_price['id_room'] = $id_room;
     $params_price['num_players'] = $prices[$i]['num_players'];
     $params_price['price'] = $prices[$i]['price'];
+    
     $query = "INSERT INTO prices (id_room, num_players, price) VALUES (:id_room, :num_players, :price)";
     $price = $db->execute($query, $params_price);
 

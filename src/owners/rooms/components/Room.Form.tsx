@@ -15,6 +15,8 @@ const RoomForm: React.FC<RoomFormProps> = ({
 }) => {
   const [data, setData] = useState<RoomModel>(initialData);
   const [open, setOpen] = useState<boolean>(false);
+  const min: number = data.min_players;
+  const max: number = data.max_players;
 
   useEffect(() => {
     setData(initialData);
@@ -27,24 +29,29 @@ const RoomForm: React.FC<RoomFormProps> = ({
 
 
   useEffect(() => {
-    if (data.min_players > data.max_players) return;
-
-    const max = data.max_players;
-    const min = data.min_players;
+    if (min > max) return;
     const newPrices: Price[] = [];
 
-    for (let i = min; i <= max; i++) {
-
-      newPrices.push(
-        { id_room: 0, num_players: i, price: 0 }
+    if (data.prices.length > 0)
+      for (let i = 0; i <= max - min; i++) {
+        const indice = i - min
+        const existe = data.prices[indice];
+        newPrices.push(
+        { id_room: 0, num_players: i, price: existe ? existe.price : 0 }
       );
+    } else {
+      for (let i = min; i <= max; i++) {
+        newPrices.push(
+          { id_room: 0, num_players: i, price: 0 }
+        );
+      }
     }
 
     setData(({
       ...data,
       prices: newPrices
     }));
-  }, [data.min_players, data.max_players]);
+  }, [min, max]);
 
 
   const handleSnackbarClose = () => { setOpen(false); }
@@ -67,7 +74,6 @@ const RoomForm: React.FC<RoomFormProps> = ({
     const id: string = e.target.id;
     const value: number = parseFloat(e.target.value!);
     const index: number = parseInt(e.target.dataset.index!);
-    const min: number = data.min_players;
     const newPrices: Price[] = Object.assign([], data.prices);
 
     newPrices[index] = { id_room: 0, num_players: +min + +index, price: value };
@@ -156,7 +162,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
             <input
               type="number"
               id="min_players"
-              value={data.min_players}
+              value={min}
               onChange={handleInputChange}
               placeholder="1"
               required
@@ -176,7 +182,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
             <input
               type="number"
               id="max_players"
-              value={data.max_players}
+              value={max}
               onChange={handleInputChange}
               placeholder="6"
               required
@@ -185,7 +191,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
           </div>
         </div>
 
-        {(data.min_players > 0 && data.max_players > 0 && data.min_players < data.max_players &&
+        {(min > 0 && max > 0 && min < max &&
           <>
           <h2>Precios Por número de jugadores</h2>
           {data.prices.map( (x, index: number) => (
