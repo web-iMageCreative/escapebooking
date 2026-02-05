@@ -39,9 +39,9 @@ const Room: React.FC = () => {
     }
 
     return (
-        <div className='ficha'>
+        <div className='ficha contained'>
             <div className='cabecera'>
-                <h1>{room.name}</h1>
+                <h3>{room.name}</h3>
                 <div className="actions">
                     <Link to={'/owner/rooms/edit/' + id}>Editar Sala</Link>
                 </div>
@@ -51,11 +51,11 @@ const Room: React.FC = () => {
             </div>
             <div className="players">
                 <div className='min-players'>
-                    <h2>Mínimo de Jugadores</h2>
+                    <h4>Mínimo de Jugadores</h4>
                     <p>{room.min_players}</p>
                 </div>
                 <div className='max-players'>
-                    <h2>Máximo de Jugadores</h2>
+                    <h4>Máximo de Jugadores</h4>
                     <p>{room.max_players}</p>
                 </div>
             </div>

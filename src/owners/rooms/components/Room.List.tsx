@@ -91,7 +91,7 @@ const RoomList: React.FC<any> = ( {id} ) => {
 
     return (
         <div className='contenido-rooms contained'>
-        <h2>Salas del Escaperoom</h2>
+        <h3>Salas del Escaperoom</h3>
         { ! loading && 
             <div className='lista-rooms'>
             {rooms.map(room => (
@@ -103,7 +103,7 @@ const RoomList: React.FC<any> = ( {id} ) => {
                         image="/assets/imgs/escaperooms/generic.jpg"
                     />
                     <CardContent>
-                        <Typography gutterBottom variant="h5" component="div">
+                        <Typography gutterBottom variant="h6" component="h3">
                             {room.name}
                         </Typography>
                         <Typography variant="body2" sx={{ color: 'text.secondary' }}>

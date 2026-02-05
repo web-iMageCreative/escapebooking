@@ -45,7 +45,7 @@ const OwnerDashboard: React.FC = () => {
   return (
     <div className="dashboard-container contained">
       <header className="dashboard-header">
-        <h1>Dashboard</h1>
+        <h2>Dashboard</h2>
         <div className="user-info">
           <span>Bienvenido, <strong>{user.email}</strong></span>
         </div>

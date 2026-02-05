@@ -40,7 +40,7 @@ const EscapeRoom: React.FC = () => {
     return (
         <div className='ficha contained'>
             <div className='cabecera-ficha'>
-                <h1>{escapeRoom.name}</h1>
+                <h2>{escapeRoom.name}</h2>
                 <div className="actions">
                     <Link to={'/owner/escape-rooms/edit/' + id}>Editar Escaperoom</Link>
                     <Link to={'/owner/rooms/new/' + escapeRoom.id}>Crear nueva Sala</Link>

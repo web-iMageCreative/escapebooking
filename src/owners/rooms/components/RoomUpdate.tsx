@@ -37,7 +37,7 @@ const RoomUpdate: React.FC = () => {
     try {
       const res = await RoomService.update(data);
       if (res.success) {
-        nav('/owner/rooms/' + initialData?.escaperoom_id, { state: { alert: { type: 'success', message: res.message } } });
+        nav('/owner/escape-room/' + initialData?.escaperoom_id, { state: { alert: { type: 'success', message: res.message } } });
       } else {
         setError(res.message);
       }
@@ -49,7 +49,7 @@ const RoomUpdate: React.FC = () => {
   };
 
   const handleCancel = () => {
-    nav('/owner/rooms/' + initialData?.escaperoom_id, { state: { alert: { message: 'Operación cancelada', type: 'info' } } });
+    nav('/owner/escape-room/' + initialData?.escaperoom_id, { state: { alert: { message: 'Operación cancelada', type: 'info' } } });
   };
 
   if (loading && !initialData) {

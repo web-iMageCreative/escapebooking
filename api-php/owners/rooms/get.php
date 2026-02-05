@@ -23,7 +23,6 @@ try {
     $query = "SELECT * FROM rooms WHERE id = :id ORDER BY name";
 
     $room = $db->fetchSingle($query, $params);
-
     
     if (!$room) {
         throw new Exception('Sala no encontrada.');

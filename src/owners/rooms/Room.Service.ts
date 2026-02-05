@@ -25,7 +25,7 @@ export class RoomService {
     }
 
     const result = await res.json();
-    console.log(result)
+    
     return result;
   }
 

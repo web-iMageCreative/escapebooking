@@ -4,7 +4,7 @@
 
 .room-form .form-group {
   display: flex;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
   border-bottom: 1px solid #d4d4d4
 }
 
@@ -17,12 +17,16 @@
 
 .room-form .col-label {
   flex: 1 1 50%;
-  padding: 20px 20px 20px 0;
+  padding: 10px 20px 10px 0;
 }
 
 .room-form .col-value {
   flex: 1 1 50%;
-  padding: 20px 0 20px 20px;
+  padding: 10px 0 10px 20px;
+}
+
+.room-form .form-actions {
+  margin-top: 50px;
 }
 
 .room-form .form-group label {
