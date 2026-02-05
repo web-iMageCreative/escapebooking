@@ -43,8 +43,39 @@ try {
     throw new Exception( 'No se pudo Editar la sala '. $params['name'] );
   }
 
-  $query = "UPDATE prices SET name = :name, description = :description, duration = :duration, min_players = :min_players, max_players = :max_players WHERE id = :id";
-  $price = $db->execute($query, $params_price);
+  if (isset($data['prices']) && is_array($data['prices'])) {
+    foreach ($data['prices'] as $p) {
+      if (!isset($p['num_players']) || !isset($p['price'])) {
+        continue;
+      }
+
+      $query = "SELECT price FROM prices WHERE id_room = :id_room AND num_players = :num_players";
+      $queryExist = $db->fetchSingle($query, [
+        'id_room' => $data['id'],
+        'num_players' => $p['num_players']
+      ]);
+      
+      if ($queryExist) {
+        $queryUpdate = "UPDATE prices SET price = :price WHERE id_room = :id_room AND num_players = :num_players";
+
+        $db->execute($queryUpdate, [
+          'price' => $p['price'],
+          'id_room' => $data['id'],
+          'num_players' => $p['num_players']
+        ]);
+      } else {
+        $query = "INSERT INTO prices (id_room, num_players, price) 
+        VALUES (:id_room, :num_players, :price)";
+
+        $db->execute($query, [
+          'id_room' => $data['id'],
+          'num_players' => $p['num_players'],
+          'price' => $p['price']
+        ]);
+      }
+    }
+  }
+
 
   http_response_code(200);
   echo json_encode([
