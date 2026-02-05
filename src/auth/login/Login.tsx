@@ -5,7 +5,7 @@ import './Login.css';
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Container, Icon, Stack, TextField } from '@mui/material';
 import LockPersonOutlinedIcon from '@mui/icons-material/LockPersonOutlined';
-import { NotchedContainer } from '../../shared/components/CircularNotchedBox';
+import NotchedContainer from '../../shared/components/CircularNotchedBox';
 
 const Login: React.FC = () => {
   const [credentials, setCredentials] = useState<LoginCredentials>({
@@ -48,32 +48,13 @@ const Login: React.FC = () => {
 
   return (
     <>
-      <Box className="login-form"
-        // maxWidth='xs'
-        // notch="top"
-        // sx={{
-        //   bgcolor: 'background.paper',
-        //   boxShadow: 8,
-        //   borderRadius: 0,
-        //   p: 2,
-        // }}
-      >
-      <Box sx={{ width: 500, m: 'auto' }}
-      // sx={{ position: 'relative', height: 100 }}
-      >
-        {/* <NotchedContainer
-          notchPosition="top"
-          notchSize={40}
-          notchOffset="50%"
-          elevation={6}
-        > */}
+      <Box sx={{ maxWidth: 'xs' }}>
           <Box
             component="form"
             onSubmit={handleSubmit}
             sx={{ 
-              // p: 4,
-              bgcolor: '#FFF',
-              p: '50px'
+              p: 4,
+              bgcolor: '#FFF'
             }}
             noValidate
             autoComplete="off"
@@ -122,8 +103,6 @@ const Login: React.FC = () => {
 
             </Stack>
           </Box>
-        {/* </NotchedContainer> */}
-      </Box>
       </Box>
 
       <div className="test-credentials">
