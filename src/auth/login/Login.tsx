@@ -48,62 +48,85 @@ const Login: React.FC = () => {
 
   return (
     <>
-      <Box sx={{ maxWidth: 'xs' }}>
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            sx={{ 
-              p: 4,
-              bgcolor: '#FFF'
-            }}
-            noValidate
-            autoComplete="off"
-          >
-            <Stack spacing={4}>
+      <Container maxWidth='xs' className="login-container">
+        <Box style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginBottom: -70
+        }}>
+          <LockPersonOutlinedIcon sx={{
+            fontSize: 30,
+            width: 30,
+            height: 30,
+            bgcolor: 'primary.main',
+            color: 'common.white',
+            p: 2,
+            borderRadius: '50%'
+          }}
+          />
+        </Box>
+        <NotchedContainer 
+          width={80}
+          cornerRadius={20}
+          bgColor="#fff"
+        />
+        <Box
+          className="form-container"
+          component="form"
+          onSubmit={handleSubmit}
+          sx={{ 
+            p: 4,
+            bgcolor: '#FFF'
+          }}
+          noValidate
+          autoComplete="off"
+        >
+          <Stack spacing={4}>
 
-              <h2>Acceso</h2>
+            <h2>Mi perfil</h2>
 
-              <TextField
-                sx={{ minWidth:"100%" }} 
-                type="email"
-                id="email" 
-                label="E-mail"
-                variant="outlined" 
-                value={credentials.email}
-                onChange={(e) => setCredentials({
-                  ...credentials,
-                  email: e.target.value
-                })}
-                required
-              />
+            <TextField
+              sx={{ minWidth:"100%" }} 
+              type="email"
+              id="email" 
+              label="E-mail"
+              variant="outlined" 
+              value={credentials.email}
+              onChange={(e) => setCredentials({
+                ...credentials,
+                email: e.target.value
+              })}
+              required
+            />
 
-              <TextField
-                sx={{ minWidth:"100%" }} 
-                type="password"
-                id="password" 
-                label="Contraseña"
-                variant="outlined" 
-                value={credentials.password}
-                onChange={(e) => setCredentials({
-                  ...credentials,
-                  password: e.target.value
-                })}
-                required
-              />
+            <TextField
+              sx={{ minWidth:"100%" }} 
+              type="password"
+              id="password" 
+              label="Contraseña"
+              variant="outlined" 
+              value={credentials.password}
+              onChange={(e) => setCredentials({
+                ...credentials,
+                password: e.target.value
+              })}
+              required
+            />
 
-              <Button 
-                type="submit"
-                variant="contained"
-                disabled={loading}
-                color="primary"
-                size="large"
-              >
-                {loading ? 'Identificando...' : 'Acceder'}
-              </Button>
+            <Button 
+              type="submit"
+              variant="contained"
+              disabled={loading}
+              color="primary"
+              size="large"
+            >
+              {loading ? 'Identificando...' : 'Acceder'}
+            </Button>
 
-            </Stack>
-          </Box>
-      </Box>
+          </Stack>
+        </Box>
+      </Container>
 
       <div className="test-credentials">
         <h4>Cuentas de prueba:</h4>
