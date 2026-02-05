@@ -28,7 +28,7 @@ try {
         throw new Exception('Sala no encontrada.');
     }
    
-    $query = "SELECT * FROM prices WHERE id_room = :id";
+    $query = "SELECT * FROM prices WHERE id_room = :id ORDER BY num_players ASC";
     $prices = $db->fetchAll($query, $params);
 
     if ($prices) {
@@ -46,6 +46,6 @@ try {
     http_response_code(401);
     echo json_encode([
         'success' => false,
-        'message' => 'asfgsdfgsdfg'
+        'message' => $e->getMessage()
     ]);
 }
