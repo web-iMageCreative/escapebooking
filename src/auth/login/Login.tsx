@@ -3,6 +3,9 @@ import { AuthService } from '../AuthService';
 import { LoginCredentials } from '../../users/UserModel';
 import './Login.css';
 import { useNavigate } from 'react-router-dom';
+import { Box, Button, Container, Icon, Stack, TextField } from '@mui/material';
+import LockPersonOutlinedIcon from '@mui/icons-material/LockPersonOutlined';
+import { NotchedContainer } from '../../shared/components/CircularNotchedBox';
 
 const Login: React.FC = () => {
   const [credentials, setCredentials] = useState<LoginCredentials>({
@@ -44,54 +47,92 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="login-container">
-      <form className="login-form contained" onSubmit={handleSubmit}>
-        <h2>Acceso</h2>
+    <>
+      <Box className="login-form"
+        // maxWidth='xs'
+        // notch="top"
+        // sx={{
+        //   bgcolor: 'background.paper',
+        //   boxShadow: 8,
+        //   borderRadius: 0,
+        //   p: 2,
+        // }}
+      >
+      <Box sx={{ width: 500, m: 'auto' }}
+      // sx={{ position: 'relative', height: 100 }}
+      >
+        {/* <NotchedContainer
+          notchPosition="top"
+          notchSize={40}
+          notchOffset="50%"
+          elevation={6}
+        > */}
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            sx={{ 
+              // p: 4,
+              bgcolor: '#FFF',
+              p: '50px'
+            }}
+            noValidate
+            autoComplete="off"
+          >
+            <Stack spacing={4}>
 
-        {error && <div className="error-message">{error}</div>}
+              <h2>Acceso</h2>
 
-        <div className="form-group">
-          <label>E-mail</label>
-          <input
-            type="email"
-            value={credentials.email}
-            onChange={(e) => setCredentials({
-              ...credentials,
-              email: e.target.value
-            })}
-            placeholder="admin@escapebooking.com"
-            required
-          />
-        </div>
+              <TextField
+                sx={{ minWidth:"100%" }} 
+                type="email"
+                id="email" 
+                label="E-mail"
+                variant="outlined" 
+                value={credentials.email}
+                onChange={(e) => setCredentials({
+                  ...credentials,
+                  email: e.target.value
+                })}
+                required
+              />
 
-        <div className="form-group">
-          <label>Contraseña</label>
-          <input
-            type="password"
-            value={credentials.password}
-            onChange={(e) => setCredentials({
-              ...credentials,
-              password: e.target.value
-            })}
-            placeholder="password"
-            required
-          />
-        </div>
+              <TextField
+                sx={{ minWidth:"100%" }} 
+                type="password"
+                id="password" 
+                label="Contraseña"
+                variant="outlined" 
+                value={credentials.password}
+                onChange={(e) => setCredentials({
+                  ...credentials,
+                  password: e.target.value
+                })}
+                required
+              />
 
-        <div className="form-actions">
-          <button type="submit" disabled={loading}>
-            {loading ? 'Identificando...' : 'Acceder'}
-          </button>
-        </div>
+              <Button 
+                type="submit"
+                variant="contained"
+                disabled={loading}
+                color="primary"
+                size="large"
+              >
+                {loading ? 'Identificando...' : 'Acceder'}
+              </Button>
 
-        <div className="test-credentials">
-          <h4>Cuentas de prueba:</h4>
-          {/* <p><strong>Admin:</strong> admin@escapebooking.com / password</p> */}
-          <p><strong>Owner:</strong> madrid@escaperooms.com / password</p>
-          {/* <p><strong>Customer:</strong> juan.perez@gmail.com / password</p> */}
-        </div>
-      </form>
-    </div>
+            </Stack>
+          </Box>
+        {/* </NotchedContainer> */}
+      </Box>
+      </Box>
+
+      <div className="test-credentials">
+        <h4>Cuentas de prueba:</h4>
+        {/* <p><strong>Admin:</strong> admin@escapebooking.com / password</p> */}
+        <p><strong>Owner:</strong> madrid@escaperooms.com / password</p>
+        {/* <p><strong>Customer:</strong> juan.perez@gmail.com / password</p> */}
+      </div>
+    </>
   );
 };
 

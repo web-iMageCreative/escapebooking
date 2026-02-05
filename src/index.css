@@ -21,3 +21,13 @@ code {
 .contained .contained {
   padding: 0 !important;
 }
+
+h2 {
+  font-size: 30px;
+}
+
+h3 {
+  font-size: 24px;
+  margin-top: 50px;
+  margin-bottom: 30px;
+}
