@@ -23,15 +23,15 @@ const EscapeRoom: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        getEscaperooms();
+        getEscaperoom();
     }, []);
         
-    const getEscaperooms = async () => {
+    const getEscaperoom = async () => {
         try {
             const res = await EscapeRoomService.getEscaperoom( id );
             setEscapeRoom(res.data);
         } catch {
-            setError('Error en la carga de Escaperooms');
+            setError('Error en la carga de datos');
         } finally {
             return;
         }

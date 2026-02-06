@@ -35,7 +35,7 @@ const EscapeRoomUpdate: React.FC = () => {
     try {
       const res = await EscapeRoomService.update(data);
       if (res.success) {
-        nav('/owner/escape-rooms', { state: { alert: { type: 'success', message: res.message } } });
+        nav('/owner/dashboard', { state: { alert: { type: 'success', message: res.message } } });
       } else {
         setError(res.message);
       }
@@ -47,7 +47,7 @@ const EscapeRoomUpdate: React.FC = () => {
   };
 
   const handleCancel = () => {
-    nav('/owner/escape-rooms', { state: { alert: { message: 'Operación cancelada', type: 'info' } } });
+    nav('/owner/dashboard', { state: { alert: { message: 'Operación cancelada', type: 'info' } } });
   };
 
   if (loading && !initialData) {

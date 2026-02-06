@@ -38,10 +38,10 @@ const EscapeRoomList: React.FC = () => {
   useEffect(() => {
     getEscaperooms();
 
-    if (alertData.type) {
-      setOpenSnackbar(true);
-      window.history.replaceState({}, document.title);
-    }
+    // if (alertData.type) {
+    //   setOpenSnackbar(true);
+    //   window.history.replaceState({}, document.title);
+    // }
   }, []);
 
   const getEscaperooms = async () => {

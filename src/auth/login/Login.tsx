@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { AuthService } from '../AuthService';
 import { LoginCredentials } from '../../users/UserModel';
 import './Login.css';
-import { useNavigate } from 'react-router-dom';
-import { Box, Button, Container, Icon, Stack, TextField } from '@mui/material';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Alert, Box, Button, Container, Snackbar, Stack, TextField } from '@mui/material';
 import LockPersonOutlinedIcon from '@mui/icons-material/LockPersonOutlined';
 import NotchedContainer from '../../shared/components/CircularNotchedBox';
 
@@ -13,14 +13,16 @@ const Login: React.FC = () => {
     password: ''
   });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const nav = useNavigate();
+  const [open, setOpen] = useState<boolean>(false);
+  const location = useLocation();
+  const [alertData, setAlertData] = useState<any>( location.state?.alert || {} );
 
+  const handleSnackbarClose = () => { setOpen(false); }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
 
     try {
       const res = await AuthService.login(credentials);
@@ -30,17 +32,19 @@ const Login: React.FC = () => {
         localStorage.setItem('user', JSON.stringify(res.data.user));
 
         if (res.data.user.role_name === 'owner') {
-          nav('/owner/dashboard', { state: { alert: { type: 'info', message: 'Usuario identificado correctamente' } } });
+          nav('/owner/dashboard', { state: { alert: { type: 'info', message: 'Usuario identificado. Bienvenido.' } } });
         } else if (res.data.user.role_name === 'admin') {
           window.location.href = '/admin/dashboard';
         } else {
           window.location.href = '/customer/dashboard';
         }
       } else {
-        setError(res.message);
+        setAlertData({type: 'error', message: res.message});
+        setOpen(true);
       }
     } catch (err) {
-      setError('Error de identificación. Por favor, inténtelo nuevamente.');
+      setAlertData({type: 'error', message: 'Error de identificación. Por favor, inténtelo nuevamente.'});
+      setOpen(true);
     } finally {
       setLoading(false);
     }
@@ -127,6 +131,22 @@ const Login: React.FC = () => {
           </Stack>
         </Box>
       </Container>
+
+      <Snackbar
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        open={open}
+        autoHideDuration={5000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={alertData.type}
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          {alertData.message}
+        </Alert>
+      </Snackbar>
 
       <div className="test-credentials">
         <h4>Cuentas de prueba:</h4>
