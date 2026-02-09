@@ -43,6 +43,15 @@ try {
     throw new Exception( 'No se pudo Editar la sala '. $params['name'] );
   }
 
+  $queryDelete = "DELETE FROM prices WHERE id_room = :id_room 
+  AND (num_players < :min_players OR num_players > :max_players)";
+
+  $db->execute($queryDelete, [
+    'id_room' => $data['id'],
+    'min_players' => $params['min_players'],
+    'max_players' => $params['max_players']
+  ]);
+
   if (isset($data['prices']) && is_array($data['prices'])) {
     foreach ($data['prices'] as $p) {
       if (!isset($p['num_players']) || !isset($p['price'])) {
