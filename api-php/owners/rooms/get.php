@@ -37,6 +37,9 @@ try {
         $room['prices'] = array();
     }
 
+    $querySchedule = "SELECT * FROM schedule WHERE id_room = :id";
+    $schedule = $db->fetchAll($querySchedule, $params);
+
     echo json_encode([
         'success' => true,
         'message' => 'Salas cargadas.',

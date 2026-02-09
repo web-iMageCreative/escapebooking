@@ -104,6 +104,17 @@ ALTER TABLE `prices`
 ALTER TABLE `prices` ADD CONSTRAINT `precio_fk` FOREIGN KEY (`id_room`) REFERENCES `rooms`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 
+CREATE TABLE `schedule` (
+  `id_room` int(11) NOT NULL,
+  `day_week` int(11) NOT NULL,
+  `hour` time NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+ALTER TABLE `schedule`
+  ADD PRIMARY KEY (`id_room`,`day_week`,`hour`);
+
+ALTER TABLE `schedule` ADD CONSTRAINT `schedule_fk` FOREIGN KEY (`id_room`) REFERENCES `rooms`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
 
 INSERT IGNORE INTO roles (name, description) VALUES 
 ('owner', 'Propietario de negocios de EscapeRooms'),

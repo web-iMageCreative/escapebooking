@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { RoomFormProps, RoomModel, Price } from '../Room.Model';
+import { RoomFormProps, RoomModel, Price, Schedule } from '../Room.Model';
 import { Snackbar, Alert } from '@mui/material';
 import '../styles/Room.Form.css';
 
@@ -15,6 +15,11 @@ const RoomForm: React.FC<RoomFormProps> = ({
 }) => {
   const [data, setData] = useState<RoomModel>(initialData);
   const [open, setOpen] = useState<boolean>(false);
+  const [openSchedule, setOpenSchedule] = useState<boolean>(false);
+  const [day, setDay] = useState<number>(1);
+  const [hour, setHour] = useState<string>();
+  const [schedules, setSchedules] = useState<Schedule[]>([]);
+
 
   useEffect(() => {
     setData(initialData);
@@ -51,11 +56,6 @@ const RoomForm: React.FC<RoomFormProps> = ({
 
   const handleSnackbarClose = () => { setOpen(false); }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSubmit(data);
-  };
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target;
     setData({
@@ -78,6 +78,30 @@ const RoomForm: React.FC<RoomFormProps> = ({
       prices: newPrices
     }));
   };
+
+  const handleScheduleClick = () => {
+    setOpenSchedule(true);
+  };
+
+  const handleDayChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setDay(Number(e.target.value));
+  };
+
+  const handleHourChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setHour(e.target.value);
+  };
+
+  const handleAddSchedule = () => {
+    
+
+  }
+
+    const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSubmit(data);
+  };
+
+
 
 
   return (
@@ -145,6 +169,10 @@ const RoomForm: React.FC<RoomFormProps> = ({
             />
           </div>
         </div>
+
+        <button type="button" onClick={handleScheduleClick}>
+          Introduce tu horario
+        </button>
 
         <div className="form-group">
           <div className="col-label">
@@ -232,6 +260,47 @@ const RoomForm: React.FC<RoomFormProps> = ({
         </div>
 
       </form>
+
+      {openSchedule && (
+          <div className='pop-overlay' onClick={() => setOpenSchedule(false)}>
+            <div className='pop-content' onClick={(e) => e.stopPropagation()}>
+
+              <div className='table-content'>
+                <div className='table-day'></div>
+              </div>
+
+              <div className="form-group">
+                <label>Día</label>
+                <select
+                  value={day}
+                  onChange={handleDayChange}
+                >
+                  <option value={1}>Lunes</option>
+                  <option value={2}>Martes</option>
+                  <option value={3}>Miércoles</option>
+                  <option value={4}>Jueves</option>
+                  <option value={5}>Viernes</option>
+                  <option value={6}>Sábado</option>
+                  <option value={7}>Domingo</option>
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label>Hora</label>
+                <input
+                  type="time"
+                  value={hour}
+                  onChange={handleHourChange}
+                  required
+                />
+              </div>
+
+              <button type="submit" onClick={handleAddSchedule}>
+                Añadir horario
+              </button>
+            </div>
+          </div>
+        )}
 
       <Snackbar
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}

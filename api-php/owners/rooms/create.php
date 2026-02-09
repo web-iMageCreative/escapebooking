@@ -34,6 +34,7 @@ try {
   $params['max_players']   = $data['max_players'];
   $params['escaperoom_id'] = $data['escaperoom_id'];
   $prices = $data['prices'];
+  $schedule = $data['schedule'];
 
   $query = "INSERT INTO rooms (name, description, duration, min_players, max_players, escaperoom_id) 
   VALUES (:name, :description, :duration, :min_players, :max_players, :escaperoom_id)";
@@ -57,6 +58,25 @@ try {
 
     if (!$price) {
       throw new Exception( 'No se pudo crear el precio para la sala '. $params['name'] );
+    }
+  }
+
+  for ($i = 0; $i < count($data['schedule']); $i++) {
+
+    if (!isset($schedule[$i]['day_week']) || !isset($schedule[$i]['hour'])) {
+        throw new Exception('El horario está incompleto');
+    }
+
+    $params_schedule = array();
+    $params_schedule['id_room'] = $id_room;
+    $params_schedule['day_week'] = $schedule[$i]['day_week'];
+    $params_schedule['hour'] = $schedule[$i]['hour'];
+
+    $querySchedule = "INSERT INTO schedule (id_room, day_week, hour) VALUES (:id:room, :day_week, :hour)";
+    $schedule = $db->execute($querySchedule, $params_schedule);
+
+    if (!$schedule) {
+      throw new Exception ('No se pudo crear el horario para la sala'. $params['name']);
     }
   }
 

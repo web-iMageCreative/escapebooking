@@ -15,6 +15,7 @@ const Room: React.FC = () => {
         name: '',
         description: '',
         duration: 0,
+        schedule: [],
         min_players: 0,
         max_players: 0,
         prices: [],

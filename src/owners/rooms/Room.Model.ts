@@ -3,6 +3,7 @@ export interface RoomModel {
     name: string,
     description: string,
     duration: number,
+    schedule: Schedule[],
     min_players: number,
     max_players: number,
     prices: Price[],
@@ -24,4 +25,10 @@ export interface Price {
   id_room: number,
   num_players: number,
   price: number
+}
+
+export interface Schedule {
+  id_room: number,
+  day_week: number,
+  hour: Date
 }
