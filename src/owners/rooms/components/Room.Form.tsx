@@ -234,7 +234,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
       </form>
 
       <Snackbar
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
         open={open}
         autoHideDuration={5000}
         onClose={handleSnackbarClose}
