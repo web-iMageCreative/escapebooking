@@ -21,7 +21,6 @@ const RoomForm: React.FC<RoomFormProps> = ({
   const [hour, setHour] = useState<Date>(new Date());
   const [schedules, setSchedules] = useState<Schedule[]>([]);
 
-
   useEffect(() => {
     setData(initialData);
     if (error !== null) {
@@ -34,11 +33,11 @@ const RoomForm: React.FC<RoomFormProps> = ({
 
   useEffect(() => {
     if (+data.min_players > +data.max_players) return;
-    
+
     const max = data.max_players;
     const min = data.min_players;
     const newPrices: Price[] = [];
-    
+
     for (let i = min; i <= max; i++) {
       const existe = data.prices.find(x => x.num_players === i)
       const hasId = data.id !== 0;
@@ -46,7 +45,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
         { id_room: hasId ? data.id : 0, num_players: i, price: existe ? existe.price : 0 }
       );
     }
-    
+
 
     setData(({
       ...data,
@@ -54,6 +53,12 @@ const RoomForm: React.FC<RoomFormProps> = ({
     }));
   }, [data.min_players, data.max_players]);
 
+  useEffect(() => {
+    setData({
+      ...data,
+      schedule: schedules
+    });
+  }, [schedules]);
 
   const handleSnackbarClose = () => { setOpen(false); }
 
@@ -66,7 +71,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
   };
 
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement | HTMLInputElement>) => {
-    if ( isNaN( parseFloat( e.target.value! ) ) ) return;
+    if (isNaN(parseFloat(e.target.value!))) return;
     const value: number = parseFloat(e.target.value!);
     const index: number = parseInt(e.target.dataset.index!);
     const min: number = data.min_players;
@@ -101,29 +106,18 @@ const RoomForm: React.FC<RoomFormProps> = ({
   };
 
   const handleAddSchedule = () => {
-    let s:Schedule[] = schedules;
-    s= [...schedules, {
+    const s: Schedule[] = [...schedules, {
       id_room: 0,
       day_week: day,
       hour: hour
     }];
-    sortSchedules();
-    setSchedules(s);
-  };
 
-  useEffect(() => {
-    setData({
-      ...data,
-      schedule: schedules
-    });
-  }, [schedules]);
-
-
-  const sortSchedules = () => {
-    [...schedules].sort( (a, b) => {
+    const sortS: Schedule[] = [...s].sort((a, b) => {
       return a.hour.getTime() - b.hour.getTime();
-    } );
-  };  
+    });
+
+    setSchedules(sortS);
+  };
 
   return (
     <div className="room-form-container">
@@ -237,27 +231,27 @@ const RoomForm: React.FC<RoomFormProps> = ({
 
         {(data.min_players > 0 && data.max_players > 0 && data.min_players < data.max_players &&
           <>
-          <h3>Precios por número de jugadores</h3>
-          {data.prices.map( (x, index: number) => (
-            <div key={x.num_players} className="form-group indented">
-              <div className="col-label">
-              <label htmlFor={'price_' + x.num_players}>{x.num_players} jugadores</label>
+            <h3>Precios por número de jugadores</h3>
+            {data.prices.map((x, index: number) => (
+              <div key={x.num_players} className="form-group indented">
+                <div className="col-label">
+                  <label htmlFor={'price_' + x.num_players}>{x.num_players} jugadores</label>
+                </div>
+                <div className="col-value">
+                  <input
+                    type="number"
+                    id={'price_' + x.num_players}
+                    data-index={index}
+                    min={0}
+                    step={0.01}
+                    value={x.price}
+                    onChange={handlePriceChange}
+                    required
+                    disabled={loading}
+                  />
+                </div>
               </div>
-              <div className="col-value">
-                <input
-                  type="number"
-                  id={'price_' + x.num_players}
-                  data-index={index}
-                  min={0}
-                  step={0.01}
-                  value={x.price}
-                  onChange={handlePriceChange}
-                  required
-                  disabled={loading}
-                />
-              </div>
-            </div>
-          ))}
+            ))}
           </>
         )}
 
@@ -283,50 +277,50 @@ const RoomForm: React.FC<RoomFormProps> = ({
       </form>
 
       {openSchedule && (
-          <div className='pop-overlay' onClick={() => setOpenSchedule(false)}>
-            <div className='pop-content' onClick={(e) => e.stopPropagation()}>
+        <div className='pop-overlay' onClick={() => setOpenSchedule(false)}>
+          <div className='pop-content' onClick={(e) => e.stopPropagation()}>
 
-              
-              {schedules
-                .map((s, i) => (
-                  <div key={i} className="">
-                    {s.hour.getHours()}
-                  </div>
+
+            {schedules
+              .map((s, i) => (
+                <div key={i} className="">
+                  {s.hour.getHours()}
+                </div>
               ))}
 
 
-              <div className="form-group">
-                <label>Día</label>
-                <select
-                  value={day}
-                  onChange={handleDayChange}
-                >
-                  <option value={1}>Lunes</option>
-                  <option value={2}>Martes</option>
-                  <option value={3}>Miércoles</option>
-                  <option value={4}>Jueves</option>
-                  <option value={5}>Viernes</option>
-                  <option value={6}>Sábado</option>
-                  <option value={7}>Domingo</option>
-                </select>
-              </div>
-
-              <div className="form-group">
-                <label>Hora</label>
-                <input
-                  type="time"
-                  // value={hour.getTime()}
-                  onChange={handleHourChange}
-                  required
-                />
-              </div>
-
-              <button type="button" onClick={handleAddSchedule}>
-                Añadir horario
-              </button>
+            <div className="form-group">
+              <label>Día</label>
+              <select
+                value={day}
+                onChange={handleDayChange}
+              >
+                <option value={1}>Lunes</option>
+                <option value={2}>Martes</option>
+                <option value={3}>Miércoles</option>
+                <option value={4}>Jueves</option>
+                <option value={5}>Viernes</option>
+                <option value={6}>Sábado</option>
+                <option value={7}>Domingo</option>
+              </select>
             </div>
+
+            <div className="form-group">
+              <label>Hora</label>
+              <input
+                type="time"
+                // value={hour.getTime()}
+                onChange={handleHourChange}
+                required
+              />
+            </div>
+
+            <button type="button" onClick={handleAddSchedule}>
+              Añadir horario
+            </button>
           </div>
-        )}
+        </div>
+      )}
 
       <Snackbar
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
