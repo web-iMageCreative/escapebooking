@@ -15,7 +15,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
   cancelText
 }) => {
   const [data, setData] = useState<RoomModel>(initialData);
-  const [open, setOpen] = useState<boolean>(false);
+  const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
   const [openSchedule, setOpenSchedule] = useState<boolean>(false);
   const [day, setDay] = useState<number>(1);
   const [hour, setHour] = useState<Date>(new Date());
@@ -24,9 +24,9 @@ const RoomForm: React.FC<RoomFormProps> = ({
   useEffect(() => {
     setData(initialData);
     if (error !== null) {
-      setOpen(true);
+      setOpenSnackbar(true);
     } else {
-      setOpen(false);
+      setOpenSnackbar(false);
     }
   }, [error]);
 
@@ -60,7 +60,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
     });
   }, [schedules]);
 
-  const handleSnackbarClose = () => { setOpen(false); }
+  const handleSnackbarClose = () => { setOpenSnackbar(false); }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target;
@@ -88,10 +88,6 @@ const RoomForm: React.FC<RoomFormProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit(data);
-  };
-
-  const handleScheduleClick = () => {
-    setOpenSchedule(true);
   };
 
   const handleDayChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -185,7 +181,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
           </div>
         </div>
 
-        <button type="button" onClick={handleScheduleClick}>
+        <button type="button" onClick={() => setOpenSchedule(true)}>
           Introduce tu horario
         </button>
 
@@ -324,7 +320,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
 
       <Snackbar
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-        open={open}
+        open={openSnackbar}
         autoHideDuration={5000}
         onClose={handleSnackbarClose}
       >
