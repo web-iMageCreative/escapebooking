@@ -20,7 +20,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
   const [open, setOpen] = useState<boolean>(false);
   const [openSchedule, setOpenSchedule] = useState<boolean>(false);
   const [day, setDay] = useState<number>(1);
-  const [hour, setHour] = useState<any>(null);
+  const [hour, setHour] = useState<Date>(new Date());
   const [schedules, setSchedules] = useState<Schedule[]>([]);
 
 
@@ -85,6 +85,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit(data);
+  };
 
   const handleScheduleClick = () => {
     setOpenSchedule(true);
@@ -95,17 +96,26 @@ const RoomForm: React.FC<RoomFormProps> = ({
   };
 
   const handleHourChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setHour(String(e.target.value));
+    const h = e.target.value.split(':');
+
+    setHour(new Date(0, 0, 0, Number(h[0]), Number(h[1])));
+
+    //console.log(hour);
   };
 
-  const handleAddSchedule = (newSchedule: Schedule) => {
-    
-    for (let i = 0; i < schedules.length; i++) {
-      if (
-        schedules[i].day_week === newSchedule.day_week && 
-        schedules[i].hour === newSchedule.hour 
-      )
-    }
+  const handleAddSchedule = () => {
+    // for (let i = 0; i < schedules.length; i++) {
+      // }
+    let s:Schedule[] = schedules;
+    s.push({
+      id_room: 0,
+      day_week: day,
+      hour: hour
+    });
+
+    setSchedules(s);
+
+    console.log( schedules );
   };
 
 
@@ -297,7 +307,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
                 <label>Hora</label>
                 <input
                   type="time"
-                  value={hour}
+                  // value={hour.getTime()}
                   onChange={handleHourChange}
                   required
                 />
