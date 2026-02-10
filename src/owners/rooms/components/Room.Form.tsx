@@ -102,13 +102,13 @@ const RoomForm: React.FC<RoomFormProps> = ({
 
   const handleAddSchedule = () => {
     let s:Schedule[] = schedules;
-    s.push({
+    s= [...schedules, {
       id_room: 0,
       day_week: day,
       hour: hour
-    });
-    setSchedules(s);
+    }];
     sortSchedules();
+    setSchedules(s);
   };
 
   useEffect(() => {
@@ -120,7 +120,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
 
 
   const sortSchedules = () => {
-    schedules.sort( (a, b) => {
+    [...schedules].sort( (a, b) => {
       return a.hour.getTime() - b.hour.getTime();
     } );
   };  
