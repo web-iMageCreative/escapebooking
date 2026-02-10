@@ -4,8 +4,6 @@ import { Snackbar, Alert } from '@mui/material';
 import '../styles/Room.Form.css';
 import { days_of_week } from '../../../shared/data/days';
 
-
-
 const RoomForm: React.FC<RoomFormProps> = ({
   initialData,
   loading,
@@ -100,24 +98,32 @@ const RoomForm: React.FC<RoomFormProps> = ({
 
     setHour(new Date(0, 0, 0, Number(h[0]), Number(h[1])));
 
-    //console.log(hour);
   };
 
   const handleAddSchedule = () => {
-    // for (let i = 0; i < schedules.length; i++) {
-      // }
     let s:Schedule[] = schedules;
     s.push({
       id_room: 0,
       day_week: day,
       hour: hour
     });
-
     setSchedules(s);
-
-    console.log( schedules );
+    sortSchedules();
   };
 
+  useEffect(() => {
+    setData({
+      ...data,
+      schedule: schedules
+    });
+  }, [schedules]);
+
+
+  const sortSchedules = () => {
+    schedules.sort( (a, b) => {
+      return a.hour.getTime() - b.hour.getTime();
+    } );
+  };  
 
   return (
     <div className="room-form-container">
@@ -280,11 +286,13 @@ const RoomForm: React.FC<RoomFormProps> = ({
           <div className='pop-overlay' onClick={() => setOpenSchedule(false)}>
             <div className='pop-content' onClick={(e) => e.stopPropagation()}>
 
-              <div className="table-content">
-                  <div className="table-day">
-                    
+              
+              {schedules
+                .map((s, i) => (
+                  <div key={i} className="">
+                    {s.hour.getHours()}
                   </div>
-              </div>
+              ))}
 
 
               <div className="form-group">
