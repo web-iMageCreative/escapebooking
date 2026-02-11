@@ -124,7 +124,7 @@ input::placeholder, textarea::placeholder {
   opacity: 0.5;
 }
 
-button {
+.button {
   background-color: transparent;
   color: inherit;
   text-transform: uppercase;
@@ -135,16 +135,16 @@ button {
   transition: all .3s;
 }
 
-button[type="submit"] {
+.button[type="submit"] {
   background-color: #273746;
   color: white;
 }
 
-button:hover {
+.button:hover {
   background-color: #a6cbeb;
 }
 
-button[type="submit"]:hover {
+.button[type="submit"]:hover {
   background-color: #526b81;
 }
 

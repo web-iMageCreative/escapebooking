@@ -20,15 +20,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
   const [hour, setHour] = useState<Date>(new Date());
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [orderedSchedules, setOrderedSchedules] = useState<any>([[],[],[],[],[],[],[]]);
-  const days_of_week: string[] = [
-    'Lunes',
-    'Martes',
-    'Miércoles',
-    'Jueves',
-    'Viernes',
-    'Sábado',
-    'Domingo'
-  ]
+  const days_of_week: string[] = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']
 
   useEffect(() => {
     setData(initialData);
@@ -281,7 +273,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
           <button
             type="submit"
             disabled={loading}
-            className="btn-primary"
+            className="btn-primary button"
           >
             {loading ? 'Procesando...' : submitText}
           </button>
@@ -290,7 +282,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
             type="button"
             onClick={onCancel}
             disabled={loading}
-            className="btn-secondary"
+            className="btn-secondary button"
           >
             {cancelText}
           </button>

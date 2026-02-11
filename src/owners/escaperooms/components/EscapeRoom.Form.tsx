@@ -158,7 +158,7 @@ const EscapeRoomForm: React.FC<EscapeRoomFormProps> = ({
           <button
             type="submit"
             disabled={loading}
-            className="btn-primary"
+            className="btn-primary button"
           >
             {loading ? 'Procesando...' : submitText}
           </button>
@@ -167,7 +167,7 @@ const EscapeRoomForm: React.FC<EscapeRoomFormProps> = ({
             type="button"
             onClick={onCancel}
             disabled={loading}
-            className="btn-secondary"
+            className="btn-secondary button"
           >
             {cancelText}
           </button>
