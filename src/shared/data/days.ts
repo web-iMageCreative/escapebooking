@@ -1,10 +1,9 @@
-export const days_of_week = {
-    1: 'Lunes',
-    2: 'Martes',
-    3: 'Miércoles',
-    4: 'Jueves',
-    5: 'Viernes',
-    6: 'Sábado',
-    7: 'Domingo'
-} as const
-
+export interface Days_of_week {
+    1: string,
+    2: string,
+    3: string,
+    4: string,
+    5: string,
+    6: string,
+    7: string
+}

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { RoomFormProps, RoomModel, Price, Schedule } from '../Room.Model';
 import { Snackbar, Alert } from '@mui/material';
 import '../styles/Room.Form.css';
-import { days_of_week } from '../../../shared/data/days';
 
 const RoomForm: React.FC<RoomFormProps> = ({
   initialData,
@@ -20,6 +19,17 @@ const RoomForm: React.FC<RoomFormProps> = ({
   const [day, setDay] = useState<number>(1);
   const [hour, setHour] = useState<Date>(new Date());
   const [schedules, setSchedules] = useState<Schedule[]>([]);
+  const [orderedSchedules, setOrderedSchedules] = useState<any>([[],[],[],[],[],[],[]]);
+  const days_of_week: string[] = [
+    '',
+    'Lunes',
+    'Martes',
+    'Miércoles',
+    'Jueves',
+    'Viernes',
+    'Sábado',
+    'Domingo'
+  ]
 
   useEffect(() => {
     setData(initialData);
@@ -60,8 +70,6 @@ const RoomForm: React.FC<RoomFormProps> = ({
     });
   }, [schedules]);
 
-  const handleSnackbarClose = () => { setOpenSnackbar(false); }
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target;
     setData({
@@ -87,6 +95,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    data.schedule = schedules;
     onSubmit(data);
   };
 
@@ -98,21 +107,40 @@ const RoomForm: React.FC<RoomFormProps> = ({
     const h = e.target.value.split(':');
 
     setHour(new Date(0, 0, 0, Number(h[0]), Number(h[1])));
-
   };
 
+  const sortSchedule = (s: Schedule[]) => {
+    const result: Schedule[] = s.sort((a, b) => {
+      return a.hour.getTime() - b.hour.getTime();
+    });
+
+    return result;
+  }
+
   const handleAddSchedule = () => {
-    const s: Schedule[] = [...schedules, {
-      id_room: 0,
+    let s: Schedule[] = [...schedules, {
+      id_room: initialData.id,
       day_week: day,
       hour: hour
     }];
 
-    const sortS: Schedule[] = [...s].sort((a, b) => {
-      return a.hour.getTime() - b.hour.getTime();
-    });
+    s = sortSchedule(s);
 
-    setSchedules(sortS);
+    for (let i = 1; i <= 7; i++) {
+      let filtered = s.filter((obj) => {
+        return obj.day_week === i;
+      })
+
+      setOrderedSchedules(orderedSchedules[i - 1] = filtered);
+    }
+
+    console.log(orderedSchedules);
+
+    setSchedules([...schedules, {
+      id_room: initialData.id,
+      day_week: day,
+      hour: hour
+    }]);
   };
 
   return (
@@ -277,12 +305,17 @@ const RoomForm: React.FC<RoomFormProps> = ({
           <div className='pop-content' onClick={(e) => e.stopPropagation()}>
 
 
-            {schedules
-              .map((s, i) => (
-                <div key={i} className="">
-                  {s.hour.getHours()}
+            {orderedSchedules
+              .map((d: any, i: number) => {
+                return (
+                <div key={i} className="day-of-week">
+                  {d.map((s: Schedule, j: number) => (
+                    <div key={j} className="hour">
+                      {new Intl.DateTimeFormat("es-ES", { hour: 'numeric', minute: 'numeric' }).format(s.hour.getTime())}
+                    </div>
+                  ))}
                 </div>
-              ))}
+              )})}
 
 
             <div className="form-group">
@@ -322,10 +355,10 @@ const RoomForm: React.FC<RoomFormProps> = ({
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
         open={openSnackbar}
         autoHideDuration={5000}
-        onClose={handleSnackbarClose}
+        onClose={() => setOpenSnackbar(false)}
       >
         <Alert
-          onClose={handleSnackbarClose}
+          onClose={() => setOpenSnackbar(false)}
           severity="error"
           variant="filled"
           sx={{ width: '100%' }}
