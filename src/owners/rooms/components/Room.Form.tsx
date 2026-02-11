@@ -16,12 +16,11 @@ const RoomForm: React.FC<RoomFormProps> = ({
   const [data, setData] = useState<RoomModel>(initialData);
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
   const [openSchedule, setOpenSchedule] = useState<boolean>(false);
-  const [day, setDay] = useState<number>(1);
+  const [day, setDay] = useState<number>(0);
   const [hour, setHour] = useState<Date>(new Date());
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [orderedSchedules, setOrderedSchedules] = useState<any>([[],[],[],[],[],[],[]]);
   const days_of_week: string[] = [
-    '',
     'Lunes',
     'Martes',
     'Miércoles',
@@ -126,12 +125,12 @@ const RoomForm: React.FC<RoomFormProps> = ({
 
     s = sortSchedule(s);
 
-    for (let i = 1; i <= 7; i++) {
+    for (let i = 0; i <= 6; i++) {
       let filtered = s.filter( ( obj ) => {
         return obj.day_week === i;
       })
 
-      orderedSchedules[i - 1] = filtered;
+      orderedSchedules[i] = filtered;
       setOrderedSchedules([...orderedSchedules]);
     }
 
@@ -307,7 +306,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
               {orderedSchedules
                 .map((d: any, i: number) => {
                   return (
-                  <div key={i} className="day-of-week"> {days_of_week[i + 1]}
+                  <div key={i} className="day-of-week"> {days_of_week[i]}
                     {d.map((s: Schedule, j: number) => (
                       <div key={j} className="hour">
                         {new Intl.DateTimeFormat("es-ES", { hour: 'numeric', minute: 'numeric' }).format(s.hour.getTime())}
@@ -324,13 +323,13 @@ const RoomForm: React.FC<RoomFormProps> = ({
                 value={day}
                 onChange={handleDayChange}
               >
-                <option value={1}>Lunes</option>
-                <option value={2}>Martes</option>
-                <option value={3}>Miércoles</option>
-                <option value={4}>Jueves</option>
-                <option value={5}>Viernes</option>
-                <option value={6}>Sábado</option>
-                <option value={7}>Domingo</option>
+                <option value={0}>Lunes</option>
+                <option value={1}>Martes</option>
+                <option value={2}>Miércoles</option>
+                <option value={3}>Jueves</option>
+                <option value={4}>Viernes</option>
+                <option value={5}>Sábado</option>
+                <option value={6}>Domingo</option>
               </select>
             </div>
 
