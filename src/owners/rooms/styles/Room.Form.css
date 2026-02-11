@@ -122,4 +122,10 @@
   position: relative;
 }
 
+.calendar {
+  display: flex;
+}
 
+.day-of-week {
+  flex: 1 1 100%;
+}

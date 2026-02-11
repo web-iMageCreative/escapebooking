@@ -127,14 +127,13 @@ const RoomForm: React.FC<RoomFormProps> = ({
     s = sortSchedule(s);
 
     for (let i = 1; i <= 7; i++) {
-      let filtered = s.filter((obj) => {
+      let filtered = s.filter( ( obj ) => {
         return obj.day_week === i;
       })
 
-      setOrderedSchedules(orderedSchedules[i - 1] = filtered);
+      orderedSchedules[i - 1] = filtered;
+      setOrderedSchedules([...orderedSchedules]);
     }
-
-    console.log(orderedSchedules);
 
     setSchedules([...schedules, {
       id_room: initialData.id,
@@ -304,18 +303,19 @@ const RoomForm: React.FC<RoomFormProps> = ({
         <div className='pop-overlay' onClick={() => setOpenSchedule(false)}>
           <div className='pop-content' onClick={(e) => e.stopPropagation()}>
 
-
-            {orderedSchedules
-              .map((d: any, i: number) => {
-                return (
-                <div key={i} className="day-of-week">
-                  {d.map((s: Schedule, j: number) => (
-                    <div key={j} className="hour">
-                      {new Intl.DateTimeFormat("es-ES", { hour: 'numeric', minute: 'numeric' }).format(s.hour.getTime())}
-                    </div>
-                  ))}
-                </div>
-              )})}
+            <div className="calendar">
+              {orderedSchedules
+                .map((d: any, i: number) => {
+                  return (
+                  <div key={i} className="day-of-week"> {days_of_week[i + 1]}
+                    {d.map((s: Schedule, j: number) => (
+                      <div key={j} className="hour">
+                        {new Intl.DateTimeFormat("es-ES", { hour: 'numeric', minute: 'numeric' }).format(s.hour.getTime())}
+                      </div>
+                    ))}
+                  </div>
+                )})}
+              </div>
 
 
             <div className="form-group">
