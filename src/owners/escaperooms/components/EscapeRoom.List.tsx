@@ -4,7 +4,6 @@ import { EscapeRoomModel } from '../EscapeRoom.Model';
 import { EscapeRoomService } from '../EscapeRoom.Service';
 import { User } from '../../../users/UserModel';
 import { AuthService } from '../../../auth/AuthService';
-import '../styles/EscapeRoom.List.css';
 import {
   Button,
   Dialog,
@@ -90,12 +89,12 @@ const EscapeRoomList: React.FC = () => {
   const handleDialogClose = () => { setOpenDialog(false); }
 
   return (
-    <div className='contenido-escaperooms contained'>
+    <div className='contained'>
       <h3>Mis Negocios de Escape Rooms</h3>
       { ! loading && 
-        <div className='lista-escaperooms'>
+        <div className='list'>
           {data.map(escaperoom => (
-            <Card key={escaperoom.id} sx={{ boxShadow: 4 }}>
+            <Card key={escaperoom.id} sx={{ maxWidth: 345 }}>
               <CardMedia
                 component="img"
                 alt="logo"

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import '../styles/Room.List.css';
 import { RoomService } from '../Room.Service';
 import { RoomModel } from '../Room.Model';
 import { useParams } from 'react-router-dom';
@@ -19,6 +18,9 @@ import {
   Snackbar,
   Alert
 } from '@mui/material';
+import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 
 
 const RoomList: React.FC<any> = ({ id }) => {
@@ -90,10 +92,10 @@ const RoomList: React.FC<any> = ({ id }) => {
   const handleDialogClose = () => { setOpenDialog(false); }
 
   return (
-    <div className='contenido-rooms contained'>
+    <div className='contained'>
       <h3>Salas del Escaperoom</h3>
       {!loading &&
-        <div className='lista-rooms'>
+        <div className='list'>
           {rooms.map(room => (
             <Card key={room.id} sx={{ maxWidth: 345 }}>
               <CardMedia
@@ -111,9 +113,9 @@ const RoomList: React.FC<any> = ({ id }) => {
                 </Typography>
               </CardContent>
               <CardActions>
-                <Button size="small" data-id={room.id} onClick={handleReadClick}>Ver</Button>
-                <Button size="small" data-id={room.id} onClick={handleEditClick}>Editar</Button>
-                <Button size="small" data-id={room.id} onClick={handleDeleteClick}>Eliminar</Button>
+                <Button startIcon={<ArticleOutlinedIcon />} size="small" data-id={room.id} onClick={handleReadClick}>Ver</Button>
+                <Button startIcon={<EditOutlinedIcon />} size="small" data-id={room.id} onClick={handleEditClick}>Editar</Button>
+                <Button startIcon={<DeleteOutlineOutlinedIcon />} size="small" data-id={room.id} onClick={handleDeleteClick} color="error">Eliminar</Button>
               </CardActions>
             </Card>
           ))}

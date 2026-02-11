@@ -142,8 +142,8 @@ const RoomForm: React.FC<RoomFormProps> = ({
   };
 
   return (
-    <div className="room-form-container">
-      <form onSubmit={handleSubmit} className="room-form contained">
+    <div>
+      <form onSubmit={handleSubmit} className="form contained">
         <h2>{title}</h2>
 
         <div className="form-group">

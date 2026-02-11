@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import '../styles/EscapeRoom.css';
 import { EscapeRoomModel } from '../EscapeRoom.Model';
 import { EscapeRoomService } from '../EscapeRoom.Service';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import RoomList from '../../rooms/components/Room.List';
-import { ROUTES } from '../../../routes';
 
 const EscapeRoom: React.FC = () => {
     const params = useParams();
@@ -38,15 +36,15 @@ const EscapeRoom: React.FC = () => {
     }
 
     return (
-        <div className='ficha contained'>
-            <div className='cabecera-ficha'>
+        <div className='contained'>
+            <div className='header-file'>
                 <h2>{escapeRoom.name}</h2>
                 <div className="actions">
                     <Link to={'/owner/escape-rooms/edit/' + id}>Editar Escaperoom</Link>
                     <Link to={'/owner/rooms/new/' + escapeRoom.id}>Crear nueva Sala</Link>
                 </div>
             </div>
-            <div className='contenido-ficha'>
+            <div className='description-file'>
                 <p>{escapeRoom.description}</p>
             </div>
 

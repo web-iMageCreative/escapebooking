@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { EscapeRoomFormProps, EscapeRoomModel } from '../EscapeRoom.Model';
 import  { Snackbar, Alert } from '@mui/material';
-import '../styles/EscapeRoom.Form.css';
 import { Province } from '../../../shared/models/province.Model';
 import { getProvinces } from '../../../shared/data/provinces';
 
@@ -53,8 +52,8 @@ const EscapeRoomForm: React.FC<EscapeRoomFormProps> = ({
   };
 
   return (
-    <div className="escaperoom-form-container">
-      <form className="escaperoom-form contained" onSubmit={handleSubmit}>
+    <div>
+      <form className="form contained" onSubmit={handleSubmit}>
 
         <h2>{title}</h2>
 
