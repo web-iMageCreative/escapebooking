@@ -61,21 +61,22 @@ try {
     }
   }
 
-  for ($i = 0; $i < count($data['schedule']); $i++) {
+
+  for ($i = 0; $i < count($schedule); $i++) {
 
     if (!isset($schedule[$i]['day_week']) || !isset($schedule[$i]['hour'])) {
-        throw new Exception('El horario está incompleto');
+        throw new Exception('no existe el dia o la hora');
     }
 
     $params_schedule = array();
     $params_schedule['id_room'] = $id_room;
     $params_schedule['day_week'] = $schedule[$i]['day_week'];
-    $params_schedule['hour'] = $schedule[$i]['hour'];
+    $params_schedule['hour'] = date('HH:MM',strtotime($schedule[$i]['hour']));
 
-    $querySchedule = "INSERT INTO schedule (id_room, day_week, hour) VALUES (:id:room, :day_week, :hour)";
-    $schedule = $db->execute($querySchedule, $params_schedule);
+    $querySchedule = "INSERT INTO schedule (id_room, day_week, hour) VALUES (:id_room, :day_week, :hour)";
+    $createSchedule = $db->execute($querySchedule, $params_schedule);
 
-    if (!$schedule) {
+    if (!$createSchedule) {
       throw new Exception ('No se pudo crear el horario para la sala'. $params['name']);
     }
   }
