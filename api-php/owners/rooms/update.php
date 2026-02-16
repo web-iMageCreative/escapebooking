@@ -43,14 +43,47 @@ try {
     throw new Exception( 'No se pudo Editar la sala '. $params['name'] );
   }
 
-  $queryDelete = "DELETE FROM prices WHERE id_room = :id_room 
+  $queryDeletePrice = "DELETE FROM prices WHERE id_room = :id_room 
   AND (num_players < :min_players OR num_players > :max_players)";
 
-  $db->execute($queryDelete, [
+  $db->execute($queryDeletePrice, [
     'id_room' => $data['id'],
     'min_players' => $params['min_players'],
     'max_players' => $params['max_players']
   ]);
+
+  $queryDeleteSchedule = "DELETE FROM schedule WHERE id_room = :id_room";
+  $db->execute($queryDeleteSchedule, [
+      'id_room' => $data['id']
+    ]);
+
+  $schedule = $data['schedule'];
+
+  echo json_encode([
+    'success' => true,
+    'message' => '...',
+    'data' => []
+  ]);die();
+
+  for ($i = 0; $i < count($data['schedule']); $i++) {
+
+    if (!isset($schedule[$i]['day_week']) || !isset($schedule[$i]['hour'])) {
+        throw new Exception('El horario está incompleto('.isset$schedule[$i]['day_week'].')');
+    }
+
+    $params_schedule = array();
+    $params_schedule['id_room'] = $data['id'];
+    $params_schedule['day_week'] = $schedule[$i]['day_week'];
+    $params_schedule['hour'] = $schedule[$i]['hour'];
+
+    $querySchedule = "INSERT INTO schedule (id_room, day_week, hour) VALUES (:id_room, :day_week, :hour)";
+    $schedule = $db->execute($querySchedule, $params_schedule);
+
+    if (!$schedule) {
+      throw new Exception ('No se pudo crear el horario para la sala');
+    }
+  }
+
 
   if (isset($data['prices']) && is_array($data['prices'])) {
     foreach ($data['prices'] as $p) {

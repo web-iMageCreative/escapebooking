@@ -28,8 +28,8 @@ try {
         throw new Exception('Sala no encontrada.');
     }
    
-    $query = "SELECT * FROM prices WHERE id_room = :id ORDER BY num_players ASC";
-    $prices = $db->fetchAll($query, $params);
+    $queryPrice = "SELECT * FROM prices WHERE id_room = :id ORDER BY num_players ASC";
+    $prices = $db->fetchAll($queryPrice, $params);
 
     if ($prices) {
         $room['prices'] = $prices;
@@ -39,6 +39,12 @@ try {
 
     $querySchedule = "SELECT * FROM schedule WHERE id_room = :id";
     $schedule = $db->fetchAll($querySchedule, $params);
+
+    if ($schedule) {
+        $room['schedule'] = $schedule;
+    } else {
+        $room['schedule'] = array();
+    }
 
     echo json_encode([
         'success' => true,

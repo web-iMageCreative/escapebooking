@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { RoomModel, Price } from '../Room.Model';
+import { RoomModel, Price, Schedule } from '../Room.Model';
 import { RoomService } from '../Room.Service';
 import RoomForm from './Room.Form';
 import { ApiResponse } from '../../../shared/models/apiResponse.Model';
@@ -18,10 +18,16 @@ const RoomUpdate: React.FC = () => {
   useEffect(() => {
     loadData();
   }, [id]);
-
+  
   const loadData = async () => {
     try {
       const RoomRes: ApiResponse = await RoomService.getRoom( parseInt(id!) );
+      console.log(RoomRes.data);
+      RoomRes.data.schedule.map( (s:any) => {
+        console.log(s.hour);
+        let h = s.hour.split(':');
+        s.hour = new Date(0, 0, 0, Number(h[0]), Number(h[1]));
+      })
       setInitialData(RoomRes.data);
     } catch (err: any) {
       console.log(err);

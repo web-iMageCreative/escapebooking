@@ -31,6 +31,19 @@ const RoomForm: React.FC<RoomFormProps> = ({
     }
   }, [error]);
 
+  useEffect(() => {
+    if (!initialData.schedule)
+      return
+    setSchedules(initialData.schedule);
+
+    let s: Schedule[] = sortSchedule([...initialData.schedule]);
+    
+    for (let i = 0; i <= 6; i++) {
+      orderedSchedules[i] = s.filter(obj => obj.day_week === i);
+    }
+    setOrderedSchedules([...orderedSchedules]);
+  }, [initialData]);
+
 
   useEffect(() => {
     if (+data.min_players > +data.max_players) return;
@@ -46,7 +59,6 @@ const RoomForm: React.FC<RoomFormProps> = ({
         { id_room: hasId ? data.id : 0, num_players: i, price: existe ? existe.price : 0 }
       );
     }
-
 
     setData(({
       ...data,
@@ -118,21 +130,14 @@ const RoomForm: React.FC<RoomFormProps> = ({
     s = sortSchedule(s);
 
     for (let i = 0; i <= 6; i++) {
-      let filtered = s.filter( ( obj ) => {
-        return obj.day_week === i;
-      })
-
-      orderedSchedules[i] = filtered;
-      setOrderedSchedules([...orderedSchedules]);
+      orderedSchedules[i] = s.filter(obj =>  obj.day_week === i);
     }
 
-    setSchedules([...schedules, {
-      id_room: initialData.id,
-      day_week: day,
-      hour: hour
-    }]);
+    setOrderedSchedules([...orderedSchedules]);
+    setSchedules(s);
+    console.log(schedules);
   };
-
+    
   return (
     <div>
       <form onSubmit={handleSubmit} className="form contained">
@@ -329,7 +334,6 @@ const RoomForm: React.FC<RoomFormProps> = ({
               <label>Hora</label>
               <input
                 type="time"
-                // value={hour.getTime()}
                 onChange={handleHourChange}
                 required
               />
