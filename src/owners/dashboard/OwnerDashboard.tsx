@@ -6,6 +6,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import  { Snackbar, Alert } from '@mui/material';
 import './OwnerDashboard.css';
 import EscapeRoomList from '../escaperooms/components/EscapeRoom.List';
+import EscapeRoomCreate from '../escaperooms/components/EscapeRoom.Create';
 
 
 const OwnerDashboard: React.FC = () => {
@@ -15,6 +16,9 @@ const OwnerDashboard: React.FC = () => {
   const nav = useNavigate();
   const location = useLocation();
   const alertData = location.state?.alert || {};
+  const [openAdd, setOpenAdd] = useState<boolean>(false)
+  const [myseed, setMyseed] = useState<number>(0)
+
 
   useEffect(() => {
     if (alertData.type) {
@@ -33,6 +37,10 @@ const OwnerDashboard: React.FC = () => {
   }, []);
 
   const handleSnackbarClose = () => { setOpen(false); }
+  const handlePopupClose = () => {
+    setOpenAdd(false);
+    setMyseed( Math.random());
+  }
 
   if (loading) {
     return <div className="loading">Cargando datos de usuario...</div>;
@@ -45,20 +53,16 @@ const OwnerDashboard: React.FC = () => {
   return (
     <div className="dashboard-container contained">
       <header className="dashboard-header">
-        <h2>Dashboard</h2>
         <div className="user-info">
           <span>Bienvenido, <strong>{user.email}</strong></span>
         </div>
-      </header>
-
-      <div className="dashboard-content">
-        <div className="dashboard-card">
-          <h3>Acciones rápidas</h3>
-          <div className="actions">
-            <Link to={ROUTES.OWNER_ESCAPE_ROOMS_CREATE}>Crear nuevo negocio</Link>
-            <Link to={ROUTES.OWNER_ESCAPE_ROOMS}>Ver Escaperooms</Link>
-          </div>
+        <div className="actions">
+          <button type="button" className='buttonLink' onClick={() => setOpenAdd(true)}>Añadir Nuevo Negocio</button>
         </div>
+      </header>          
+      <div className="dashboard-content">
+
+        <EscapeRoomList key={myseed}/>
 
         <div className="debug-card">
           <h3>Debug</h3>
@@ -69,7 +73,17 @@ const OwnerDashboard: React.FC = () => {
         </div>
       </div>
 
-      <EscapeRoomList />
+      {openAdd && (
+        <div className='pop-overlayCreate' onClick={() => setOpenAdd(false)}>
+            <div className='pop-contentCreate' onClick={(e) => e.stopPropagation()}>
+                  <EscapeRoomCreate onCancel={handlePopupClose}/>
+            </div>
+      </div>
+      )}
+
+      <div>
+        <h1>CALENDARIO</h1>
+      </div>
 
       <Snackbar
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}

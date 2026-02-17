@@ -12,12 +12,8 @@ const EscapeRoom: React.FC = () => {
     const [escapeRoom, setEscapeRoom] = useState<EscapeRoomModel>({
         id: 0,
         name: '',
-        description: '',
-        address: '',
-        province: 0,
         owner: 0
     });
-    const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -43,9 +39,6 @@ const EscapeRoom: React.FC = () => {
                     <Link to={'/owner/escape-rooms/edit/' + id}>Editar Escaperoom</Link>
                     <Link to={'/owner/rooms/new/' + escapeRoom.id}>Crear nueva Sala</Link>
                 </div>
-            </div>
-            <div className='description-file'>
-                <p>{escapeRoom.description}</p>
             </div>
 
             { escapeRoom && 
