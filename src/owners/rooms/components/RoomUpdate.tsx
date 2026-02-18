@@ -4,11 +4,8 @@ import { RoomModel, Price, Schedule } from '../Room.Model';
 import { RoomService } from '../Room.Service';
 import RoomForm from './Room.Form';
 import { ApiResponse } from '../../../shared/models/apiResponse.Model';
-import { User } from '../../../users/UserModel';
-import { AuthService } from '../../../auth/AuthService';
 
 const RoomUpdate: React.FC = () => {
-  const currentUser: User = AuthService.getCurrentUser();
   const { id } = useParams<{ id: string }>();
   const nav = useNavigate();
   const [initialData, setInitialData] = useState<RoomModel>();
@@ -22,12 +19,12 @@ const RoomUpdate: React.FC = () => {
   const loadData = async () => {
     try {
       const RoomRes: ApiResponse = await RoomService.getRoom( parseInt(id!) );
-      console.log(RoomRes.data);
+      
       RoomRes.data.schedule.map( (s:any) => {
-        console.log(s.hour);
         let h = s.hour.split(':');
         s.hour = new Date(0, 0, 0, Number(h[0]), Number(h[1]));
       })
+      
       setInitialData(RoomRes.data);
     } catch (err: any) {
       console.log(err);

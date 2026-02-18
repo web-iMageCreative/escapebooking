@@ -30,7 +30,6 @@ export class RoomService {
   }
 
   static async create(data: RoomModel): Promise<ApiResponse> {
-    console.log(data);
     const res = await fetch(`${API_BASE_URL}/owners/rooms/create.php`, {
       method: 'POST',
       headers: {

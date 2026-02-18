@@ -37,7 +37,7 @@ try {
         $room['prices'] = array();
     }
 
-    $querySchedule = "SELECT * FROM schedule WHERE id_room = :id";
+    $querySchedule = "SELECT *, TIME_FORMAT(hour, '%H:%i') AS strHour FROM schedule WHERE id_room = :id";
     $schedule = $db->fetchAll($querySchedule, $params);
 
     if ($schedule) {

@@ -108,9 +108,6 @@ const RoomList: React.FC<any> = ({ id }) => {
                 <Typography gutterBottom variant="h6" component="h3">
                   {room.name}
                 </Typography>
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                  {room.description}
-                </Typography>
               </CardContent>
               <CardActions>
                 <Button startIcon={<ArticleOutlinedIcon />} size="small" data-id={room.id} onClick={handleReadClick}>Ver</Button>
