@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { EscapeRoomModel } from '../EscapeRoom.Model';
-import { Province } from '../../../shared/models/province.Model';
+import { EscapeRoomModel, UpdateFormProp } from '../EscapeRoom.Model';
 import { EscapeRoomService } from '../EscapeRoom.Service';
-import { getProvinces } from '../../../shared/data/provinces';
 import EscapeRoomForm from './EscapeRoom.Form';
 import { ApiResponse } from '../../../shared/models/apiResponse.Model';
 
-const EscapeRoomUpdate: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+const EscapeRoomUpdate: React.FC<UpdateFormProp> = ({id: updateId, onCancel}) => {
+  const { id: paramId } = useParams<{ id: string }>();
+  const id = updateId ?? (paramId ? parseInt(paramId) : undefined);
   const nav = useNavigate();
   const [initialData, setInitialData] = useState<EscapeRoomModel | null>(null);
   const [loading, setLoading] = useState(true);
@@ -20,7 +19,7 @@ const EscapeRoomUpdate: React.FC = () => {
 
   const loadData = async () => {
     try {
-      const escapeRoomRes: ApiResponse = await EscapeRoomService.getEscaperoom(parseInt(id!));
+      const escapeRoomRes: ApiResponse = await EscapeRoomService.getEscaperoom(id!);
       setInitialData(escapeRoomRes.data);
     } catch (err: any) {
       setError(err.message || 'Error cargando datos');
@@ -35,7 +34,7 @@ const EscapeRoomUpdate: React.FC = () => {
     try {
       const res = await EscapeRoomService.update(data);
       if (res.success) {
-        nav('/owner/dashboard', { state: { alert: { type: 'success', message: res.message } } });
+        onCancel();
       } else {
         setError(res.message);
       }
@@ -47,7 +46,7 @@ const EscapeRoomUpdate: React.FC = () => {
   };
 
   const handleCancel = () => {
-    nav('/owner/dashboard', { state: { alert: { message: 'Operación cancelada', type: 'info' } } });
+    onCancel();
   };
 
   if (loading && !initialData) {

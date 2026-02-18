@@ -36,7 +36,6 @@ const EscapeRoom: React.FC = () => {
             <div className='header-file'>
                 <h2>{escapeRoom.name}</h2>
                 <div className="actions">
-                    <Link to={'/owner/escape-rooms/edit/' + id}>Editar Escaperoom</Link>
                     <Link to={'/owner/rooms/new/' + escapeRoom.id}>Crear nueva Sala</Link>
                 </div>
             </div>

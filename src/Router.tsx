@@ -5,14 +5,12 @@ import { ROUTES } from './routes';
 import Login from './auth/login/Login';
 import OwnerDashboard from './owners/dashboard/OwnerDashboard';
 import EscapeRoomList from './owners/escaperooms/components/EscapeRoom.List';
-import EscapeRoomCreate from './owners/escaperooms/components/EscapeRoom.Create';
 import EscapeRoom from './owners/escaperooms/components/EscapeRoom';
-import EscapeRoomUpdate from './owners/escaperooms/components/EscapeRoom.Update';
 import RoomList from './owners/rooms/components/Room.List';
 import RoomCreate from './owners/rooms/components/Room.Create';
 import Room from './owners/rooms/components/Room';
 import RoomUpdate from './owners/rooms/components/RoomUpdate';
-import { CreateFormProp } from './owners/escaperooms/EscapeRoom.Model';
+import Booking from './widget/Booking';
 
 //import AdminUsers from './admin/Users/AdminUsers';
 //import CustomerBrowse from './customer/Browse/CustomerBrowse';
@@ -58,6 +56,10 @@ const AppRouter: React.FC = () => {
                     <Login />
                 </PublicRoute>
             } />
+
+            <Route path={ROUTES.WIDGET} element={
+                    <Booking />
+            } />
             
             {/* Owner Routes */}
             <Route path={ROUTES.OWNER_DASHBOARD} element={
@@ -84,11 +86,6 @@ const AppRouter: React.FC = () => {
                 </ProtectedRoute>
             } />  
 
-            <Route path={ROUTES.OWNER_ESCAPE_ROOMS_UPDATE} element={
-                <ProtectedRoute requiredRole="owner">
-                    <EscapeRoomUpdate />
-                </ProtectedRoute>
-            } />
 
             <Route path={ROUTES.OWNER_ROOMS_CREATE} element={
                 <ProtectedRoute requiredRole="owner">

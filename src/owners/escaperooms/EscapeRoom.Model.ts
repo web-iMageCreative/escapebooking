@@ -19,3 +19,8 @@ export interface EscapeRoomFormProps {
 export interface CreateFormProp {
   onCancel: () => void;
 }
+
+export interface UpdateFormProp {
+  id?: number,
+  onCancel: () => void;
+}
