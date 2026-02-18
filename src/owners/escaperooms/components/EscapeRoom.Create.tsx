@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { EscapeRoomModel } from '../EscapeRoom.Model';
+import { EscapeRoomFormProps, EscapeRoomModel, CreateFormProp } from '../EscapeRoom.Model';
 import { EscapeRoomService } from '../EscapeRoom.Service';
 import { AuthService } from '../../../auth/AuthService';
 import { User } from '../../../users/UserModel';
@@ -7,7 +7,7 @@ import EscapeRoomForm from './EscapeRoom.Form';
 import { useNavigate } from 'react-router-dom';
 
 
-const EscapeRoomCreate: React.FC = () => {
+const EscapeRoomCreate: React.FC<CreateFormProp> = ({onCancel}) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const currentUser: User = AuthService.getCurrentUser();
@@ -17,9 +17,6 @@ const EscapeRoomCreate: React.FC = () => {
   const initialData: EscapeRoomModel = {
     id: 0,
     name: '',
-    description: '',
-    address: '',
-    province: 0,
     owner: currentUser.id
   };
 
@@ -31,7 +28,7 @@ const EscapeRoomCreate: React.FC = () => {
       const res = await EscapeRoomService.create(data);
 
       if (res.success) {
-        nav('/owner/dashboard', { state: { alert: { type: 'success', message: res.message } } } );
+        onCancel();
       } else {
         setError(res.message);
       }
@@ -43,7 +40,7 @@ const EscapeRoomCreate: React.FC = () => {
   };
 
   const handleCancel = () => {
-    nav('/owner/dashboard', { state: { alert: {message: 'Operación cancelada', type: 'info' } } } );
+    onCancel();
   };
 
   return (

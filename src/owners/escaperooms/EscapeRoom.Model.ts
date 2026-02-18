@@ -1,11 +1,7 @@
-import { Province } from "../../shared/models/province.Model";
 
 export interface EscapeRoomModel {
   id: number,
   name: string,
-  description: string,
-  address: string,
-  province: number,
   owner: number
 }
 
@@ -18,4 +14,8 @@ export interface EscapeRoomFormProps {
   title?: string;
   submitText?: string;
   cancelText?: string;
+}
+
+export interface CreateFormProp {
+  onCancel: () => void;
 }

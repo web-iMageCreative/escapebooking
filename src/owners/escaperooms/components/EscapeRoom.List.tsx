@@ -14,7 +14,6 @@ import {
   Card,
   CardActions,
   CardContent,
-  CardMedia,
   Typography,
   Snackbar,
   Alert
@@ -90,23 +89,14 @@ const EscapeRoomList: React.FC = () => {
 
   return (
     <div className='contained'>
-      <h3>Mis Negocios de Escape Rooms</h3>
+      <h3>Mis Escape Rooms</h3>
       { ! loading && 
         <div className='list'>
           {data.map(escaperoom => (
             <Card key={escaperoom.id} sx={{ maxWidth: 345 }}>
-              <CardMedia
-                component="img"
-                alt="logo"
-                height="200"
-                image="/assets/imgs/escaperooms/generic.jpg"
-              />
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
                   {escaperoom.name}
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                  {escaperoom.description}
                 </Typography>
               </CardContent>
               <CardActions>

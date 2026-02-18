@@ -152,6 +152,18 @@ input::placeholder, textarea::placeholder {
   padding: 50px 0
 }
 
+.buttonLink {
+  background: #fff;
+  border: 1px solid #d4d4d4;
+  padding: 6px 25px;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 3px 3px 1px rgba(0,0,0,0.2);
+  border-radius: 6px;
+  margin-right: 20px;
+  transition: all .3s;
+}
+
 .actions a {
   background: #fff;
   border: 1px solid #d4d4d4;

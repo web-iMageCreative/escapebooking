@@ -12,6 +12,7 @@ import RoomList from './owners/rooms/components/Room.List';
 import RoomCreate from './owners/rooms/components/Room.Create';
 import Room from './owners/rooms/components/Room';
 import RoomUpdate from './owners/rooms/components/RoomUpdate';
+import { CreateFormProp } from './owners/escaperooms/EscapeRoom.Model';
 
 //import AdminUsers from './admin/Users/AdminUsers';
 //import CustomerBrowse from './customer/Browse/CustomerBrowse';
@@ -70,12 +71,6 @@ const AppRouter: React.FC = () => {
                     <EscapeRoomList />
                 </ProtectedRoute>
             } /> 
-            
-            <Route path={ROUTES.OWNER_ESCAPE_ROOMS_CREATE} element={
-                <ProtectedRoute requiredRole="owner">
-                    <EscapeRoomCreate />
-                </ProtectedRoute>
-            } />
 
             <Route path={ROUTES.OWNER_ESCAPE_ROOM} element={
                 <ProtectedRoute requiredRole="owner">
