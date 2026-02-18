@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { RoomFormProps, RoomModel, Price, Schedule } from '../Room.Model';
-import { Snackbar, Alert } from '@mui/material';
+import { Snackbar, Alert, Chip } from '@mui/material';
 import '../styles/Room.Form.css';
 
 const RoomForm: React.FC<RoomFormProps> = ({
@@ -15,7 +15,6 @@ const RoomForm: React.FC<RoomFormProps> = ({
 }) => {
   const [data, setData] = useState<RoomModel>(initialData);
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
-  const [openSchedule, setOpenSchedule] = useState<boolean>(false);
   const [day, setDay] = useState<number>(0);
   const [hour, setHour] = useState<Date>(new Date());
   const [schedules, setSchedules] = useState<Schedule[]>([]);
@@ -34,6 +33,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
   useEffect(() => {
     if (!initialData.schedule)
       return
+    
     setSchedules(initialData.schedule);
 
     let s: Schedule[] = sortSchedule([...initialData.schedule]);
@@ -41,9 +41,9 @@ const RoomForm: React.FC<RoomFormProps> = ({
     for (let i = 0; i <= 6; i++) {
       orderedSchedules[i] = s.filter(obj => obj.day_week === i);
     }
+
     setOrderedSchedules([...orderedSchedules]);
   }, [initialData]);
-
 
   useEffect(() => {
     if (+data.min_players > +data.max_players) return;
@@ -124,7 +124,8 @@ const RoomForm: React.FC<RoomFormProps> = ({
     let s: Schedule[] = [...schedules, {
       id_room: initialData.id,
       day_week: day,
-      hour: hour
+      hour: hour,
+      strHour: new Intl.DateTimeFormat("es-ES", { hour: 'numeric', minute: 'numeric' }).format(hour.getTime())
     }];
 
     s = sortSchedule(s);
@@ -137,6 +138,19 @@ const RoomForm: React.FC<RoomFormProps> = ({
     setSchedules(s);
     console.log(schedules);
   };
+
+  const handleDeleteHour = (i: number, j: number) => {
+    const id_room = orderedSchedules[i][j]['id_room'];
+    const day_week = orderedSchedules[i][j]['day_week'];
+    const hour = orderedSchedules[i][j]['hour'];
+    const s = schedules.filter( (schedule) => {
+      return !(schedule.id_room === id_room && schedule.day_week === day_week && schedule.hour === hour);
+    });
+    setSchedules(s);
+
+    delete orderedSchedules[i][j];
+    setOrderedSchedules([...orderedSchedules]);
+  }
     
   return (
     <div>
@@ -166,26 +180,6 @@ const RoomForm: React.FC<RoomFormProps> = ({
 
         <div className="form-group">
           <div className="col-label">
-            <label htmlFor="description">Descripción</label>
-            <p className="description">
-              Describe tu Sala. Incluye temática, dificultad, y experiencia única.
-            </p>
-          </div>
-          <div className="col-value">
-            <textarea
-              id="description"
-              value={data.description}
-              onChange={handleInputChange}
-              placeholder="Sumérgete en una aventura de misterio..."
-              rows={6}
-              required
-              disabled={loading}
-            />
-          </div>
-        </div>
-
-        <div className="form-group">
-          <div className="col-label">
             <label htmlFor="duration">Duración</label>
             <p className="description">
               Duración completa de la experiencia en minutos
@@ -204,9 +198,63 @@ const RoomForm: React.FC<RoomFormProps> = ({
           </div>
         </div>
 
-        <button type="button" onClick={() => setOpenSchedule(true)}>
-          Introduce tu horario
-        </button>
+        <div className="schedules">
+          <label htmlFor="day">Horarios</label>
+          <div className="calendar">
+            {orderedSchedules
+              .map((d: any, i: number) => {
+                return (
+                <div key={i} className="day-of-week"> 
+                  <div className="day-name">{days_of_week[i]}</div>
+                  {d.map((s: Schedule, j: number) => (
+                    <div key={j} className="hour">
+                      <Chip
+                        sx={{ width: '95%', fontSize: '12px' }}
+                        label={ s.strHour }
+                        onDelete={() => handleDeleteHour(i, j)}
+                        color='primary'
+                      />
+                    </div>
+                  ))}
+                </div>
+              )})}
+          </div>
+
+          <div className="schedule-form">
+            <div className="form-group">
+              <label htmlFor="day">Día</label>
+              <select
+                id="day"
+                value={day}
+                onChange={handleDayChange}
+              >
+                <option value={0}>Lunes</option>
+                <option value={1}>Martes</option>
+                <option value={2}>Miércoles</option>
+                <option value={3}>Jueves</option>
+                <option value={4}>Viernes</option>
+                <option value={5}>Sábado</option>
+                <option value={6}>Domingo</option>
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="time">Hora</label>
+              <input
+                id="time"
+                type="time"
+                onChange={handleHourChange}
+                required
+              />
+            </div>
+
+            <div className="form-group">  
+              <button type="button" onClick={handleAddSchedule}>
+                Añadir horario
+              </button>
+            </div>
+          </div>
+        </div>
 
         <div className="form-group">
           <div className="col-label">
@@ -294,57 +342,6 @@ const RoomForm: React.FC<RoomFormProps> = ({
         </div>
 
       </form>
-
-      {openSchedule && (
-        <div className='pop-overlay' onClick={() => setOpenSchedule(false)}>
-          <div className='pop-content' onClick={(e) => e.stopPropagation()}>
-
-            <div className="calendar">
-              {orderedSchedules
-                .map((d: any, i: number) => {
-                  return (
-                  <div key={i} className="day-of-week"> {days_of_week[i]}
-                    {d.map((s: Schedule, j: number) => (
-                      <div key={j} className="hour">
-                        {new Intl.DateTimeFormat("es-ES", { hour: 'numeric', minute: 'numeric' }).format(s.hour.getTime())}
-                      </div>
-                    ))}
-                  </div>
-                )})}
-              </div>
-
-
-            <div className="form-group">
-              <label>Día</label>
-              <select
-                value={day}
-                onChange={handleDayChange}
-              >
-                <option value={0}>Lunes</option>
-                <option value={1}>Martes</option>
-                <option value={2}>Miércoles</option>
-                <option value={3}>Jueves</option>
-                <option value={4}>Viernes</option>
-                <option value={5}>Sábado</option>
-                <option value={6}>Domingo</option>
-              </select>
-            </div>
-
-            <div className="form-group">
-              <label>Hora</label>
-              <input
-                type="time"
-                onChange={handleHourChange}
-                required
-              />
-            </div>
-
-            <button type="button" onClick={handleAddSchedule}>
-              Añadir horario
-            </button>
-          </div>
-        </div>
-      )}
 
       <Snackbar
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}

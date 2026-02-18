@@ -12,7 +12,6 @@ const Room: React.FC = () => {
     const [room, setRoom] = useState<RoomModel>({
         id: 0,
         name: '',
-        description: '',
         duration: 0,
         schedule: [],
         min_players: 0,
@@ -45,9 +44,6 @@ const Room: React.FC = () => {
                 <div className="actions">
                     <Link to={'/owner/rooms/edit/' + id}>Editar Sala</Link>
                 </div>
-            </div>
-            <div className='contenido-ficha'>
-                <p>{room.description}</p>
             </div>
             <div className="players">
                 <div className='min-players'>

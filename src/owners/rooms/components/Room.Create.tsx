@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { RoomModel } from '../Room.Model';
 import { RoomService } from '../Room.Service';
-import { AuthService } from '../../../auth/AuthService';
-import { User } from '../../../users/UserModel';
 import RoomForm from './Room.Form';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
@@ -10,14 +8,12 @@ import { useParams } from 'react-router-dom';
 const RoomCreate: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const currentUser: User = AuthService.getCurrentUser();
   const nav = useNavigate();
   const { escaperoom_id } = useParams<{ escaperoom_id: string }>();
 
   const initialData: RoomModel = {
     id: 0,
     name: '',
-    description: '',
     duration: 0,
     schedule: [],
     min_players: 0,

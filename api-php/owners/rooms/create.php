@@ -20,7 +20,6 @@ try {
   $data = json_decode(file_get_contents('php://input'), true);
 
   if ( ! (isset( $data['name'] ) && trim($data['name']) != '') ) throw new Exception('Falta el nombre de la sala');
-  if ( ! (isset( $data['description'] ) && trim($data['description']) != '') ) throw new Exception('Falta la descripción de la sala');
   if ( ! (isset( $data['duration'] ) && trim($data['duration']) != '') ) throw new Exception('Falta la duración de la sala');
   if ( ! (isset( $data['min_players'] ) && trim($data['min_players']) != '') ) throw new Exception('Falta el mínimo de jugadores');
   if ( ! (isset( $data['max_players'] ) && trim($data['max_players']) != '') ) throw new Exception('Falta el máximo de jugadores');
@@ -28,7 +27,6 @@ try {
   
   $params = array();
   $params['name']          = trim( $data['name'] );
-  $params['description']   = trim( $data['description'] );
   $params['duration']      = $data['duration'];
   $params['min_players']   = $data['min_players'];
   $params['max_players']   = $data['max_players'];
@@ -36,8 +34,8 @@ try {
   $prices = $data['prices'];
   $schedule = $data['schedule'];
 
-  $query = "INSERT INTO rooms (name, description, duration, min_players, max_players, escaperoom_id) 
-  VALUES (:name, :description, :duration, :min_players, :max_players, :escaperoom_id)";
+  $query = "INSERT INTO rooms (name, duration, min_players, max_players, escaperoom_id) 
+  VALUES (:name, :duration, :min_players, :max_players, :escaperoom_id)";
   
   $room = $db->execute($query, $params);
 
@@ -71,7 +69,7 @@ try {
     $params_schedule = array();
     $params_schedule['id_room'] = $id_room;
     $params_schedule['day_week'] = $schedule[$i]['day_week'];
-    $params_schedule['hour'] = date('HH:MM',strtotime($schedule[$i]['hour']));
+    $params_schedule['hour'] = $schedule[$i]['strHour'];
 
     $querySchedule = "INSERT INTO schedule (id_room, day_week, hour) VALUES (:id_room, :day_week, :hour)";
     $createSchedule = $db->execute($querySchedule, $params_schedule);

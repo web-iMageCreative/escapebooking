@@ -21,7 +21,6 @@ try {
 
   if ( ! (isset( $data['id'] ) && trim($data['id']) != '') ) throw new Exception('Falta el id de la sala');
   if ( ! (isset( $data['name'] ) && trim($data['name']) != '') ) throw new Exception('Falta el nombre de la sala');
-  if ( ! (isset( $data['description'] ) && trim($data['description']) != '') ) throw new Exception('Falta la descripción de la sala');
   if ( ! (isset( $data['duration'] ) && trim($data['duration']) != '') ) throw new Exception('Falta la duración de la sala');
   if ( ! (isset( $data['min_players'] ) && $data['min_players'] != '') ) throw new Exception('Falta el mínimo de jugadores');
   if ( ! (isset( $data['max_players'] ) && $data['max_players'] != '') ) throw new Exception('Falta el máximo de jugadores');
@@ -30,12 +29,11 @@ try {
   $params = array();
   $params['id']        = $data['id'];
   $params['name']        = trim( $data['name'] );
-  $params['description'] = trim( $data['description'] );
   $params['duration']     = trim( $data['duration'] );
   $params['min_players']    = $data['min_players'];
   $params['max_players']    = $data['max_players'];
 
-  $query = "UPDATE rooms SET name = :name, description = :description, duration = :duration, min_players = :min_players, max_players = :max_players WHERE id = :id";
+  $query = "UPDATE rooms SET name = :name, duration = :duration, min_players = :min_players, max_players = :max_players WHERE id = :id";
 
   $room = $db->execute($query, $params);
 
@@ -58,26 +56,20 @@ try {
     ]);
 
   $schedule = $data['schedule'];
+  
+  for ($i = 0; $i < count($schedule); $i++) {
 
-  echo json_encode([
-    'success' => true,
-    'message' => '...',
-    'data' => []
-  ]);die();
-
-  for ($i = 0; $i < count($data['schedule']); $i++) {
-
-    if (!isset($schedule[$i]['day_week']) || !isset($schedule[$i]['hour'])) {
-        throw new Exception('El horario está incompleto('.isset$schedule[$i]['day_week'].')');
+    if (!isset($schedule[$i]['day_week']) || !isset($schedule[$i]['strHour'])) {
+        throw new Exception('El horario está incompleto');
     }
 
     $params_schedule = array();
     $params_schedule['id_room'] = $data['id'];
     $params_schedule['day_week'] = $schedule[$i]['day_week'];
-    $params_schedule['hour'] = $schedule[$i]['hour'];
+    $params_schedule['hour'] = $schedule[$i]['strHour'];
 
     $querySchedule = "INSERT INTO schedule (id_room, day_week, hour) VALUES (:id_room, :day_week, :hour)";
-    $schedule = $db->execute($querySchedule, $params_schedule);
+    $updateSchedule = $db->execute($querySchedule, $params_schedule);
 
     if (!$schedule) {
       throw new Exception ('No se pudo crear el horario para la sala');
@@ -106,8 +98,7 @@ try {
           'num_players' => $p['num_players']
         ]);
       } else {
-        $query = "INSERT INTO prices (id_room, num_players, price) 
-        VALUES (:id_room, :num_players, :price)";
+        $query = "INSERT INTO prices (id_room, num_players, price) VALUES (:id_room, :num_players, :price)";
 
         $db->execute($query, [
           'id_room' => $data['id'],
