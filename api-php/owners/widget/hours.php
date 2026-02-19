@@ -16,24 +16,32 @@ require_once '../../shared/Database.php';
 $db = new Database();
 
 try {
-    $id = $_GET['id'];
-    $params = array('id' => $id);
 
-    $query = "SELECT * FROM rooms WHERE id = :id ORDER BY name";
+    $idRoom = $_GET['id'];
+    $dayWeek = $_GET['day_week'];
+    $params = array(
+        'idRoom' => $idRoom,
+        'dayWeek' => $dayWeek
+    );
 
-    $getRooms = $db->fetchSingle($query, $params);
+    $query = "SELECT hours FROM schedule WHERE id = :idRoom AND day_week = :dayWeek";
 
-    if (!$getRooms) {
-        throw new Exception('No se ha encontrado ninguna sala.');
+    $getHours = $db->fetchSingle($query, $params);
+
+    if (!$getHours) {
+        throw new Exception('No se han encontrado horarios para esta sala.');
     }
 
     echo json_encode([
         'success' => true,
-        'message' => 'Salas cargadas.',
-        'data' => $getRooms
+        'message' => 'Horario cargado.',
+        'data' => $getHours
     ]);
+
 } catch (Exception $e) {
+
     http_response_code(401);
+
     echo json_encode([
         'success' => false,
         'message' => $e->getMessage()

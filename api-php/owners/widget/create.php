@@ -42,7 +42,7 @@ try {
         throw new Exception( 'No se pudo hacer la reserva ' );
     }
 
-    http_response_code(200);
+  http_response_code(200);
   echo json_encode([
     'success' => true,
     'message' => 'Reserva realizada',
