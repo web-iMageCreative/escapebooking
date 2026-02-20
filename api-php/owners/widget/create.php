@@ -23,7 +23,8 @@ try {
     if ( ! (isset( $data['phone'] ) && trim($data['phone']) != '') ) throw new Exception('Falta el número');
     if ( ! (isset( $data['num_players'] ) && trim($data['num_players']) != '') ) throw new Exception('Falta el número de jugadores');
     if ( ! (isset( $data['date'] ) && trim($data['date']) != '') ) throw new Exception('Falta la fecha');
-    if ( ! (isset( $data['room_id'] ) && $data['room_id'] != '') ) throw new Exception('Falta el id de la sala');
+    if ( ! (isset( $data['id_room'] ) && $data['id_room'] != '') ) throw new Exception('Falta el id de la sala');
+    if ( ! (isset( $data['price'] ) && trim($data['price']) != '') ) throw new Exception('Falta el precio');
 
     $params = array();
     $params['name']          = trim( $data['name'] );
@@ -31,10 +32,12 @@ try {
     $params['phone']          = trim( $data['phone'] );
     $params['num_players']          = trim( $data['num_players'] );
     $params['date']          = trim( $data['date'] );
-    $params['room_id']          = trim( $data['room_id'] );
+    $params['id_room']          = trim( $data['id_room'] );
+    $params['price']          = trim( $data['price'] );
 
-    $query = "INSERT INTO bookings (name, email, phone, num_players, date, room_id)
-    VALUES (:name, :email, :phone, :num_players, :date, :room_id)"
+
+    $query = "INSERT INTO bookings (name, email, phone, num_players, date, id_room, price)
+    VALUES (:name, :email, :phone, :num_players, :date, :id_room, :price)";
 
     $createBooking = $db->execute($query, $params);
 

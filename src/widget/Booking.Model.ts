@@ -5,6 +5,7 @@ export interface BookingModel {
   phone: number,
   num_players: number,
   date: Date,
+  price: number,
   id_room: number
 }
 
@@ -17,4 +18,10 @@ export interface BookingFormProps {
   title?: string;
   submitText?: string;
   cancelText?: string;
+}
+
+export interface Price {
+  id_room: number,
+  num_players: number,
+  price: number
 }

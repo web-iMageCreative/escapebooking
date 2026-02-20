@@ -19,18 +19,27 @@ try {
     $id = $_GET['id'];
     $params = array('id' => $id);
 
-    $query = "SELECT * FROM rooms WHERE id = :id ORDER BY name";
+    $query = "SELECT * FROM rooms WHERE id = :id";
 
-    $getRooms = $db->fetchSingle($query, $params);
+    $getRoom = $db->fetchSingle($query, $params);
 
-    if (!$getRooms) {
+    if (!$getRoom) {
         throw new Exception('No se ha encontrado ninguna sala.');
+    }
+
+    $queryPrice = "SELECT * FROM prices WHERE id_room = :id ORDER BY num_players ASC";
+    $prices = $db->fetchAll($queryPrice, $params);
+
+    if ($prices) {
+        $getRoom['prices'] = $prices;
+    } else {
+        $getRoom['prices'] = array();
     }
 
     echo json_encode([
         'success' => true,
         'message' => 'Salas cargadas.',
-        'data' => $getRooms
+        'data' => $getRoom
     ]);
 } catch (Exception $e) {
     http_response_code(401);
