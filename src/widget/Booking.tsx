@@ -4,7 +4,6 @@ import { useParams } from 'react-router-dom';
 import { RoomModel, Schedule } from '../owners/rooms/Room.Model';
 import { BookingModel } from './Booking.Model';
 import { BookingService } from './Booking.Service';
-import { RoomService } from '../owners/rooms/Room.Service';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateCalendar, LocalizationProvider } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
@@ -16,7 +15,7 @@ const Booking: React.FC = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [clickDay, setClickDay] = useState<dayjs.Dayjs | null>(null);
-    const [hours, setHours] = useState<Schedule[]>([]);
+    const [hours, setHours] = useState<any[]>([]);
     const [clickHour, setClickHour] = useState<Schedule | null>(null);
     
     const [room, setRoom] = useState<RoomModel>({
@@ -37,6 +36,7 @@ const Booking: React.FC = () => {
         phone: 0,
         num_players: 0,
         date: new Date(),
+        price: 0,
         id_room: 0
     });
 
@@ -50,6 +50,8 @@ const Booking: React.FC = () => {
             setRoom(res.data);
         } catch {
             console.log('Error cargando sala');
+        } finally {
+            return;
         }
     }
 
@@ -63,6 +65,13 @@ const Booking: React.FC = () => {
 
     const handleClickDay = async (value: dayjs.Dayjs | null) => {
         setClickDay(value);
+        const selectedDate = value;
+        const currentDate = dayjs();
+        if (currentDate > selectedDate!) {
+            setHours([]);
+            return;
+        }
+        
         const dayOfWeek = value?.get('day');
 
         try {
@@ -80,14 +89,16 @@ const Booking: React.FC = () => {
         });
     };
 
+    const handleClickHour = (hour: Schedule) => {
+        setClickHour(hour);
+    };
+
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        
+        bookingData.id_room = room.id;
         try {
-            await BookingService.createBooking({
-                ...bookingData,
-                id_room: room.id
-            });
+            await BookingService.createBooking(bookingData);
         } catch {
             setError('Error al realizar la reserva.')
         } finally {
@@ -107,93 +118,105 @@ const Booking: React.FC = () => {
                         />
                     </LocalizationProvider>
 
-                    <div className='form contained'>
-                        <p>Horas disponibles:</p>
-                        <div>
-                            {hours?.map((h) => ( 
+                    <div className='form-group'>
+                        <div className="col-label">
+                            <p>Horas disponibles:</p>
+                        </div>
+                        <div className='col-value'>
+                            {hours?.map((h, i) => ( 
                                 <button
-                                    key={`${h.id_room}-${h.strHour}`} 
+                                    key={i}
                                     type="button"
-
+                                    onClick={() => handleClickHour(h)}
                                 >
-                                    {h.strHour} 
+                                    {h.hour}
                                 </button>
-                            )) || <span>No hay horas disponibles</span>}
-                        </div>
-
-                    </div>
-
-                    <div className="form-group">
-                        <div className="col-label">
-                            <label htmlFor="name">Nombre</label>
-                        </div>
-                        <div className="col-value">
-                                <input
-                                    type="text"
-                                    id="name"
-                                    value={bookingData.name}
-                                    onChange={handleChange}
-                                    placeholder="Nombre"
-                                    required
-                                    disabled={loading}
-                                />
+                            ))}
+                            {hours.length === 0 &&
+                                <span>No hay horas disponibles</span>
+                            }
                         </div>
                     </div>
 
-                    <div className="form-group">
-                        <div className="col-label">
-                            <label htmlFor="email">Email</label>
-                        </div>
-                        <div className="col-value">
-                                <input
-                                    type="text"
-                                    id="email"
-                                    value={bookingData.email}
-                                    onChange={handleChange}
-                                    placeholder="Email"
-                                    required
-                                    disabled={loading}
-                                />
-                        </div>
+                    <div className='form-group'>
+                        {clickHour && (
+                            <div className="col-value">                               
+                                {room.prices?.map((p, i) => (
+                                    <button
+                                        key={i}
+                                        type='button'
+                                        onClick={() =>
+                                            setBookingData({
+                                                ...bookingData,
+                                                num_players: p.num_players,
+                                                price: p.price
+                                            })
+                                        }
+                                    >
+                                        {p.num_players} jugadores - {p.price}€
+                                    </button>
+                                ))}
+                            </div> 
+                        )}
                     </div>
 
-                    <div className="form-group">
-                        <div className="col-label">
-                            <label htmlFor="phone">Teléfono</label>
+                    {bookingData.num_players > 0 && (
+                        <>
+                        <div className="form-group">
+                            <div className="col-label">
+                                <label htmlFor="name">Nombre</label>
+                            </div>
+                            <div className="col-value">
+                                    <input
+                                        type="text"
+                                        id="name"
+                                        value={bookingData.name}
+                                        onChange={handleChange}
+                                        placeholder="Nombre"
+                                        required
+                                        disabled={loading}
+                                    />
+                            </div>
                         </div>
-                        <div className="col-value">
-                                <input
-                                    type="number"
-                                    id="phone"
-                                    value={bookingData.phone}
-                                    onChange={handleChange}
-                                    placeholder="Teléfono"
-                                    required
-                                    disabled={loading}
-                                />
-                        </div>
-                    </div>
 
-                    <div className="form-group">
-                        <div className="col-label">
-                            <label htmlFor="num_players">Número de Juagdores</label>
+                        <div className="form-group">
+                            <div className="col-label">
+                                <label htmlFor="email">Email</label>
+                            </div>
+                            <div className="col-value">
+                                    <input
+                                        type="text"
+                                        id="email"
+                                        value={bookingData.email}
+                                        onChange={handleChange}
+                                        placeholder="Email"
+                                        required
+                                        disabled={loading}
+                                    />
+                            </div>
                         </div>
-                        <div className="col-value">
-                                <input
-                                    type="number"
-                                    id="phone"
-                                    value={bookingData.num_players}
-                                    onChange={handleChange}
-                                    placeholder="Jugadores"
-                                    required
-                                    disabled={loading}
-                                />
-                        </div>
-                    </div>
 
-                <button type="submit">
-                    Reservar
-                </button>
+                        <div className="form-group">
+                            <div className="col-label">
+                                <label htmlFor="phone">Teléfono</label>
+                            </div>
+                            <div className="col-value">
+                                    <input
+                                        type="number"
+                                        id="phone"
+                                        value={bookingData.phone}
+                                        onChange={handleChange}
+                                        placeholder="Teléfono"
+                                        required
+                                        disabled={loading}
+                                    />
+                            </div>
+                        </div>
+                        <button type="submit">
+                            Reservar
+                        </button>
+                        </>
+                    )}
 
             </form>
         </div>

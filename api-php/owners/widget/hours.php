@@ -17,16 +17,16 @@ $db = new Database();
 
 try {
 
-    $idRoom = $_GET['id'];
+    $idRoom = $_GET['id_room'];
     $dayWeek = $_GET['day_week'];
     $params = array(
         'idRoom' => $idRoom,
         'dayWeek' => $dayWeek
     );
 
-    $query = "SELECT hours FROM schedule WHERE id = :idRoom AND day_week = :dayWeek";
+    $query = "SELECT hour FROM schedule WHERE id_room = :idRoom AND day_week = :dayWeek";
 
-    $getHours = $db->fetchSingle($query, $params);
+    $getHours = $db->fetchAll($query, $params);
 
     if (!$getHours) {
         throw new Exception('No se han encontrado horarios para esta sala.');
@@ -39,9 +39,7 @@ try {
     ]);
 
 } catch (Exception $e) {
-
     http_response_code(401);
-
     echo json_encode([
         'success' => false,
         'message' => $e->getMessage()
