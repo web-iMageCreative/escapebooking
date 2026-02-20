@@ -5,6 +5,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { RoomFormProps, RoomModel, Price, Schedule, RoomFormError } from '../Room.Model';
 import '../styles/Room.Form.css';
+import { RoomFormHandlers } from './Room.Form.Handlers';
 
 const RoomForm: React.FC<RoomFormProps> = ({
   initialData,
@@ -49,7 +50,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
     
     setSchedules(initialData.schedule);
 
-    let s: Schedule[] = sortSchedule([...initialData.schedule]);
+    let s: Schedule[] = RoomFormHandlers.sortSchedule([...initialData.schedule]);
     
     for (let i = 0; i <= 6; i++) {
       orderedSchedules[i] = s.filter(obj => obj.day_week === i);
@@ -96,66 +97,35 @@ const RoomForm: React.FC<RoomFormProps> = ({
   }, [schedules]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    let { id, value } = e.target;
-    
-    if (id === "duration" || id === "min_players" || id === "max_players") {
-      const onlyNums = e.target.value.replace(/[^0-9]/g, '');
-      value = onlyNums;
-    }
-
-    if (id === "min_players" || id === "max_players") {
-      let players: number = Number(value);
-      if ( players > 20) {
-        value = '20';
-      }
-      value = players.toString();
-    }
-
-    setData({
-      ...data,
-      [id]: value
-    });
+    RoomFormHandlers.handleInputChange(e, data, setData);
   };
 
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let value: string = e.target.value;
-    let point: RegExpMatchArray | null;
-    let parts: string[];
-    let price: number | string;
+    RoomFormHandlers.handlePriceChange(e, data, setData);
+  };
 
-    if (value === '') {
-      value = '0';
-    } else {
-      value = value.replace(',','.')
-      value = value.replace(/[^0-9.]/g, '');
-      point = value.match(/\./g); 
-      parts = value.split('.');
+  const handleDayChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    RoomFormHandlers.handleDayChange(e, setDay);
+  };
 
-      if (point && point.length > 1) {
-        value = parts[0] + '.' + parts.slice(1).join('');
-      }
+  const handleHourChange = (value: dayjs.Dayjs | null) => {
+    RoomFormHandlers.handleHourChange(value, setHour);
+  };
 
-      if (parts[1] && parts[1].length > 2) {
-        value = parts[0] + '.' + parts[1].substring(0,2);
-      }
-    }
-    
-    if (value.endsWith('.') || value.endsWith('0')) {
-      price = value;
-    } else {
-      price = parseFloat(value);
-    }
+  const handleAddSchedule = () => {
+    RoomFormHandlers.handleAddSchedule(
+      initialData, 
+      day, 
+      hour, 
+      schedules, 
+      setSchedules, 
+      orderedSchedules, 
+      setOrderedSchedules
+    );
+  };
 
-    const index: number = parseInt(e.target.dataset.index!);
-    const min: number = data.min_players;
-    const newPrices: Price[] = Object.assign([], data.prices);
-
-    newPrices[index] = { id_room: 0, num_players: +min + +index, price: price };
-
-    setData(({
-      ...data,
-      prices: newPrices
-    }));
+  const handleDeleteHour = (i: number, j: number) => {
+    RoomFormHandlers.handleDeleteHour(i, j, orderedSchedules, schedules, setSchedules, setOrderedSchedules);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -163,53 +133,6 @@ const RoomForm: React.FC<RoomFormProps> = ({
     data.schedule = schedules;
     onSubmit(data);
   };
-
-  const handleDayChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setDay(Number(e.target.value));
-  };
-
-  const handleHourChange = (value: dayjs.Dayjs | null) => {
-    setHour(new Date(0, 0, 0, value?.get('hour'), value?.get('minute')));
-  };
-
-  const handleAddSchedule = () => {
-    let s: Schedule[] = [...schedules, {
-      id_room: initialData.id,
-      day_week: day,
-      hour: hour,
-      strHour: new Intl.DateTimeFormat("es-ES", { hour: 'numeric', minute: 'numeric' }).format(hour.getTime())
-    }];
-
-    s = sortSchedule(s);
-
-    for (let i = 0; i <= 6; i++) {
-      orderedSchedules[i] = s.filter(obj =>  obj.day_week === i);
-    }
-
-    setOrderedSchedules([...orderedSchedules]);
-    setSchedules(s);
-  };
-
-  const handleDeleteHour = (i: number, j: number) => {
-    const id_room = orderedSchedules[i][j]['id_room'];
-    const day_week = orderedSchedules[i][j]['day_week'];
-    const hour = orderedSchedules[i][j]['hour'];
-    const s = schedules.filter( (schedule) => {
-      return !(schedule.id_room === id_room && schedule.day_week === day_week && schedule.hour === hour);
-    });
-    setSchedules(s);
-
-    delete orderedSchedules[i][j];
-    setOrderedSchedules([...orderedSchedules]);
-  }
-  
-  const sortSchedule = (s: Schedule[]) => {
-    const result: Schedule[] = s.sort((a, b) => {
-      return a.hour.getTime() - b.hour.getTime();
-    });
-
-    return result;
-  }
 
   const validate = ( e: React.FocusEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
