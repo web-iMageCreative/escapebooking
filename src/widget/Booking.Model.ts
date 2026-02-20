@@ -5,7 +5,7 @@ export interface BookingModel {
   phone: number,
   num_players: number,
   date: Date,
-  price: number,
+  price: number | string,
   id_room: number
 }
 
