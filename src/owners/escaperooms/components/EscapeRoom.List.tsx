@@ -21,6 +21,7 @@ import {
 import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import EscapeRoomUpdate from './EscapeRoom.Update';
 
 const EscapeRoomList: React.FC = () => {
   const [data, setData] = useState<EscapeRoomModel[]>([]);
@@ -32,6 +33,8 @@ const EscapeRoomList: React.FC = () => {
   const nav = useNavigate();
   const location = useLocation();
   const [alertData, setAlertData] = useState<any>(location.state?.alert || {});
+  const [openEdit, setOpenEdit] = useState<boolean>(false);
+  const [idToEdit, setIdToEdit] = useState<number | null>(0);
 
   useEffect(() => {
     getEscaperooms();
@@ -61,8 +64,18 @@ const EscapeRoomList: React.FC = () => {
   }
 
   const handleEditClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    nav('/owner/escape-rooms/edit/' + e.currentTarget.dataset.id);
-  }
+    const id = parseInt(e.currentTarget.dataset.id!);
+    setIdToEdit(id);
+    setOpenEdit(true);
+  };
+
+  const handleEditClose = () => {
+    setOpenEdit(false);
+    setIdToEdit(null);
+    getEscaperooms(); 
+  };
+
+
 
   const handleDeleteClick = (e: React.MouseEvent<HTMLButtonElement>) => { 
     setIdToDelete( parseInt( e.currentTarget.dataset.id! ) );
@@ -146,6 +159,19 @@ const EscapeRoomList: React.FC = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+
+      {openEdit && idToEdit && (
+        <div className='pop-overlayCreate' onClick={handleEditClose}>
+          <div className='pop-contentCreate' onClick={(e) => e.stopPropagation()}>
+            <EscapeRoomUpdate 
+              id={idToEdit}
+              onCancel={handleEditClose}
+            />
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };

@@ -43,6 +43,7 @@ const Room: React.FC = () => {
                 <h3>{room.name}</h3>
                 <div className="actions">
                     <Link to={'/owner/rooms/edit/' + id}>Editar Sala</Link>
+                    <Link to={'/booking/' + id}>Reservar Sala</Link>
                 </div>
             </div>
             <div className="players">
