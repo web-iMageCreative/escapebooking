@@ -265,3 +265,28 @@ INSERT INTO provinces (code, name, autonomous_community_id) VALUES
 
 -- Melilla (id 19)
 ('52', 'Melilla', 19);
+
+CREATE TABLE `bookings` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `phone` text NOT NULL,
+  `num_players` int(11) NOT NULL,
+  `date` date NOT NULL,
+  `id_room` int(11) NOT NULL,
+  `price` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+ALTER TABLE `bookings`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`,`id_room`),
+  ADD KEY `bookings_ibfk_1` (`id_room`);
+
+ALTER TABLE `bookings`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+ALTER TABLE `bookings`
+  ADD CONSTRAINT `bookings_ibfk_1` FOREIGN KEY (`id_room`) REFERENCES `rooms` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+INSERT INTO `bookings` (`id`, `name`, `email`, `phone`, `num_players`, `date`, `id_room`, `price`) VALUES
+(3, 'Anónimo', 'info@test.es', '2147483647', 3, '2026-02-22', 33, 140);
