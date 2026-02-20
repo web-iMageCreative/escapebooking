@@ -23,7 +23,7 @@ export interface RoomFormProps {
 export interface Price {
   id_room: number,
   num_players: number,
-  price: number
+  price: number | string
 }
 
 export interface Schedule {
@@ -31,4 +31,15 @@ export interface Schedule {
   day_week: number,
   hour: Date,
   strHour: string
+}
+
+export interface RoomFormError {
+  name: { success: boolean, message:string },
+  duration: { success: boolean, message:string },
+  schedules: { success: boolean, message:string },
+  day: { success: boolean, message:string },
+  hour: { success: boolean, message:string },
+  min_players: { success: boolean, message:string },
+  max_players: { success: boolean, message:string },
+  prices: { success: boolean, message:string }[]
 }

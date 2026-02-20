@@ -1,6 +1,5 @@
 .schedules {
   margin-bottom: 10px;
-  border-bottom: 1px solid #d4d4d4;
 }
 
 .schedules label {
@@ -12,32 +11,43 @@
 .schedule-form {
   display: flex;
   gap: 30px;
-  align-items: center;
+  align-items: start;
   margin: 20px;
 }
 
-.schedule-form .form-group {
+.schedule-form .action .MuiButtonBase-root {
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+
+.schedule-form > div {
   flex: 1 1 33%;
-  gap: 10px;
   justify-content: end;
+}
+
+.schedule-form > div .MuiFormHelperText-root {
+  height: 20px;
 }
 
 .calendar {
   display: flex;
   min-height: 200px;
-  border: 1px solid #ccc;
+  border: 1px solid #bbb;
   margin: 20px;
 }
 
 .calendar .day-of-week {
   flex: 1 1 100%;
   text-align: center;
-  border-left: 1px solid #ccc;
+  border-left: 1px solid #bbb;
 }
 
 .calendar .day-name {
-  padding: 5px;
-  background-color: #fff;
+  padding: 10px 5px;
+  font-size: 13px;
+  text-transform: uppercase;
+  background-color: #d4d4d4;
+  color: #444;
 }
 
 .calendar .hour {
