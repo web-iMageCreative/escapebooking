@@ -104,9 +104,11 @@ const RoomForm: React.FC<RoomFormProps> = ({
     }
 
     if (id === "min_players" || id === "max_players") {
-      if ( Number(value) > 20) {
+      let players: number = Number(value);
+      if ( players > 20) {
         value = '20';
       }
+      value = players.toString();
     }
 
     setData({
