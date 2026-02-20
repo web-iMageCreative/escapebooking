@@ -31,3 +31,21 @@ h3 {
   margin-top: 50px;
   margin-bottom: 30px;
 }
+
+.MuiFilledInput-root {
+  background-color: #E0E0E0 !important;
+}
+
+.MuiFilledInput-root:hover {
+  background-color: #EBEBEB !important;
+}
+
+.MuiFilledInput-root .MuiFilledInput-input,
+.MuiPickersFilledInput-root  {
+  background-color: #FFFFFF !important;
+}
+
+.MuiFilledInput-root:hover .MuiFilledInput-input,
+.MuiPickersFilledInput-root:hover  {
+  background-color: #F8F8F8 !important;
+}

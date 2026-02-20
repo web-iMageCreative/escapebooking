@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { RoomFormProps, RoomModel, Price, Schedule } from '../Room.Model';
-import { Snackbar, Alert, Chip } from '@mui/material';
+import { Snackbar, Alert, Chip, TextField, FormControl, InputAdornment, FormHelperText, MenuItem, Button } from '@mui/material';
+import { LocalizationProvider, TimeField } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
+import { RoomFormProps, RoomModel, Price, Schedule, RoomFormError } from '../Room.Model';
 import '../styles/Room.Form.css';
 
 const RoomForm: React.FC<RoomFormProps> = ({
@@ -15,11 +18,22 @@ const RoomForm: React.FC<RoomFormProps> = ({
 }) => {
   const [data, setData] = useState<RoomModel>(initialData);
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
-  const [day, setDay] = useState<number>(0);
-  const [hour, setHour] = useState<Date>(new Date());
+  const [day, setDay] = useState<number>(-1);
+  const [hour, setHour] = useState<Date>(new Date(2000,1,1));
   const [schedules, setSchedules] = useState<Schedule[]>([]);
+  const [scheduleOK, setScheduleOK] = useState<boolean>(false);
   const [orderedSchedules, setOrderedSchedules] = useState<any>([[],[],[],[],[],[],[]]);
   const days_of_week: string[] = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']
+  const [validationError, setValidationError] = useState<RoomFormError>({
+    name: { success: true, message: '' },
+    duration: { success: true, message: '' },
+    schedules: { success: true, message: '' },
+    day: { success: true, message: '' },
+    hour:  { success: true, message: '' },
+    min_players: { success: true, message: '' },
+    max_players: { success: true, message: '' },
+    prices: []
+  })
 
   useEffect(() => {
     setData(initialData);
@@ -31,8 +45,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
   }, [error]);
 
   useEffect(() => {
-    if (!initialData.schedule)
-      return
+    if (!initialData.schedule) return;
     
     setSchedules(initialData.schedule);
 
@@ -43,10 +56,18 @@ const RoomForm: React.FC<RoomFormProps> = ({
     }
 
     setOrderedSchedules([...orderedSchedules]);
+
+    for (let i = 0; i <= initialData.prices.length; i++) {
+      validationError.prices.push({success: true, message: ''})
+    }
+
+    setValidationError(validationError);
   }, [initialData]);
 
   useEffect(() => {
-    if (+data.min_players > +data.max_players) return;
+    if (+data.min_players > +data.max_players 
+      && +data.min_players !== 0 
+      && +data.max_players !== 0 ) return;
 
     const max = data.max_players;
     const min = data.min_players;
@@ -55,6 +76,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
     for (let i = min; i <= max; i++) {
       const existe = data.prices.find(x => x.num_players === i)
       const hasId = data.id !== 0;
+      validationError.prices.push({success: true, message: ''})
       newPrices.push(
         { id_room: hasId ? data.id : 0, num_players: i, price: existe ? existe.price : 0 }
       );
@@ -74,21 +96,59 @@ const RoomForm: React.FC<RoomFormProps> = ({
   }, [schedules]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { id, value } = e.target;
+    let { id, value } = e.target;
+    
+    if (id === "duration" || id === "min_players" || id === "max_players") {
+      const onlyNums = e.target.value.replace(/[^0-9]/g, '');
+      value = onlyNums;
+    }
+
+    if (id === "min_players" || id === "max_players") {
+      if ( Number(value) > 20) {
+        value = '20';
+      }
+    }
+
     setData({
       ...data,
       [id]: value
     });
   };
 
-  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement | HTMLInputElement>) => {
-    if (isNaN(parseFloat(e.target.value!))) return;
-    const value: number = parseFloat(e.target.value!);
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value: string = e.target.value;
+    let point: RegExpMatchArray | null;
+    let parts: string[];
+    let price: number | string;
+
+    if (value === '') {
+      value = '0';
+    } else {
+      value = value.replace(',','.')
+      value = value.replace(/[^0-9.]/g, '');
+      point = value.match(/\./g); 
+      parts = value.split('.');
+
+      if (point && point.length > 1) {
+        value = parts[0] + '.' + parts.slice(1).join('');
+      }
+
+      if (parts[1] && parts[1].length > 2) {
+        value = parts[0] + '.' + parts[1].substring(0,2);
+      }
+    }
+    
+    if (value.endsWith('.') || value.endsWith('0')) {
+      price = value;
+    } else {
+      price = parseFloat(value);
+    }
+
     const index: number = parseInt(e.target.dataset.index!);
     const min: number = data.min_players;
     const newPrices: Price[] = Object.assign([], data.prices);
 
-    newPrices[index] = { id_room: 0, num_players: +min + +index, price: value };
+    newPrices[index] = { id_room: 0, num_players: +min + +index, price: price };
 
     setData(({
       ...data,
@@ -102,23 +162,13 @@ const RoomForm: React.FC<RoomFormProps> = ({
     onSubmit(data);
   };
 
-  const handleDayChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleDayChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setDay(Number(e.target.value));
   };
 
-  const handleHourChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const h = e.target.value.split(':');
-
-    setHour(new Date(0, 0, 0, Number(h[0]), Number(h[1])));
+  const handleHourChange = (value: dayjs.Dayjs | null) => {
+    setHour(new Date(0, 0, 0, value?.get('hour'), value?.get('minute')));
   };
-
-  const sortSchedule = (s: Schedule[]) => {
-    const result: Schedule[] = s.sort((a, b) => {
-      return a.hour.getTime() - b.hour.getTime();
-    });
-
-    return result;
-  }
 
   const handleAddSchedule = () => {
     let s: Schedule[] = [...schedules, {
@@ -136,7 +186,6 @@ const RoomForm: React.FC<RoomFormProps> = ({
 
     setOrderedSchedules([...orderedSchedules]);
     setSchedules(s);
-    console.log(schedules);
   };
 
   const handleDeleteHour = (i: number, j: number) => {
@@ -151,55 +200,158 @@ const RoomForm: React.FC<RoomFormProps> = ({
     delete orderedSchedules[i][j];
     setOrderedSchedules([...orderedSchedules]);
   }
+  
+  const sortSchedule = (s: Schedule[]) => {
+    const result: Schedule[] = s.sort((a, b) => {
+      return a.hour.getTime() - b.hour.getTime();
+    });
+
+    return result;
+  }
+
+  const validate = ( e: React.FocusEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+
+    switch (id) {
+      case 'name':
+        if ( value.length > 100 ) {
+          setValidationError({...validationError, name: {success: false, message: 'Máximo 100 caracteres'}} );
+        } else {
+          setValidationError({...validationError, name: {success: true, message: ''}} );
+        }
+      break;
     
+      case 'duration':
+        if ( Number(value) > 1440 ) {
+          setValidationError({...validationError, duration: {success: false, message: 'Máximo 1440 minutos (24h)'}} );
+        } else {
+          setValidationError({...validationError, duration: {success: true, message: ''}} );
+        }
+      break;
+    
+      case 'min_players':
+      case 'max_players':
+        if (data.min_players > data.max_players) {
+          setValidationError({...validationError, 
+            min_players: {success: false, message: 'Mínimo debe ser igual o menor que máximo'},  
+            max_players: {success: false, message: 'Mínimo debe ser igual o menor que máximo'}
+          });
+        } else {
+          setValidationError({...validationError, 
+            min_players: {success: true, message: ''},
+             max_players: {success: true, message: ''}
+          });
+        }
+      break;
+      
+      case 'prices':
+        return true;
+      break;
+
+      default:
+        return true;
+      break;
+    }
+  }
+
+  const validateSchedule =  (fieldId: string) => () => {
+    const id = fieldId;
+
+    switch (id) {
+      case 'day':
+        if ( day > 6 ) {
+          setValidationError({...validationError, day: {success: false, message: 'Selecciona día de la semana'}} );
+          setScheduleOK(false);
+        } else {
+          setValidationError({...validationError, day: {success: true, message: ''}} );
+          setScheduleOK(true);
+        }
+      break;
+
+      case 'hour':
+        if ( hour.getFullYear() === 2000 ) {
+          setValidationError({...validationError, hour: {success: false, message: 'Añade una hora'}} );
+          setScheduleOK(false);
+        } else {
+          setValidationError({...validationError, hour: {success: true, message: ''}} );
+          setScheduleOK(true);
+        }
+      break;
+    }
+  }
+
   return (
     <div>
-      <form onSubmit={handleSubmit} className="form contained">
+      <form onSubmit={handleSubmit} className="form contained" noValidate autoComplete='off'>
         <h2>{title}</h2>
 
         <div className="form-group">
           <div className="col-label">
-            <label htmlFor="name">Nombre</label>
+            <label htmlFor="name">Nombre de la sala</label>
             <p className="description">
               Nombre comercial de tu sala.
-              Aparecerá en los listados de búsqueda.
+              Usa un nombre con gancho, que evoque la ambientación de la partida.
             </p>
           </div>
           <div className="col-value">
-            <input
-              type="text"
-              id="name"
-              value={data.name}
-              onChange={handleInputChange}
-              placeholder="Sala Masters Albacete"
-              required
-              disabled={loading}
-            />
+            <FormControl variant="filled" fullWidth>
+              <TextField
+                variant='filled'
+                sx={{backgroundColor: 'white'}}
+                id="name"
+                label="Nombre"
+                slotProps={{
+                  input: {
+                    "aria-label": "Duración"
+                  },
+                }}
+                required
+                error={!validationError.name.success}
+                value={data.name}
+                onChange={handleInputChange}
+                onBlur={validate}
+                disabled={loading}
+              />
+              <FormHelperText error={!validationError.name.success} id="error_name">{validationError.name.message}</FormHelperText>
+            </FormControl>
           </div>
         </div>
 
         <div className="form-group">
           <div className="col-label">
-            <label htmlFor="duration">Duración</label>
+            <label htmlFor="duration">Duración de la partida</label>
             <p className="description">
               Duración completa de la experiencia en minutos
             </p>
           </div>
           <div className="col-value">
-            <input
-              type="number"
-              id="duration"
-              value={data.duration}
-              onChange={handleInputChange}
-              placeholder="150"
-              required
-              disabled={loading}
-            />
+            <FormControl variant="filled" fullWidth>
+              <TextField
+                sx={{backgroundColor: 'transparent'}}
+                variant="filled"
+                type="text"
+                id="duration"
+                label="Duración"
+                slotProps={{
+                  input: {
+                    endAdornment: <InputAdornment position="end">minutos</InputAdornment>,
+                    "aria-label": "Duración"
+                  },
+                }}
+                defaultValue={undefined}
+                value={data.duration}
+                onChange={handleInputChange}
+                onBlur={validate}
+                error={!validationError.duration.success}
+                disabled={loading}
+              />
+              <FormHelperText error={!validationError.duration.success} id="error_duration">{validationError.duration.message}</FormHelperText>
+            </FormControl>
           </div>
         </div>
 
         <div className="schedules">
-          <label htmlFor="day">Horarios</label>
+          <h3>Horarios</h3>
           <div className="calendar">
             {orderedSchedules
               .map((d: any, i: number) => {
@@ -221,40 +373,59 @@ const RoomForm: React.FC<RoomFormProps> = ({
           </div>
 
           <div className="schedule-form">
-            <div className="form-group">
-              <label htmlFor="day">Día</label>
-              <select
+            <FormControl fullWidth>
+              <TextField
+                label="Días"
+                select
+                variant='filled'
                 id="day"
-                value={day}
                 onChange={handleDayChange}
+                onBlur={validateSchedule('day')}
+                error={!validationError.day.success}
               >
-                <option value={0}>Lunes</option>
-                <option value={1}>Martes</option>
-                <option value={2}>Miércoles</option>
-                <option value={3}>Jueves</option>
-                <option value={4}>Viernes</option>
-                <option value={5}>Sábado</option>
-                <option value={6}>Domingo</option>
-              </select>
-            </div>
+                <MenuItem value={0}>Lunes</MenuItem>
+                <MenuItem value={1}>Martes</MenuItem>
+                <MenuItem value={2}>Miércoles</MenuItem>
+                <MenuItem value={3}>Jueves</MenuItem>
+                <MenuItem value={4}>Viernes</MenuItem>
+                <MenuItem value={5}>Sábado</MenuItem>
+                <MenuItem value={6}>Domingo</MenuItem>
+              </TextField>
+              <FormHelperText error={!validationError.day.success} id="error_duration">{validationError.day.message}</FormHelperText>
+            </FormControl>
 
-            <div className="form-group">
-              <label htmlFor="time">Hora</label>
-              <input
-                id="time"
-                type="time"
-                onChange={handleHourChange}
-                required
-              />
-            </div>
+            <FormControl fullWidth>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <TimeField
+                  variant='filled'
+                  label="Hora"
+                  id="hour"
+                  defaultValue={dayjs("00:00")}
+                  format="HH:mm"
+                  onChange={handleHourChange}
+                  onBlur={validateSchedule('hour')}
+                  error={!validationError.hour.success}
+                />
+              </LocalizationProvider>
+              <FormHelperText error={!validationError.hour.success} id="error_duration">{validationError.hour.message}</FormHelperText>
+            </FormControl>
 
-            <div className="form-group">  
-              <button type="button" onClick={handleAddSchedule}>
+            <div className="action">  
+              <Button 
+                fullWidth
+                color='inherit'
+                size='large'
+                variant="contained"
+                disabled={!scheduleOK}
+                onClick={handleAddSchedule}
+              >
                 Añadir horario
-              </button>
+              </Button>
             </div>
           </div>
         </div>
+
+        <h3>Precios <small>/ número de jugadores</small></h3>
 
         <div className="form-group">
           <div className="col-label">
@@ -264,15 +435,27 @@ const RoomForm: React.FC<RoomFormProps> = ({
             </p>
           </div>
           <div className="col-value">
-            <input
-              type="number"
-              id="min_players"
-              value={data.min_players}
-              onChange={handleInputChange}
-              placeholder="1"
-              required
-              disabled={loading}
-            />
+            <FormControl variant="filled" fullWidth>
+              <TextField
+                sx={{backgroundColor: 'transparent'}}
+                variant="filled"
+                type="text"
+                id="min_players"
+                label="Mínimo"
+                slotProps={{
+                  input: {
+                    endAdornment: <InputAdornment position="end">Jugadores</InputAdornment>,
+                    "aria-label": "Mínimo"
+                  },
+                }}
+                value={data.min_players}
+                onChange={handleInputChange}
+                onBlur={validate}
+                error={!validationError.min_players.success}
+                disabled={loading}
+              />
+              <FormHelperText error={!validationError.min_players.success} id="error_min_players">{validationError.min_players.message}</FormHelperText>
+            </FormControl>
           </div>
         </div>
 
@@ -284,38 +467,64 @@ const RoomForm: React.FC<RoomFormProps> = ({
             </p>
           </div>
           <div className="col-value">
-            <input
-              type="number"
-              id="max_players"
-              value={data.max_players}
-              onChange={handleInputChange}
-              placeholder="6"
-              required
-              disabled={loading}
-            />
+            <FormControl variant="filled" fullWidth>
+              <TextField
+                sx={{backgroundColor: 'transparent'}}
+                variant="filled"
+                type="text"
+                id="max_players"
+                label="Máximo"
+                slotProps={{
+                  input: {
+                    endAdornment: <InputAdornment position="end">Jugadores</InputAdornment>,
+                    "aria-label": "Máximo"
+                  },
+                }}
+                value={data.max_players}
+                onChange={handleInputChange}
+                onBlur={validate}
+                error={!validationError.max_players.success}
+                disabled={loading}
+              />
+              <FormHelperText error={!validationError.max_players.success} id="error_max_players">
+                {validationError.max_players.message}
+              </FormHelperText>
+            </FormControl>
           </div>
         </div>
 
-        {(data.min_players > 0 && data.max_players > 0 && data.min_players < data.max_players &&
+        {(data.min_players > 0 && data.max_players > 0 && data.min_players <= data.max_players &&
           <>
-            <h3>Precios por número de jugadores</h3>
             {data.prices.map((x, index: number) => (
               <div key={x.num_players} className="form-group indented">
                 <div className="col-label">
-                  <label htmlFor={'price_' + x.num_players}>{x.num_players} jugadores</label>
+                  <label htmlFor={'price_' + x.num_players}>{x.num_players} {x.num_players === 1 ? 'jugador' : 'jugadores'}</label>
                 </div>
                 <div className="col-value">
-                  <input
-                    type="number"
-                    id={'price_' + x.num_players}
-                    data-index={index}
-                    min={0}
-                    step={0.01}
-                    value={x.price}
-                    onChange={handlePriceChange}
-                    required
-                    disabled={loading}
-                  />
+                  <FormControl variant="filled" fullWidth>
+                    <TextField
+                      sx={{backgroundColor: 'transparent'}}
+                      variant="filled"
+                      type="text"
+                      id={'price_' + x.num_players}
+                      label="Precio"
+                      slotProps={{
+                        input: {
+                          endAdornment: <InputAdornment position="end">€</InputAdornment>,
+                          'aria-label': 'Precio'
+                        },
+                        htmlInput: {
+                          'data-index': index
+                        }
+                      }}
+                      value={x.price}
+                      onChange={handlePriceChange}
+                      onBlur={validate}
+                      error={!validationError.prices[index]?.success}
+                      disabled={loading}
+                    />
+                    <FormHelperText error={!validationError.prices[index]?.success} id="error_prices">{validationError.prices[index]?.message}</FormHelperText>
+                  </FormControl>
                 </div>
               </div>
             ))}
@@ -323,22 +532,27 @@ const RoomForm: React.FC<RoomFormProps> = ({
         )}
 
         <div className="form-actions">
-          <button
+          <Button
+            sx={{marginRight: '20px'}}
             type="submit"
+            color='primary'
+            size='large'
+            variant="contained"
             disabled={loading}
-            className="btn-primary button"
           >
             {loading ? 'Procesando...' : submitText}
-          </button>
+          </Button>
 
-          <button
+          <Button
             type="button"
+            color='inherit'
+            size='large'
+            variant="contained"
             onClick={onCancel}
             disabled={loading}
-            className="btn-secondary button"
           >
             {cancelText}
-          </button>
+          </Button>
         </div>
 
       </form>
