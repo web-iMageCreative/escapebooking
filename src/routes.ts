@@ -15,8 +15,8 @@ export const ROUTES = {
   OWNER_ROOM: '/owner/room/:id',
   OWNER_ROOMS_CREATE: '/owner/rooms/new/:escaperoom_id',
   OWNER_ROOMS_UPDATE: '/owner/rooms/edit/:id',
+  OWNER_BOOKINGS: '/owner/bookings',
   WIDGET: '/booking/:id'
-  // OWNER_BOOKINGS: '/owner/bookings',
   
   // Customer routes
   // CUSTOMER_BROWSE: '/customer/browse',

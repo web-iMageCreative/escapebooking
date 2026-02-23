@@ -16,31 +16,20 @@ require_once '../../shared/Database.php';
 $db = new Database();
 
 try {
-    
-    $idRoom = $_GET['id_room'];
-    $date = $_GET['date'];
-    $params = array(
-        'idRoom' => $idRoom,
-        'date' => $date
-    );
+    $room_id = $_GET['room_id'];
+    $params = array('room_id' => $room_id);
 
-    $query = "SELECT TIME_FORMAT(TIME(date), '%H:%i') as hour FROM bookings WHERE id_room = :idRoom AND DATE(date) = :date";    
+    $query = "SELECT b.*, r.name as room_name FROM bookings b 
+        INNER JOIN rooms r ON b.id_room = r.id 
+        WHERE b.id_room = :room_id
+        ORDER BY b.date ASC";
 
-    $getAvailableHours = $db->fetchAll($query, $params);
-
-    if (!$getAvailableHours) {
-        echo json_encode([
-            'success' => true,
-            'message' => 'No hay horas reservadas.',
-            'data' => []
-        ]);
-        exit();
-    }
+    $getOwnerBookings = $db->fetchAll($query, $params);
 
     echo json_encode([
         'success' => true,
-        'message' => 'Horario cargado.',
-        'data' => $getAvailableHours
+        'message' => 'Reservas cargadas.',
+        'data' => $getOwnerBookings ?? []
     ]);
 
 } catch (Exception $e) {

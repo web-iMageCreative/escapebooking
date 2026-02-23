@@ -49,6 +49,19 @@ export class BookingService {
         const result = await res.json();
     
         return result;
-    }    
+    }
+    
+    static async getOwnerBookings(room_id: number): Promise<ApiResponse> {
+        const res = await fetch(`${API_BASE_URL}/owners/widget/listBookings.php?room_id=${room_id}`);
+        
+        if (!res.ok) {
+            const result = await res.json();
+            throw new Error(result.message);
+        }
+
+        const result = await res.json();
+
+        return result;
+    }
 
 }

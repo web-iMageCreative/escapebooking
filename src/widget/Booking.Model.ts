@@ -7,6 +7,7 @@ export interface BookingModel {
   date: Date,
   price: number | string,
   id_room: number
+  room_name?: string
 }
 
 export interface BookingFormProps {

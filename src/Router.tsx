@@ -11,6 +11,7 @@ import RoomCreate from './owners/rooms/components/Room.Create';
 import Room from './owners/rooms/components/Room';
 import RoomUpdate from './owners/rooms/components/RoomUpdate';
 import Booking from './widget/Booking';
+import OwnerBookings from './owners/bookings/OwnerBookings';
 
 //import AdminUsers from './admin/Users/AdminUsers';
 //import CustomerBrowse from './customer/Browse/CustomerBrowse';
@@ -65,6 +66,12 @@ const AppRouter: React.FC = () => {
             <Route path={ROUTES.OWNER_DASHBOARD} element={
                 <ProtectedRoute requiredRole="owner">
                     <OwnerDashboard />
+                </ProtectedRoute>
+            } />
+
+            <Route path={ROUTES.OWNER_BOOKINGS} element={
+                <ProtectedRoute requiredRole="owner">
+                    <OwnerBookings />
                 </ProtectedRoute>
             } /> 
 
