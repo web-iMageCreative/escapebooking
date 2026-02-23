@@ -16,7 +16,8 @@ const Booking: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [clickDay, setClickDay] = useState<dayjs.Dayjs | null>(null);
     const [hours, setHours] = useState<any[]>([]);
-    const [clickHour, setClickHour] = useState<Schedule | null>(null);
+    const [clickDate, setClickDate] = useState<Date | null>(null);
+    const [hourSelected, setHourSelected] = useState<boolean>(false);
     
     const [room, setRoom] = useState<RoomModel>({
         id: 0,
@@ -31,9 +32,9 @@ const Booking: React.FC = () => {
 
     const [bookingData, setBookingData] = useState<BookingModel>({
         id: 0,
-        name: '',
-        email: '',
-        phone: 0,
+        name: 'Miguel',
+        email: 'web@imagecreative.es',
+        phone: 66555444,
         num_players: 0,
         date: new Date(),
         price: 0,
@@ -82,15 +83,29 @@ const Booking: React.FC = () => {
         } finally {
             setLoading(false);
         }
+        
+        setClickDate(value!.toDate());
 
-        setBookingData({
-            ...bookingData,
-            date: value!.toDate()
-        });
+        
     };
 
     const handleClickHour = (hour: Schedule) => {
-        setClickHour(hour);
+        let h: Date = new Date(hour.hour);
+        let dateDayjs: dayjs.Dayjs | null = clickDay;
+
+        let date = new Date( dateDayjs!.get('y'), dateDayjs!.get('M'), dateDayjs?.get('D'), dateDayjs!.get('h'), dateDayjs!.get('m'))
+
+        date.setHours(h.getHours());
+        date.setMinutes(h.getMinutes());
+
+        setHourSelected(true);
+
+        console.log(date)
+        
+        setBookingData({
+            ...bookingData,
+            date: date
+        });
     };
 
 
@@ -139,7 +154,7 @@ const Booking: React.FC = () => {
                     </div>
 
                     <div className='form-group'>
-                        {clickHour && (
+                        {hourSelected && (
                             <div className="col-value">                               
                                 {room.prices?.map((p, i) => (
                                     <button
