@@ -18,10 +18,11 @@ $db = new Database();
 
 try {
     $id = $_GET['id'] ?? $_GET['id_room'];
-    $day_week = $_GET['day_week'] ?? null;
+    
     $params = array('id' => $id);
 
     $query = "SELECT * FROM rooms WHERE id = :id ORDER BY name";
+
     $room = $db->fetchSingle($query, $params);
     
     if (!$room) {
@@ -37,25 +38,18 @@ try {
         $room['prices'] = array();
     }
 
-    
-    if ($day_week !== null) {
-            $params['day_week'] = $day_week;
-            $querySchedule = "SELECT *, TIME_FORMAT(hour, '%H:%i') AS strHour FROM schedule WHERE id_room = :id AND day_week = :day_week";
-        } else {
-            $querySchedule = "SELECT *, TIME_FORMAT(hour, '%H:%i') AS strHour FROM schedule WHERE id_room = :id";
-        }    
-        
-        $schedule = $db->fetchAll($querySchedule, $params);
+    $querySchedule = "SELECT *, TIME_FORMAT(hour, '%H:%i') AS strHour FROM schedule WHERE id_room = :id";
+    $schedule = $db->fetchAll($querySchedule, $params);
 
-        if ($schedule) {
-            $room['schedule'] = $schedule;
-        } else {
-            $room['schedule'] = array();
-        }
+    if ($schedule) {
+        $room['schedule'] = $schedule;
+    } else {
+        $room['schedule'] = array();
+    }
 
     echo json_encode([
         'success' => true,
-        'message' => 'Datos cargados.',
+        'message' => 'Salas cargadas.',
         'data' => $room
     ]);
 } catch (Exception $e) {

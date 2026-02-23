@@ -75,7 +75,7 @@ const Booking: React.FC = () => {
         }
         
         const dayOfWeek = value?.get('day');
-
+        
         try {
             setLoading(true);
             const res = await RoomService.getRoom(room.id, dayOfWeek!);
@@ -87,18 +87,17 @@ const Booking: React.FC = () => {
         }
         
         setClickDate(value!.toDate());
-
-        
     };
 
-    const handleClickHour = (hour: Schedule) => {
-        const [h, m, s] = (hour.hour as unknown as string).split(':').map(Number);
+    const handleClickHour = (hour: any) => {
+        const [h, m, s] = (hour.hour).split(':').map(Number);
 
         const dateDefinitive = clickDay!
             .hour(h)
             .minute(m)
-            .second(s)
-            .millisecond(0);
+            .second(s);
+
+            console.log(dateDefinitive.toDate());
 
         setHourSelected(true);
         setBookingData({
