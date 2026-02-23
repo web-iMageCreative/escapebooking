@@ -28,6 +28,7 @@ try {
     if (!$room) {
         throw new Exception('Sala no encontrada.');
     }
+    
    
     $queryPrice = "SELECT * FROM prices WHERE id_room = :id ORDER BY num_players ASC";
     $prices = $db->fetchAll($queryPrice, $params);
