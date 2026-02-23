@@ -7,6 +7,7 @@ import { BookingService } from './Booking.Service';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateCalendar, LocalizationProvider } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
+import { RoomService } from '../owners/rooms/Room.Service';
 
 
 const Booking: React.FC = () => {
@@ -47,7 +48,7 @@ const Booking: React.FC = () => {
 
     const getRoom = async () => {
         try {
-            const res = await BookingService.getRoom(parseInt(id!));
+            const res = await RoomService.getRoom(parseInt(id!));
             setRoom(res.data);
         } catch {
             console.log('Error cargando sala');
@@ -76,8 +77,9 @@ const Booking: React.FC = () => {
         const dayOfWeek = value?.get('day');
 
         try {
-            const res = await BookingService.getHours(room.id, dayOfWeek!);
-            setHours(res.data);
+            setLoading(true);
+            const res = await RoomService.getRoom(room.id, dayOfWeek!);
+            setHours(res.data.schedule);
         } catch {
             setError('Error al recuperar las horas.')
         } finally {
@@ -90,21 +92,18 @@ const Booking: React.FC = () => {
     };
 
     const handleClickHour = (hour: Schedule) => {
-        let h: Date = new Date(hour.hour);
-        let dateDayjs: dayjs.Dayjs | null = clickDay;
+        const [h, m, s] = (hour.hour as unknown as string).split(':').map(Number);
 
-        let date = new Date( dateDayjs!.get('y'), dateDayjs!.get('M'), dateDayjs?.get('D'), dateDayjs!.get('h'), dateDayjs!.get('m'))
-
-        date.setHours(h.getHours());
-        date.setMinutes(h.getMinutes());
+        const dateDefinitive = clickDay!
+            .hour(h)
+            .minute(m)
+            .second(s)
+            .millisecond(0);
 
         setHourSelected(true);
-
-        console.log(date)
-        
         setBookingData({
             ...bookingData,
-            date: date
+            date: dateDefinitive.toDate()
         });
     };
 
@@ -112,10 +111,16 @@ const Booking: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         bookingData.id_room = room.id;
+
+        const formatedDate = {
+            ...bookingData,
+            date: dayjs(bookingData.date).format('YYYY-MM-DD HH:mm:ss')
+        };
+        console.log(formatedDate)
         try {
-            await BookingService.createBooking(bookingData);
+            await BookingService.createBooking(formatedDate as any);
         } catch {
-            setError('Error al realizar la reserva.')
+            setError('Error al realizar la reserva.');
         } finally {
             setLoading(false);
         }

@@ -16,9 +16,9 @@ export class RoomService {
     return res.json();
   }
 
-  static async getRoom(id: number): Promise<ApiResponse> {
-    const res = await fetch(`${API_BASE_URL}/owners/rooms/get.php?id=${id}`);
-    
+  static async getRoom(id: number, dayWeek?: number): Promise<ApiResponse> {
+    const res = await fetch(`${API_BASE_URL}/owners/rooms/get.php?id=${id}` + (dayWeek ? `&dayWeek = ${dayWeek}` : ``));
+
     if (!res.ok) {
       const result = await res.json();
       throw new Error(result.message);
