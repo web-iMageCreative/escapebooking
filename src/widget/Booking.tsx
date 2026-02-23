@@ -19,6 +19,7 @@ const Booking: React.FC = () => {
     const [hours, setHours] = useState<any[]>([]);
     const [clickDate, setClickDate] = useState<Date | null>(null);
     const [hourSelected, setHourSelected] = useState<boolean>(false);
+    const [availableHours, setAvailableHours] = useState<string[]>([]);
     
     const [room, setRoom] = useState<RoomModel>({
         id: 0,
@@ -46,6 +47,11 @@ const Booking: React.FC = () => {
         getRoom();
     }, []);
 
+    useEffect(() => {
+        if (room.id === 0) return;
+        handleClickDay(dayjs());
+    }, [room.id]);
+
     const getRoom = async () => {
         try {
             const res = await RoomService.getRoom(parseInt(id!));
@@ -69,17 +75,22 @@ const Booking: React.FC = () => {
         setClickDay(value);
         const selectedDate = value;
         const currentDate = dayjs();
-        if (currentDate > selectedDate!) {
+        if (currentDate.format('YYYY-MM-DD') > selectedDate!.format('YYYY-MM-DD')) {
             setHours([]);
+            setAvailableHours([]);
             return;
         }
         
         const dayOfWeek = value?.get('day');
+        const date = value?.format('YYYY-MM-DD')
         
         try {
             setLoading(true);
-            const res = await BookingService.getHours(room.id, dayOfWeek!);
-            setHours(res.data);
+            const resHours = await BookingService.getHours(room.id, dayOfWeek!);
+            const resAvailableHours = await BookingService.getAvailableHours(room.id, date!);
+            console.log(resAvailableHours);
+            setHours(resHours.data);
+            setAvailableHours(resAvailableHours.data?.map((x: { hour: string }) => x.hour) ?? []);
         } catch {
             setError('Error al recuperar las horas.')
         } finally {
@@ -90,12 +101,11 @@ const Booking: React.FC = () => {
     };
 
     const handleClickHour = (hour: any) => {
-        const [h, m, s] = (hour.hour).split(':').map(Number);
+        const [h, m,] = (hour.hour).split(':').map(Number);
 
         const dateDefinitive = clickDay!
             .hour(h)
             .minute(m)
-            .second(s);
 
             console.log(dateDefinitive.toDate());
 
@@ -111,20 +121,22 @@ const Booking: React.FC = () => {
         e.preventDefault();
         bookingData.id_room = room.id;
 
-        const formatedDate = {
+        const formattedDate = {
             ...bookingData,
             date: dayjs(bookingData.date).format('YYYY-MM-DD HH:mm:ss')
         };
-        console.log(formatedDate)
         try {
-            await BookingService.createBooking(formatedDate as any);
+            await BookingService.createBooking(formattedDate as any);
         } catch {
             setError('Error al realizar la reserva.');
         } finally {
             setLoading(false);
         }
     };
-    
+
+    const isToday = clickDay?.format('YYYY-MM-DD') === dayjs().format('YYYY-MM-DD');
+    const currentHour = dayjs().format('HH:mm');
+
     return (
         <div className="form contained">
             <h3>Reservar {room.name}</h3>
@@ -142,15 +154,19 @@ const Booking: React.FC = () => {
                             <p>Horas disponibles:</p>
                         </div>
                         <div className='col-value'>
-                            {hours?.map((h, i) => ( 
-                                <button
-                                    key={i}
-                                    type="button"
-                                    onClick={() => handleClickHour(h)}
-                                >
-                                    {h.hour}
-                                </button>
-                            ))}
+                            {hours?.map((h, i) => {
+                                const isNotAvailable = availableHours.includes(h.hour) || (isToday && h.hour < currentHour);
+                                return (
+                                    <button
+                                        key={i}
+                                        type="button"
+                                        onClick={() => handleClickHour(h)}
+                                        disabled={isNotAvailable}
+                                    >
+                                        {h.hour.substring(0, 5)}
+                                    </button>
+                                );
+                            })}
                             {hours.length === 0 &&
                                 <span>No hay horas disponibles</span>
                             }

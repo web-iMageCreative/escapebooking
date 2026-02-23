@@ -16,22 +16,21 @@ require_once '../../shared/Database.php';
 $db = new Database();
 
 try {
-
     $idRoom = $_GET['id_room'];
-    $dayWeek = $_GET['day_week'];
+    $date = $_GET['date'];
     $params = array(
         'idRoom' => $idRoom,
-        'dayWeek' => $dayWeek
+        'date' => $date
     );
 
-    $query = "SELECT TIME_FORMAT(hour, '%H:%i') AS hour FROM schedule WHERE id_room = :idRoom AND day_week = :dayWeek";
+    $query = "SELECT TIME_FORMAT(TIME(date), '%H:%i') as hour FROM bookings WHERE id_room = :idRoom AND DATE(date) = :date";    
 
-    $getHours = $db->fetchAll($query, $params);
+    $getAvailableHours = $db->fetchAll($query, $params);
 
-    if (!$getHours) {
+    if (!$getAvailableHours) {
         echo json_encode([
             'success' => true,
-            'message' => 'No hay horas en este día.',
+            'message' => 'No hay horas reservadas.',
             'data' => []
         ]);
         exit();
@@ -40,7 +39,7 @@ try {
     echo json_encode([
         'success' => true,
         'message' => 'Horario cargado.',
-        'data' => $getHours
+        'data' => $getAvailableHours
     ]);
 
 } catch (Exception $e) {

@@ -38,4 +38,17 @@ export class BookingService {
         return result;
         }
 
+    static async getAvailableHours(id_room: number, date: string): Promise<ApiResponse> {
+        const res = await fetch(`${API_BASE_URL}/owners/widget/getAvailableHours.php?id_room=${id_room}&date=${date}`);
+
+        if (!res.ok) {
+            const result = await res.json()
+            throw new Error(result.message);
+        }
+    
+        const result = await res.json();
+    
+        return result;
+    }    
+
 }
