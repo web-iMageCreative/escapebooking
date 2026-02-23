@@ -5,7 +5,8 @@ const API_BASE_URL = 'http://localhost/api-php';
 const token = localStorage.getItem('auth_token');
 
 export class RoomService {
-
+  
+  
   static async getRooms(escaperoomId: number): Promise<ApiResponse> {
     const res = await fetch(`${API_BASE_URL}/owners/rooms/list.php?escaperoom_id=${escaperoomId}`);
 
