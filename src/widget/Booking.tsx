@@ -78,8 +78,8 @@ const Booking: React.FC = () => {
         
         try {
             setLoading(true);
-            const res = await RoomService.getRoom(room.id, dayOfWeek!);
-            setHours(res.data.schedule);
+            const res = await BookingService.getHours(room.id, dayOfWeek!);
+            setHours(res.data);
         } catch {
             setError('Error al recuperar las horas.')
         } finally {

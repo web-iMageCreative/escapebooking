@@ -24,8 +24,6 @@ export class BookingService {
         return result;
         }
 
-<<<<<<< HEAD
-=======
     static async getHours(id_room: number, day_week: number): Promise<ApiResponse> {
         
         const res = await fetch(`${API_BASE_URL}/owners/widget/hours.php?id_room=${id_room}&day_week=${day_week}`);
@@ -40,5 +38,4 @@ export class BookingService {
         return result;
         }
 
->>>>>>> 32ae08dfffda0706d9f3ce681d8dc414592bf77b
 }
