@@ -8,6 +8,8 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateCalendar, LocalizationProvider } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import { RoomService } from '../owners/rooms/Room.Service';
+import { Box, Button, Stack, TextField } from '@mui/material';
+import './Booking.css'
 
 
 const Booking: React.FC = () => {
@@ -19,6 +21,8 @@ const Booking: React.FC = () => {
     const [hours, setHours] = useState<any[]>([]);
     const [clickDate, setClickDate] = useState<Date | null>(null);
     const [hourSelected, setHourSelected] = useState<boolean>(false);
+    const [iHourSelected, setIHourSelected] = useState<number>(-1);
+    const [iPlayersSelected, setIPlayersSelected] = useState<number>(-1);
     const [availableHours, setAvailableHours] = useState<string[]>([]);
     
     const [room, setRoom] = useState<RoomModel>({
@@ -73,6 +77,7 @@ const Booking: React.FC = () => {
 
     const handleClickDay = async (value: dayjs.Dayjs | null) => {
         setClickDay(value);
+        setIHourSelected(-1);
         const selectedDate = value;
         const currentDate = dayjs();
         if (currentDate.format('YYYY-MM-DD') > selectedDate!.format('YYYY-MM-DD')) {
@@ -100,15 +105,16 @@ const Booking: React.FC = () => {
         setClickDate(value!.toDate());
     };
 
-    const handleClickHour = (hour: any) => {
-        const [h, m,] = (hour.hour).split(':').map(Number);
-
+    const handleClickHour = (hour: any, i: number) => {
+        const [h, m] = (hour.hour).split(':').map(Number);
+        
         const dateDefinitive = clickDay!
-            .hour(h)
-            .minute(m)
-
-            console.log(dateDefinitive.toDate());
-
+        .hour(h)
+        .minute(m)
+        
+        console.log(dateDefinitive.toDate());
+        
+        setIHourSelected(i);
         setHourSelected(true);
         setBookingData({
             ...bookingData,
@@ -138,120 +144,115 @@ const Booking: React.FC = () => {
     const currentHour = dayjs().format('HH:mm');
 
     return (
-        <div className="form contained">
-            <h3>Reservar {room.name}</h3>
+        <div className="booking form contained">
+            <h3 style={{ textAlign: 'center' }}>Reservar {room.name}</h3>
                 <form onSubmit={handleSubmit}>
+                    <Stack spacing={2} maxWidth={350} margin={'0 auto'}>
+                        <Box className="box-selector" sx={{boxShadow: 2, backgroundColor: 'white', p: 2, borderBottom: '2px solid #aaa'}}>
+                            <h4>Días disponibles:</h4>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DateCalendar sx={{ border: 1, borderColor: '#141414', width: '100%', height: '310px', borderWidth: 0 }}
+                                onChange={handleClickDay}
+                                value={clickDay}
+                                minDate={dayjs()}
+                                />
+                            </LocalizationProvider>
+                        </Box>
 
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DateCalendar sx={{ border: 1, borderColor: '#141414' }}
-                        onChange={handleClickDay}
-                        value={clickDay}
-                        />
-                    </LocalizationProvider>
-
-                    <div className='form-group'>
-                        <div className="col-label">
-                            <p>Horas disponibles:</p>
-                        </div>
-                        <div className='col-value'>
+                        {clickDay &&
+                        <Box className="box-selector" sx={{boxShadow: 2, backgroundColor: 'white', p: 2, borderBottom: '2px solid #aaa'}}>
+                            <h4>Horas disponibles:</h4>
                             {hours?.map((h, i) => {
                                 const isNotAvailable = availableHours.includes(h.hour) || (isToday && h.hour < currentHour);
                                 return (
-                                    <button
+                                    <Button
+                                        sx={{margin: '0 5px'}}
+                                        variant='contained'
+                                        size='small'
                                         key={i}
-                                        type="button"
-                                        onClick={() => handleClickHour(h)}
+                                        color={iHourSelected === i ? 'primary' : 'inherit'}
+                                        onClick={() => handleClickHour(h, i)}
                                         disabled={isNotAvailable}
                                     >
                                         {h.hour.substring(0, 5)}
-                                    </button>
+                                    </Button>
                                 );
                             })}
                             {hours.length === 0 &&
                                 <span>No hay horas disponibles</span>
                             }
-                        </div>
-                    </div>
-
-                    <div className='form-group'>
+                        </Box>
+                        }
                         {hourSelected && (
-                            <div className="col-value">                               
-                                {room.prices?.map((p, i) => (
-                                    <button
-                                        key={i}
-                                        type='button'
-                                        onClick={() =>
+                        <Box className="box-selector" sx={{boxShadow: 2, backgroundColor: 'white', p: 2, borderBottom: '2px solid #aaa'}}>
+                            <h4>Número de jugadores:</h4>
+                            {room.prices?.map((p, i) => (
+                                <Button
+                                    sx={{margin: '0 5px'}}
+                                    variant='contained'
+                                    size='small'
+                                    key={i}
+                                    color={iPlayersSelected === i ? 'primary' : 'inherit'}
+                                    onClick={() => {
+                                            setIPlayersSelected(i)
                                             setBookingData({
                                                 ...bookingData,
                                                 num_players: p.num_players,
                                                 price: p.price
                                             })
                                         }
-                                    >
-                                        {p.num_players} jugadores - {p.price}€
-                                    </button>
-                                ))}
-                            </div> 
+                                    }
+                                >
+                                    {p.num_players} {p.num_players == 1 ? 'jugador' : 'jugadores'} · {p.price} €
+                                </Button>
+                            ))}
+                        </Box> 
                         )}
-                    </div>
 
-                    {bookingData.num_players > 0 && (
+                        {bookingData.num_players > 0 && (
                         <>
-                        <div className="form-group">
-                            <div className="col-label">
-                                <label htmlFor="name">Nombre</label>
-                            </div>
-                            <div className="col-value">
-                                    <input
-                                        type="text"
-                                        id="name"
-                                        value={bookingData.name}
-                                        onChange={handleChange}
-                                        placeholder="Nombre"
-                                        required
-                                        disabled={loading}
-                                    />
-                            </div>
-                        </div>
+                        <Stack spacing={2}>
+                            <TextField
+                                variant="filled"
+                                id="name"
+                                label="Nombre"
+                                value={bookingData.name}
+                                onChange={handleChange}
+                                placeholder="Nombre"
+                                required
+                                disabled={loading}
+                            />
 
-                        <div className="form-group">
-                            <div className="col-label">
-                                <label htmlFor="email">Email</label>
-                            </div>
-                            <div className="col-value">
-                                    <input
-                                        type="text"
-                                        id="email"
-                                        value={bookingData.email}
-                                        onChange={handleChange}
-                                        placeholder="Email"
-                                        required
-                                        disabled={loading}
-                                    />
-                            </div>
-                        </div>
+                            <TextField
+                                variant="filled"
+                                id="email"
+                                label="E-mail"
+                                value={bookingData.email}
+                                onChange={handleChange}
+                                placeholder="Email"
+                                required
+                                disabled={loading}
+                            />
 
-                        <div className="form-group">
-                            <div className="col-label">
-                                <label htmlFor="phone">Teléfono</label>
-                            </div>
-                            <div className="col-value">
-                                    <input
-                                        type="number"
-                                        id="phone"
-                                        value={bookingData.phone}
-                                        onChange={handleChange}
-                                        placeholder="Teléfono"
-                                        required
-                                        disabled={loading}
-                                    />
-                            </div>
-                        </div>
-                        <button type="submit">
-                            Reservar
-                        </button>
+                            <TextField
+                                variant="filled"
+                                id="phone"
+                                label="Teléfono"
+                                value={bookingData.phone}
+                                onChange={handleChange}
+                                placeholder="Teléfono"
+                                required
+                                disabled={loading}
+                            />
+                       
+                       
+                            <Button size={'large'} variant="contained" color="primary" type="submit">
+                                Reservar
+                            </Button>
+                        </Stack>
                         </>
-                    )}
+                        )}
+                    </Stack>
 
             </form>
         </div>

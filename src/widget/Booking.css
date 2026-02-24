@@ -1,0 +1,11 @@
+.booking.form h4 {
+  margin-top: 0;
+}
+
+.box-selector {
+  transition: all .5s;
+}
+
+.box-selector:hover {
+  border-bottom: 2px solid #1976d2;
+}
