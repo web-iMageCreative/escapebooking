@@ -7,8 +7,10 @@ import { BookingService } from './Booking.Service';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateCalendar, LocalizationProvider } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
+import 'dayjs/locale/es';
 import { RoomService } from '../owners/rooms/Room.Service';
 import { Box, Button, Stack, TextField } from '@mui/material';
+import { esES } from '@mui/x-date-pickers/locales';
 import './Booking.css'
 
 
@@ -150,11 +152,16 @@ const Booking: React.FC = () => {
                     <Stack spacing={2} maxWidth={350} margin={'0 auto'}>
                         <Box className="box-selector" sx={{boxShadow: 2, backgroundColor: 'white', p: 2, borderBottom: '2px solid #aaa'}}>
                             <h4>Días disponibles:</h4>
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DateCalendar sx={{ border: 1, borderColor: '#141414', width: '100%', height: '310px', borderWidth: 0 }}
-                                onChange={handleClickDay}
-                                value={clickDay}
-                                minDate={dayjs()}
+                            <LocalizationProvider 
+                                dateAdapter={AdapterDayjs}
+                                localeText={esES.components.MuiLocalizationProvider.defaultProps.localeText}
+                                adapterLocale='es'
+                            >
+                                <DateCalendar 
+                                    sx={{ border: 1, borderColor: '#141414', width: '100%', height: '310px', borderWidth: 0 }}
+                                    onChange={handleClickDay}
+                                    value={clickDay}
+                                    minDate={dayjs()}
                                 />
                             </LocalizationProvider>
                         </Box>
