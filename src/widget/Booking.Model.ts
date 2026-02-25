@@ -26,3 +26,9 @@ export interface Price {
   num_players: number,
   price: number
 }
+
+export interface BookingFormError {
+  name: { success: boolean, message:string },
+  email: { success: boolean, message:string },
+  phone: { success: boolean, message:string }
+}

@@ -1,15 +1,15 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { RoomModel, Schedule } from '../owners/rooms/Room.Model';
-import { BookingModel } from './Booking.Model';
+import { RoomModel } from '../owners/rooms/Room.Model';
+import { BookingModel, BookingFormError } from './Booking.Model';
 import { BookingService } from './Booking.Service';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateCalendar, LocalizationProvider } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import 'dayjs/locale/es';
 import { RoomService } from '../owners/rooms/Room.Service';
-import { Box, Button, Stack, TextField } from '@mui/material';
+import { Box, Button, Stack, TextField, FormControl, FormHelperText } from '@mui/material';
 import { esES } from '@mui/x-date-pickers/locales';
 import './Booking.css'
 
@@ -26,6 +26,11 @@ const Booking: React.FC = () => {
     const [iHourSelected, setIHourSelected] = useState<number>(-1);
     const [iPlayersSelected, setIPlayersSelected] = useState<number>(-1);
     const [availableHours, setAvailableHours] = useState<string[]>([]);
+    const [validationError, setValidationError] = useState<BookingFormError>({
+        name: { success: true, message: '' },
+        email: { success: true, message: '' },
+        phone: { success: true, message: '' },
+      })
     
     const [room, setRoom] = useState<RoomModel>({
         id: 0,
@@ -124,9 +129,27 @@ const Booking: React.FC = () => {
         });
     };
 
+    const validateFields = () => {
+        const emailValidate = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        const phoneValidate = /^[(]?[0-9]{0,9}[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}[)]?$/im;
+        
+        const nameValid = bookingData.name.length > 0 && bookingData.name.length <= 100;
+        const emailValid = emailValidate.test(bookingData.email);
+        const phoneValid = phoneValidate.test(String(bookingData.phone));
+
+        setValidationError({
+            name: { success: nameValid, message: nameValid ? '' : 'Nombre no válido' },
+            email: { success: emailValid, message: emailValid ? '' : 'Email no válido' },
+            phone: { success: phoneValid, message: phoneValid ? '' : 'Teléfono no válido' },
+        });
+
+        return nameValid && emailValid && phoneValid;
+    };
+
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!validateFields()) return;
         bookingData.id_room = room.id;
 
         const formattedDate = {
@@ -144,6 +167,41 @@ const Booking: React.FC = () => {
 
     const isToday = clickDay?.format('YYYY-MM-DD') === dayjs().format('YYYY-MM-DD');
     const currentHour = dayjs().format('HH:mm');
+
+    const validate = (e: React.FocusEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+
+    switch (id) {
+      case 'name':
+        if (value.length > 100) {
+          setValidationError({...validationError, name: {success: false, message: 'Máximo 100 caracteres'}});
+        } else {
+          setValidationError({...validationError, name: {success: true, message: ''}});
+        }
+        break;
+
+      case 'email':
+        const emailValidate = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        if (!emailValidate.test(value)) {
+          setValidationError({...validationError, email: {success: false, message: 'Email no válido'}});
+        } else {
+          setValidationError({...validationError, email: {success: true, message: ''}});
+        }
+        break;
+
+      case 'phone':
+        const phoneValidate = /^[(]?[0-9]{0,9}[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}[)]?$/im;
+        if (!phoneValidate.test(value)) {
+          setValidationError({...validationError, phone: {success: false, message: 'Teléfono no válido'}});
+        } else {
+          setValidationError({...validationError, phone: {success: true, message: ''}});
+        }
+        break;
+
+      default:
+        break;
+    }
+  }
 
     return (
         <div className="booking form contained">
@@ -219,41 +277,62 @@ const Booking: React.FC = () => {
                         {bookingData.num_players > 0 && (
                         <>
                         <Stack spacing={2}>
-                            <TextField
-                                variant="filled"
-                                id="name"
-                                label="Nombre"
-                                value={bookingData.name}
-                                onChange={handleChange}
-                                placeholder="Nombre"
-                                required
-                                disabled={loading}
-                            />
+                            <FormControl variant="filled" fullWidth>
+                                <TextField
+                                    variant="filled"
+                                    id="name"
+                                    label="Nombre"
+                                    value={bookingData.name}
+                                    onChange={handleChange}
+                                    onBlur={validate}
+                                    error={!validationError.name.success}
+                                    placeholder="Nombre"
+                                    required
+                                    disabled={loading}
+                                />
+                                <FormHelperText error={!validationError.name.success} id="error_name">{validationError.name.message}</FormHelperText>
+                            </FormControl>
 
-                            <TextField
-                                variant="filled"
-                                id="email"
-                                label="E-mail"
-                                value={bookingData.email}
-                                onChange={handleChange}
-                                placeholder="Email"
-                                required
-                                disabled={loading}
-                            />
+                            <FormControl variant="filled" fullWidth> 
+                                <TextField
+                                    variant="filled"
+                                    id="email"
+                                    label="E-mail"
+                                    value={bookingData.email}
+                                    onChange={handleChange}
+                                    onBlur={validate}
+                                    error={!validationError.email.success}
+                                    placeholder="Email"
+                                    required
+                                    disabled={loading}
+                                />
+                                <FormHelperText error={!validationError.email.success} id="error_email">{validationError.email.message}</FormHelperText>
+                            </FormControl>    
 
-                            <TextField
-                                variant="filled"
-                                id="phone"
-                                label="Teléfono"
-                                value={bookingData.phone}
-                                onChange={handleChange}
-                                placeholder="Teléfono"
-                                required
-                                disabled={loading}
-                            />
+                            <FormControl variant="filled" fullWidth>
+                                <TextField
+                                    variant="filled"
+                                    id="phone"
+                                    label="Teléfono"
+                                    value={bookingData.phone}
+                                    onChange={handleChange}
+                                    onBlur={validate}
+                                    error={!validationError.phone.success}
+                                    placeholder="Teléfono"
+                                    required
+                                    disabled={loading}
+                                />
+                                <FormHelperText error={!validationError.phone.success} id="error_phone">{validationError.phone.message}</FormHelperText>
+                            </FormControl>    
                        
                        
-                            <Button size={'large'} variant="contained" color="primary" type="submit">
+                            <Button 
+                                size={'large'} 
+                                variant="contained" 
+                                color="primary" 
+                                type="submit"
+                                disabled={loading}
+                            >
                                 Reservar
                             </Button>
                         </Stack>
