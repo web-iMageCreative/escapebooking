@@ -6,7 +6,8 @@ export interface RoomModel {
     min_players: number,
     max_players: number,
     prices: Price[],
-    escaperoom_id: number
+    escaperoom_id: number,
+    notes?: string
 }
 
 export interface RoomFormProps {

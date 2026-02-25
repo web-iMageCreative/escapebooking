@@ -32,8 +32,9 @@ try {
   $params['duration']     = trim( $data['duration'] );
   $params['min_players']    = $data['min_players'];
   $params['max_players']    = $data['max_players'];
+  $params['notes']  = $data['notes'];
 
-  $query = "UPDATE rooms SET name = :name, duration = :duration, min_players = :min_players, max_players = :max_players WHERE id = :id";
+  $query = "UPDATE rooms SET name = :name, duration = :duration, min_players = :min_players, max_players = :max_players, notes = :notes WHERE id = :id";
 
   $room = $db->execute($query, $params);
 

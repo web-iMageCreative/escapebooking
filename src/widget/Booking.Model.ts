@@ -6,8 +6,9 @@ export interface BookingModel {
   num_players: number,
   date: Date,
   price: number | string,
-  id_room: number
-  room_name?: string
+  id_room: number,
+  room_name?: string,
+  notes?: string
 }
 
 export interface BookingFormProps {

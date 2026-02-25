@@ -456,6 +456,30 @@ const RoomForm: React.FC<RoomFormProps> = ({
           </>
         )}
 
+        <div className="form-group">
+          <div className="col-label">
+            <label htmlFor="notes">Notas</label>
+              <p className="description">
+                Información adicional sobre la sala.
+              </p>
+          </div>
+          <div className="col-value">
+            <FormControl variant="filled" fullWidth>
+              <TextField
+                variant="filled"
+                sx={{backgroundColor: 'white'}}
+                id="notes"
+                label="Notas (opcional)"
+                value={data.notes ?? ''}
+                onChange={handleInputChange}
+                multiline
+                rows={4}
+                disabled={loading}
+              />
+            </FormControl>
+          </div>
+        </div>
+
         <div className="form-actions">
           <Button
             sx={{marginRight: '20px'}}

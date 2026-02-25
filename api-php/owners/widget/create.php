@@ -34,10 +34,11 @@ try {
     $params['date']          = trim( $data['date'] );
     $params['id_room']          = trim( $data['id_room'] );
     $params['price']          = trim( $data['price'] );
+    $params['notes']          = trim( $data['notes']);
 
 
-    $query = "INSERT INTO bookings (name, email, phone, num_players, date, id_room, price)
-    VALUES (:name, :email, :phone, :num_players, :date, :id_room, :price)";
+    $query = "INSERT INTO bookings (name, email, phone, num_players, date, id_room, price, notes)
+    VALUES (:name, :email, :phone, :num_players, :date, :id_room, :price, :notes)";
 
     $createBooking = $db->execute($query, $params);
 

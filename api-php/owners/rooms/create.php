@@ -31,11 +31,12 @@ try {
   $params['min_players']   = $data['min_players'];
   $params['max_players']   = $data['max_players'];
   $params['escaperoom_id'] = $data['escaperoom_id'];
+  $params['notes'] = $data['notes'];
   $prices = $data['prices'];
   $schedule = $data['schedule'];
 
-  $query = "INSERT INTO rooms (name, duration, min_players, max_players, escaperoom_id) 
-  VALUES (:name, :duration, :min_players, :max_players, :escaperoom_id)";
+  $query = "INSERT INTO rooms (name, duration, min_players, max_players, escaperoom_id, notes) 
+  VALUES (:name, :duration, :min_players, :max_players, :escaperoom_id, :notes)";
   
   $room = $db->execute($query, $params);
 

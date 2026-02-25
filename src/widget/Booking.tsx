@@ -51,7 +51,8 @@ const Booking: React.FC = () => {
         num_players: 0,
         date: new Date(),
         price: 0,
-        id_room: 0
+        id_room: 0,
+        notes: ''
     });
 
     useEffect(() => {
@@ -206,6 +207,11 @@ const Booking: React.FC = () => {
     return (
         <div className="booking form contained">
             <h3 style={{ textAlign: 'center' }}>Reservar {room.name}</h3>
+            {room.notes && (
+                <p style={{ textAlign: 'center', color: '#555', marginBottom: '16px' }}>
+                    {room.notes}
+                </p>
+            )}
                 <form onSubmit={handleSubmit}>
                     <Stack spacing={2} maxWidth={350} margin={'0 auto'}>
                         <Box className="box-selector" sx={{boxShadow: 2, backgroundColor: 'white', p: 2, borderBottom: '2px solid #aaa'}}>
@@ -323,6 +329,20 @@ const Booking: React.FC = () => {
                                     disabled={loading}
                                 />
                                 <FormHelperText error={!validationError.phone.success} id="error_phone">{validationError.phone.message}</FormHelperText>
+                            </FormControl>
+
+                            <FormControl variant="filled" fullWidth>
+                                <TextField
+                                    variant="filled"
+                                    id="notes"
+                                    label="Notas (opcional)"
+                                    value={bookingData.notes}
+                                    onChange={handleChange}
+                                    placeholder="Comentarios adicionales..."
+                                    multiline
+                                    rows={4}
+                                    disabled={loading}
+                                />
                             </FormControl>    
                        
                        

@@ -36,8 +36,6 @@ const OwnerBookings: React.FC = () => {
     const [selectedBooking, setSelectedBooking] = useState<BookingModel | null>(null);
     const [idToDelete, setIdToDelete] = useState<number>(0);
     const [openRead, setOpenRead] = useState<boolean>(false);
-    const [openEdit, setOpenEdit] = useState<boolean>(false);
-    const [editDate, setEditDate] = useState<string>('');
     const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
     const [openDialog, setOpenDialog] = useState<boolean>(false);
     const location = useLocation();
@@ -103,17 +101,6 @@ const OwnerBookings: React.FC = () => {
         setOpenRead(true);
     };
 
-    const handleEdit = (booking: BookingModel) => {
-        setSelectedBooking(booking);
-        setOpenEdit(true);
-    };
-
-    const handlePopupClose = () => {
-        setOpenEdit(false);
-        setSelectedBooking(null);
-        getBookings();
-    };
-
     const handleDeleteClick = (e: React.MouseEvent<HTMLButtonElement>) => { 
         setIdToDelete( parseInt( e.currentTarget.dataset.id! ) );
         setOpenDialog(true) ;
@@ -162,13 +149,14 @@ const OwnerBookings: React.FC = () => {
                         <th>Nombre Sala</th>
                         <th>Fecha</th>
                         <th>Hora</th>
+                        <th>Notas</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     {bookings.length === 0 &&
                         <tr>
-                            <td colSpan={4}>No hay reservas.</td>
+                            <td colSpan={5}>No hay reservas.</td>
                         </tr>
                     }
                     {bookings.map(booking => (
@@ -176,6 +164,7 @@ const OwnerBookings: React.FC = () => {
                             <td>{booking.room_name}</td>
                             <td>{dayjs(booking.date).format('dddd DD MMMM')}</td>
                             <td>{dayjs(booking.date).format('HH:mm')}</td>
+                            <td>{booking.notes ? booking.notes : <span style={{ color: '#838383' }}>———————</span>}</td>
                             <td>
                                 <button onClick={() => handleRead(booking)}>Ver</button>
                                 <button data-id={booking.id} onClick={handleDeleteClick}>Cancelar</button>
@@ -189,9 +178,17 @@ const OwnerBookings: React.FC = () => {
                 <div className='pop-overlayCreate' onClick={() => setOpenRead(false)}>
                     <div className='pop-contentCreate' onClick={(e) => e.stopPropagation()}>
                         <h3>Detalles de la reserva</h3>
+                        <p>Hora: {dayjs(selectedBooking.date).format('HH:mm')}</p>
+                        <p>Nombre: {selectedBooking.name}</p>
+                        <p>Email: {selectedBooking.email}</p>
+                        <p>Teléfono: {selectedBooking.phone}</p>
+                        <p>Jugadores: {selectedBooking.num_players}</p>
+                        <p>Precio: {selectedBooking.price} €</p>
                         <p>Sala: {selectedBooking.room_name}</p>
                         <p>Fecha: {dayjs(selectedBooking.date).format('dddd DD MMMM')}</p>
-                        <p>Hora: {dayjs(selectedBooking.date).format('HH:mm')}</p>
+                        {selectedBooking.notes && (
+                            <p>Notas: {selectedBooking.notes}</p>
+                        )}
                         <button onClick={() => setOpenRead(false)}>Cerrar</button>
                     </div>
                 </div>
@@ -220,11 +217,11 @@ const OwnerBookings: React.FC = () => {
                 aria-describedby="delete-dialog-description"
             >
                 <DialogTitle id="delete-dialog-title">
-                    Confirmar Cancelación
+                    Confirmar Eliminación
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="delete-dialog-description">
-                        Estás apunto de <strong>cancelar</strong> esta reserva. ¿Estás seguro?. Esta decisión no puede deshacerse.
+                        Estás apunto de <strong>eliminar</strong> esta reserva. ¿Estás seguro?. Esta decisión no puede deshacerse.
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
