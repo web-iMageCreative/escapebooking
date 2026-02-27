@@ -87,6 +87,7 @@ CREATE TABLE `rooms` (
   min_players int(11) DEFAULT 1,
   max_players int(11) DEFAULT NULL,
   escaperoom_id int(11) NOT NULL,
+  notes text DEFAULT NULL
   FOREIGN KEY (escaperoom_id) REFERENCES escaperooms(id) ON DELETE CASCADE ON UPDATE CASCADE,
   INDEX idx_name (name)
 );
@@ -274,7 +275,8 @@ CREATE TABLE `bookings` (
   `num_players` int(11) NOT NULL,
   `date` date NOT NULL,
   `id_room` int(11) NOT NULL,
-  `price` int(11) NOT NULL
+  `price` int(11) NOT NULL, 
+  `notes` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 ALTER TABLE `bookings`
