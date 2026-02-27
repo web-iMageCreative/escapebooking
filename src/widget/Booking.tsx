@@ -160,8 +160,10 @@ const Booking: React.FC = () => {
                                 <DateCalendar 
                                     sx={{ border: 1, borderColor: '#141414', width: '100%', height: '310px', borderWidth: 0 }}
                                     onChange={handleClickDay}
+                                    defaultValue={null}
                                     value={clickDay}
-                                    minDate={dayjs()}
+                                    views={['month', 'day']}
+                                    disablePast={true}
                                 />
                             </LocalizationProvider>
                         </Box>
@@ -173,7 +175,7 @@ const Booking: React.FC = () => {
                                 const isNotAvailable = availableHours.includes(h.hour) || (isToday && h.hour < currentHour);
                                 return (
                                     <Button
-                                        sx={{margin: '0 5px'}}
+                                        sx={{margin: '5px'}}
                                         variant='contained'
                                         size='small'
                                         key={i}
@@ -195,7 +197,7 @@ const Booking: React.FC = () => {
                             <h4>Número de jugadores:</h4>
                             {room.prices?.map((p, i) => (
                                 <Button
-                                    sx={{margin: '0 5px'}}
+                                    sx={{margin: '5px'}}
                                     variant='contained'
                                     size='small'
                                     key={i}

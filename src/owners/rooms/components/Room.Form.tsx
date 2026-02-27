@@ -308,13 +308,13 @@ const RoomForm: React.FC<RoomFormProps> = ({
                 onBlur={validateSchedule('day')}
                 error={!validationError.day.success}
               >
-                <MenuItem value={0}>Lunes</MenuItem>
-                <MenuItem value={1}>Martes</MenuItem>
-                <MenuItem value={2}>Miércoles</MenuItem>
-                <MenuItem value={3}>Jueves</MenuItem>
-                <MenuItem value={4}>Viernes</MenuItem>
-                <MenuItem value={5}>Sábado</MenuItem>
-                <MenuItem value={6}>Domingo</MenuItem>
+                <MenuItem value={1}>Lunes</MenuItem>
+                <MenuItem value={2}>Martes</MenuItem>
+                <MenuItem value={3}>Miércoles</MenuItem>
+                <MenuItem value={4}>Jueves</MenuItem>
+                <MenuItem value={5}>Viernes</MenuItem>
+                <MenuItem value={6}>Sábado</MenuItem>
+                <MenuItem value={0}>Domingo</MenuItem>
               </TextField>
               <FormHelperText error={!validationError.day.success} id="error_duration">{validationError.day.message}</FormHelperText>
             </FormControl>
