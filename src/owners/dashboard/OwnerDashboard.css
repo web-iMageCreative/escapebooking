@@ -34,27 +34,52 @@
   box-shadow: 8px 8px 6px rgba(0,0,0,0.12);
 }
 
-.pop-overlayCreate {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.6);
+
+
+.dashboard-container {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-  padding: 20px; 
+  flex-direction: column;
+  min-height: calc(100vh - 182px);
 }
 
-.pop-contentCreate {
-  background: white;
-  padding: 30px;
+.promo-card {
+  display: flex;
+  justify-content: center;
+  padding: 48px 0 40px;
+}
+
+.promo-card-content {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  background: #273746;
   border-radius: 12px;
-  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
-  height: 45vh;
-  position: relative;
+  padding: 16px 28px;
+}
+
+.promo-card-content h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #ebebeb;
+  white-space: nowrap;
+}
+
+.promo-card-content .buttonLink {
+  background: #4fa6f8;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 9px 20px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+
+.promo-card-content .buttonLink:hover {
+  background: #3684ce;
 }
 
 

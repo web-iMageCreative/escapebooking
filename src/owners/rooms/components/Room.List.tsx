@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { RoomService } from '../Room.Service';
+import { AuthService } from '../../../auth/AuthService';
 import { RoomModel } from '../Room.Model';
 import { useParams } from 'react-router-dom';
 import {
@@ -25,6 +26,7 @@ import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined
 
 const RoomList: React.FC<any> = ({ id }) => {
   const params = useParams();
+  const [user, setUser] = useState(AuthService.getCurrentUser());
   const [rooms, setRooms] = useState<RoomModel[]>([]);
   const [loading, setLoading] = useState(false);
   const escaperoom_id = params.escaperoom_id || id;
@@ -158,6 +160,16 @@ const RoomList: React.FC<any> = ({ id }) => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      {user.email === 'madrid@escaperooms.com' && (
+        <div className="promo-card">
+          <div className="promo-card-content">
+            <h3>¿Quieres hacer crecer tu negocio?</h3>
+            <button type="button" className="buttonLink">Contratar Ahora</button>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };

@@ -17,7 +17,12 @@ const EscapeRoomCreate: React.FC<CreateFormProp> = ({onCancel}) => {
   const initialData: EscapeRoomModel = {
     id: 0,
     name: '',
-    owner: currentUser.id
+    owner: currentUser.id,
+    address: '',
+    postal_code: '',
+    cif: '',
+    email: '',
+    phone: ''
   };
 
   const handleSubmit = async (data: EscapeRoomModel) => {

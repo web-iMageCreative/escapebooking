@@ -25,6 +25,7 @@ import EscapeRoomUpdate from './EscapeRoom.Update';
 
 const EscapeRoomList: React.FC = () => {
   const [data, setData] = useState<EscapeRoomModel[]>([]);
+  const [user, setUser] = useState(AuthService.getCurrentUser());
   const [loading, setLoading] = useState<boolean>(false);
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
@@ -121,6 +122,15 @@ const EscapeRoomList: React.FC = () => {
           ))}
         </div>
       }
+
+      {user.email === 'madrid@escaperooms.com' && (
+        <div className="promo-card">
+          <div className="promo-card-content">
+            <h3>¿Quieres hacer crecer tu negocio?</h3>
+            <button type="button" className="buttonLink">Contratar Ahora</button>
+          </div>
+        </div>
+      )}
 
       <Snackbar
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}

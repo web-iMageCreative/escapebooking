@@ -22,13 +22,23 @@ try {
   if ( ! (isset( $data['id'] ) && trim($data['id']) != '') ) throw new Exception('Falta el id del negocio');
   if ( ! (isset( $data['name'] ) && trim($data['name']) != '') ) throw new Exception('Falta el nombre del negocio');
   if ( ! (isset( $data['owner'] ) && $data['owner'] != '') ) throw new Exception('Falta el id del dueño del negocio');
+  if ( ! (isset( $data['address'] ) && $data['address'] != '') ) throw new Exception('Falta la dirección');
+  if ( ! (isset( $data['postal_code'] ) && $data['postal_code'] != '') ) throw new Exception('Falta el código postal');
+  if ( ! (isset( $data['cif'] ) && $data['cif'] != '') ) throw new Exception('Falta el cif');
+  if ( ! (isset( $data['email'] ) && $data['email'] != '') ) throw new Exception('Falta el email');
+  if ( ! (isset( $data['phone'] ) && $data['phone'] != '') ) throw new Exception('Falta el teléfono');
   
   $params = array();
   $params['id']        = $data['id'];
   $params['name']        = trim( $data['name'] );
+  $params['address']       = $data['address'];
+  $params['postal_code']       = $data['postal_code'];
+  $params['cif']       = $data['cif'];
+  $params['email']       = $data['email'];
+  $params['phone']       = $data['phone'];
   
   
-  $query = "UPDATE escaperooms SET name = :name WHERE id = :id";
+  $query = "UPDATE escaperooms SET name, address, postal_code, cif, email, phone = :name, :address, :postal_code, :cif, :email, :phone WHERE id = :id";
   
   $escaperoom = $db->execute($query, $params);
   
