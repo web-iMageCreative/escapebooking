@@ -42,6 +42,10 @@
   border-left: 1px solid #bbb;
 }
 
+.calendar .day-of-week:first-child {
+  order: 7;
+}
+
 .calendar .day-name {
   padding: 10px 5px;
   font-size: 13px;
@@ -54,6 +58,6 @@
   margin: 5px 0;
 }
 
-.calendar .day-of-week:first-child {
+.calendar .day-of-week:nth-child(2) {
   border-left: none;
 }

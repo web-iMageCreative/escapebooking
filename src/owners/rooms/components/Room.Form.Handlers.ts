@@ -107,7 +107,8 @@ export class RoomFormHandlers {
     s = this.sortSchedule(s);
 
     for (let i = 0; i <= 6; i++) {
-      orderedSchedules[i] = s.filter(obj => obj.day_week === i);
+      const day_num = i < 6 ? i + 1 : 0;
+      orderedSchedules[day_num] = s.filter(obj => obj.day_week === day_num);
     }
 
     setOrderedSchedules([...orderedSchedules]);
@@ -120,7 +121,8 @@ export class RoomFormHandlers {
     orderedSchedules: any,
     schedules: Schedule[],
     setSchedules: React.Dispatch<React.SetStateAction<Schedule[]>>,
-    setOrderedSchedules: React.Dispatch<React.SetStateAction<any>>
+    setOrderedSchedules: React.Dispatch<React.SetStateAction<any>>,
+    id: number
   ) {
     const id_room = orderedSchedules[i][j]['id_room'];
     const day_week = orderedSchedules[i][j]['day_week'];
