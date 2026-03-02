@@ -40,6 +40,7 @@ const OwnerBookings: React.FC = () => {
     const [openDialog, setOpenDialog] = useState<boolean>(false);
     const location = useLocation();
     const [alertData, setAlertData] = useState<any>(location.state?.alert || {});
+    const [user, setUser] = useState(AuthService.getCurrentUser());
 
     useEffect(() => {
         getEscaperooms();
@@ -191,6 +192,15 @@ const OwnerBookings: React.FC = () => {
                         )}
                         <button onClick={() => setOpenRead(false)}>Cerrar</button>
                     </div>
+                </div>
+            )}
+
+            {user.email === 'madrid@escaperooms.com' && (
+                <div className="promo-card">
+                <div className="promo-card-content">
+                    <h3>¿Quieres hacer crecer tu negocio?</h3>
+                    <button type="button" className="buttonLink">Contratar Ahora</button>
+                </div>
                 </div>
             )}
 

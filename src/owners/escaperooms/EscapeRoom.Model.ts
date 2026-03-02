@@ -2,7 +2,12 @@
 export interface EscapeRoomModel {
   id: number,
   name: string,
-  owner: number
+  owner: number,
+  address: string,
+  postal_code: string,
+  cif: string,
+  email: string,
+  phone: string
 }
 
 export interface EscapeRoomFormProps {

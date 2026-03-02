@@ -80,10 +80,6 @@ const OwnerDashboard: React.FC = () => {
       </div>
       )}
 
-      <div>
-        
-      </div>
-
       <Snackbar
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
         open={open}

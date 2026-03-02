@@ -21,13 +21,23 @@ try {
 
   if ( ! (isset( $data['name'] ) && trim($data['name']) != '') ) throw new Exception('Falta el nombre del negocio');
   if ( ! (isset( $data['owner'] ) && $data['owner'] != '') ) throw new Exception('Falta el id del dueño del negocio');
+  if ( ! (isset( $data['address'] ) && $data['address'] != '') ) throw new Exception('Falta la dirección');
+  if ( ! (isset( $data['postal_code'] ) && $data['postal_code'] != '') ) throw new Exception('Falta el código postal');
+  if ( ! (isset( $data['cif'] ) && $data['cif'] != '') ) throw new Exception('Falta el cif');
+  if ( ! (isset( $data['email'] ) && $data['email'] != '') ) throw new Exception('Falta el email');
+  if ( ! (isset( $data['phone'] ) && $data['phone'] != '') ) throw new Exception('Falta el teléfono');
   
   $params = array();
   $params['name']        = trim( $data['name'] );
   $params['owner']       = $data['owner'];
+  $params['address']       = $data['address'];
+  $params['postal_code']       = $data['postal_code'];
+  $params['cif']       = $data['cif'];
+  $params['email']       = $data['email'];
+  $params['phone']       = $data['phone'];
   
   
-  $query = "INSERT INTO escaperooms (name, owner) VALUES (:name, :owner)";
+  $query = "INSERT INTO escaperooms (name, owner, address, postal_code, cif, email, phone) VALUES (:name, :owner, :address, :postal_code, :cif, :email, :phone)";
   
   $escaperoom = $db->execute($query, $params);
   

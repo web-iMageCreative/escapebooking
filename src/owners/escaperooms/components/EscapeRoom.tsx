@@ -12,8 +12,14 @@ const EscapeRoom: React.FC = () => {
     const [escapeRoom, setEscapeRoom] = useState<EscapeRoomModel>({
         id: 0,
         name: '',
-        owner: 0
+        owner: 0,
+        address: '',
+        postal_code: '',
+        cif: '',
+        email: '',
+        phone: ''
     });
+    
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {

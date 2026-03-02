@@ -241,6 +241,6 @@ input::placeholder, textarea::placeholder {
   padding: 30px;
   border-radius: 12px;
   box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
-  height: 45vh;
+  height: 55vh;
   position: relative;
 }

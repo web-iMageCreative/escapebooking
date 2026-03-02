@@ -74,6 +74,61 @@ const EscapeRoomForm: React.FC<EscapeRoomFormProps> = ({
             />
           </div>
         </div>
+        <div className="form-group">
+          <div className="col-label">
+            <label>Datos de Facturación</label>
+            <p className="description">
+              Datos de Facturación.
+            </p>
+          </div>
+          <div className="col-value">
+            <input
+              type="text"
+              id="address"
+              value={data.address}
+              onChange={handleInputChange}
+              placeholder="Calle Victoria 13"
+              required
+              disabled={loading}
+            />
+            <input
+              type="text"
+              id="postal_code"
+              value={data.postal_code}
+              onChange={handleInputChange}
+              placeholder="11540"
+              required
+              disabled={loading}
+            />
+            <input
+              type="text"
+              id="cif"
+              value={data.cif}
+              onChange={handleInputChange}
+              placeholder="B12345678"
+              required
+              disabled={loading}
+            />
+            <input
+              type="text"
+              id="email"
+              value={data.email}
+              onChange={handleInputChange}
+              placeholder="ejemplo@ejemplo.com"
+              required
+              disabled={loading}
+            />
+            <input
+              type="text"
+              id="phone"
+              value={data.phone}
+              onChange={handleInputChange}
+              placeholder="+34 672807144"
+              required
+              disabled={loading}
+            />
+          </div>
+        </div>
 
         {/* Acciones */}
         <div className="form-actions">
