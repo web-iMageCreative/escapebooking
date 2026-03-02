@@ -113,6 +113,15 @@ const RoomForm: React.FC<RoomFormProps> = ({
   };
 
   const handleAddSchedule = () => {
+    const check:boolean[] = RoomFormHandlers.checkRange(schedules, initialData, hour, day);
+    
+    if (check.includes(false)) {
+      setValidationError({...validationError, hour: {success: false, message: 'esta hora está ocupada'}} );
+      setScheduleOK(false);
+
+      return;
+    }
+
     RoomFormHandlers.handleAddSchedule(
       initialData, 
       day, 
