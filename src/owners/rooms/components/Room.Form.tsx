@@ -24,7 +24,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [scheduleOK, setScheduleOK] = useState<boolean>(false);
   const [orderedSchedules, setOrderedSchedules] = useState<any>([[],[],[],[],[],[],[]]);
-  const days_of_week: string[] = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']
+  const days_of_week: string[] = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
   const [validationError, setValidationError] = useState<RoomFormError>({
     name: { success: true, message: '' },
     duration: { success: true, message: '' },
@@ -113,6 +113,15 @@ const RoomForm: React.FC<RoomFormProps> = ({
   };
 
   const handleAddSchedule = () => {
+    const check:boolean[] = RoomFormHandlers.checkRange(schedules, initialData, hour, day);
+    
+    if (check.includes(false)) {
+      setValidationError({...validationError, hour: {success: false, message: 'esta hora está ocupada'}} );
+      setScheduleOK(false);
+
+      return;
+    }
+
     RoomFormHandlers.handleAddSchedule(
       initialData, 
       day, 
@@ -125,7 +134,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
   };
 
   const handleDeleteHour = (i: number, j: number) => {
-    RoomFormHandlers.handleDeleteHour(i, j, orderedSchedules, schedules, setSchedules, setOrderedSchedules);
+    RoomFormHandlers.handleDeleteHour(i, j, orderedSchedules, schedules, setSchedules, setOrderedSchedules, initialData.id);
   };
 
   const handleSubmit = (e: React.FormEvent) => {

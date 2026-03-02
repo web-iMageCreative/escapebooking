@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { RoomModel } from '../owners/rooms/Room.Model';
-import { BookingModel, BookingFormError } from './Booking.Model';
+import { BookingModel, BookingFormError, Availability } from './Booking.Model';
 import { BookingService } from './Booking.Service';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateCalendar, LocalizationProvider } from '@mui/x-date-pickers';
@@ -26,12 +26,14 @@ const Booking: React.FC = () => {
     const [iHourSelected, setIHourSelected] = useState<number>(-1);
     const [iPlayersSelected, setIPlayersSelected] = useState<number>(-1);
     const [availableHours, setAvailableHours] = useState<string[]>([]);
+    const [availability, setAvailability] = useState<Availability>();
+    const isToday = clickDay?.format('YYYY-MM-DD') === dayjs().format('YYYY-MM-DD');
+    const currentHour = dayjs().format('HH:mm');
     const [validationError, setValidationError] = useState<BookingFormError>({
         name: { success: true, message: '' },
         email: { success: true, message: '' },
         phone: { success: true, message: '' },
       })
-    
     const [room, setRoom] = useState<RoomModel>({
         id: 0,
         name: '',
@@ -42,7 +44,6 @@ const Booking: React.FC = () => {
         prices: [],
         escaperoom_id: 0
     });
-
     const [bookingData, setBookingData] = useState<BookingModel>({
         id: 0,
         name: 'Miguel',
@@ -55,6 +56,7 @@ const Booking: React.FC = () => {
         notes: ''
     });
 
+
     useEffect(() => {
         getRoom();
     }, []);
@@ -62,6 +64,7 @@ const Booking: React.FC = () => {
     useEffect(() => {
         if (room.id === 0) return;
         handleClickDay(dayjs());
+        getAvailability(dayjs());
     }, [room.id]);
 
     const getRoom = async () => {
@@ -84,10 +87,12 @@ const Booking: React.FC = () => {
     };
 
     const handleClickDay = async (value: dayjs.Dayjs | null) => {
-        setClickDay(value);
-        setIHourSelected(-1);
         const selectedDate = value;
         const currentDate = dayjs();
+
+        setClickDay(value);
+        setIHourSelected(-1);
+
         if (currentDate.format('YYYY-MM-DD') > selectedDate!.format('YYYY-MM-DD')) {
             setHours([]);
             setAvailableHours([]);
@@ -101,7 +106,6 @@ const Booking: React.FC = () => {
             setLoading(true);
             const resHours = await BookingService.getHours(room.id, dayOfWeek!);
             const resAvailableHours = await BookingService.getAvailableHours(room.id, date!);
-            console.log(resAvailableHours);
             setHours(resHours.data);
             setAvailableHours(resAvailableHours.data?.map((x: { hour: string }) => x.hour) ?? []);
         } catch {
@@ -119,8 +123,6 @@ const Booking: React.FC = () => {
         const dateDefinitive = clickDay!
         .hour(h)
         .minute(m)
-        
-        console.log(dateDefinitive.toDate());
         
         setIHourSelected(i);
         setHourSelected(true);
@@ -147,7 +149,6 @@ const Booking: React.FC = () => {
         return nameValid && emailValid && phoneValid;
     };
 
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!validateFields()) return;
@@ -165,9 +166,6 @@ const Booking: React.FC = () => {
             setLoading(false);
         }
     };
-
-    const isToday = clickDay?.format('YYYY-MM-DD') === dayjs().format('YYYY-MM-DD');
-    const currentHour = dayjs().format('HH:mm');
 
     const validate = (e: React.FocusEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -202,7 +200,71 @@ const Booking: React.FC = () => {
       default:
         break;
     }
-  }
+    }
+
+    const getAvailability = async (date: dayjs.Dayjs | null) => {
+        const month: number | undefined = date!.month() + 1;
+        const year: number | undefined = date!.year();
+        const res = await BookingService.getAvailability( room.id, month, year );
+        
+        setAvailability(res.data);
+    }
+
+    function isAvailable( day: dayjs.Dayjs ) {
+        if (availability) {
+            const dayWeek = day.day();
+            const date = day.format('YYYY-MM-DD');
+            const hasBooking = availability!.bookings_by_month.find( (booking) => {
+                return booking.date == date
+            } );
+            const hasAvailable = availability!.hours_by_day.find( (dayWithHours) => {
+                return dayWithHours.day_week == String(dayWeek);
+            } );
+
+            if (!hasAvailable) {
+                return 'not';
+            }
+
+            if (!hasBooking) {
+                return 'free';
+            }
+            
+            if ( Number(hasBooking!.bookings) < Number(hasAvailable.availables) ) {
+                return 'half';
+            } 
+            
+            if ( Number(hasBooking!.bookings) === Number(hasAvailable.availables) ) {
+                return 'full';
+            }
+        }
+
+        return '';
+    }
+
+    function mustDisable( day: dayjs.Dayjs ) {
+        if (availability) {
+            const dayWeek = day.day();
+            const date = day.format('YYYY-MM-DD');
+            const hasBooking = availability!.bookings_by_month.find( (booking) => {
+                return booking.date == date
+            } );
+            const hasAvailable = availability!.hours_by_day.find( (dayWithHours) => {
+                return dayWithHours.day_week == String(dayWeek);
+            } );
+
+            if (!hasAvailable) {
+                return true;
+            }
+            
+            if ( Number(hasBooking?.bookings) === Number(hasAvailable.availables) ) {
+                return true;
+            }
+
+            return false;
+        }
+
+        return true;
+    }
 
     return (
         <div className="booking form contained">
@@ -222,12 +284,23 @@ const Booking: React.FC = () => {
                                 adapterLocale='es'
                             >
                                 <DateCalendar 
-                                    sx={{ border: 1, borderColor: '#141414', width: '100%', height: '310px', borderWidth: 0 }}
-                                    onChange={handleClickDay}
+                                    sx={{ border: 1, borderColor: '#141414', width: '100%', height: '340px', borderWidth: 0 }}
                                     defaultValue={null}
-                                    value={clickDay}
+                                    disableHighlightToday={true}
                                     views={['month', 'day']}
                                     disablePast={true}
+                                    value={clickDay}
+                                    onChange={handleClickDay}
+                                    shouldDisableDate={(date) => mustDisable(date)}
+                                    onMonthChange={getAvailability}
+                                    onYearChange={getAvailability}
+                                    slotProps={{
+                                        day: (ownerState) => ({
+                                            
+                                            // disabled: (isAvailable(ownerState.day) === 'not' || isAvailable(ownerState.day) === 'full') ? true : false,
+                                            className: isAvailable(ownerState.day)
+                                        })
+                                    }}
                                 />
                             </LocalizationProvider>
                         </Box>

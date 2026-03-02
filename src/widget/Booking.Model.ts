@@ -33,3 +33,19 @@ export interface BookingFormError {
   email: { success: boolean, message:string },
   phone: { success: boolean, message:string }
 }
+
+export interface Availability {
+  hours_by_day: HoursByDay[],
+  bookings_by_month: BookingsByMonth[]
+}
+
+interface HoursByDay {
+  availables: string,
+  day_week: string
+}
+
+interface BookingsByMonth {
+  bookings: string
+  date: string
+  dayWeek: string
+}

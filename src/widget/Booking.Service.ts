@@ -5,7 +5,6 @@ const API_BASE_URL = 'http://localhost/api-php';
 
 export class BookingService {
     static async createBooking(data: BookingModel): Promise<ApiResponse> {
-            console.log(data);
         const res = await fetch(`${API_BASE_URL}/owners/widget/create.php`, {
             method: 'POST',
             headers: {
@@ -15,7 +14,7 @@ export class BookingService {
         });
     
         if (!res.ok) {
-            const result = await res.json()
+            const result = await res.json();
             throw new Error(result.message);
         }
     
@@ -29,7 +28,7 @@ export class BookingService {
         const res = await fetch(`${API_BASE_URL}/owners/widget/hours.php?id_room=${id_room}&day_week=${day_week}`);
     
         if (!res.ok) {
-            const result = await res.json()
+            const result = await res.json();
             throw new Error(result.message);
         }
     
@@ -42,7 +41,7 @@ export class BookingService {
         const res = await fetch(`${API_BASE_URL}/owners/widget/getAvailableHours.php?id_room=${id_room}&date=${date}`);
 
         if (!res.ok) {
-            const result = await res.json()
+            const result = await res.json();
             throw new Error(result.message);
         }
     
@@ -60,6 +59,20 @@ export class BookingService {
         }
 
         const result = await res.json();
+
+        return result;
+    }
+
+    static async getAvailability( room_id: number, month: number | undefined, year: number | undefined ): Promise<ApiResponse> {
+        const response = await fetch(`${API_BASE_URL}/owners/widget/get-availability.php?id_room=${room_id}&month=${month}&year=${year}`);
+        
+        if (!response.ok) {
+            const result = await response.json();
+            throw new Error(result.message);
+        }
+
+        const result = await response.json();
+        console.log(result.data);
 
         return result;
     }
