@@ -44,6 +44,7 @@ const OwnerDashboard: React.FC = () => {
   if (loading) {
     return <div className="loading">Cargando datos de usuario...</div>;
   }
+  console.log(user);
 
   if (!user) {
     return <div>No se encuentran datos de usuario. <a href="/login">Identifíquese de nuevo</a></div>;

@@ -1,5 +1,6 @@
 export const ROUTES = {
   LOGIN: '/login',
+  REGISTER: '/register',
   
   // Admin routes
   // ADMIN_USERS: '/admin/users',
