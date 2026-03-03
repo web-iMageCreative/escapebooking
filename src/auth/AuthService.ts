@@ -34,6 +34,29 @@ export class AuthService {
         
         return await res.json();
     }
+
+    static async createPaypalOrder(): Promise<{ orderID: string }> {
+        const res = await fetch(`${API_BASE_URL}/paypal_create_order.php`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+        });
+        if (!res.ok) throw new Error('Error al crear la orden de PayPal');
+        return await res.json();
+    }
+
+    static async capturePaypalAndRegister(payload: {
+        orderID: string;
+        email: string;
+        password: string;
+    }): Promise<AuthResponse> {
+        const res = await fetch(`${API_BASE_URL}/paypal_capture_register.php`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        if (!res.ok) throw new Error('Error al capturar el pago o registrar el usuario');
+        return await res.json();
+    }
     
     static logout(): void {
         localStorage.removeItem('auth_token');

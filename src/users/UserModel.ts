@@ -25,6 +25,10 @@ export interface RegisterCredentials {
   confirmPassword: string;
 }
 
+export interface PaypalProps {
+  credentials: RegisterCredentials;
+}
+
 export interface AuthResponse {
   success: boolean;
   message: string;

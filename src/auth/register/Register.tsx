@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { AuthService } from '../AuthService';
+import { useLocation } from 'react-router-dom';
 import { RegisterCredentials } from '../../users/UserModel';
-import { useLocation, useNavigate } from 'react-router-dom';
 import { Alert, Box, Button, Container, Snackbar, Stack, TextField } from '@mui/material';
 import LockPersonOutlinedIcon from '@mui/icons-material/LockPersonOutlined';
 import NotchedContainer from '../../shared/components/CircularNotchedBox';
@@ -13,43 +12,22 @@ const Register: React.FC = () => {
     password: '',
     confirmPassword: ''
   });
-  const [loading, setLoading] = useState(false);
-  const nav = useNavigate();
-  const [open, setOpen] = useState<boolean>(false);
   const location = useLocation();
-  const [alertData, setAlertData] = useState<any>( location.state?.alert || {} );
+  const [open, setOpen] = useState<boolean>(!!location.state?.alert);
+  const [alertData, setAlertData] = useState<any>(location.state?.alert || {});
 
   const handleSnackbarClose = () => { setOpen(false); }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
+  const handlePasswordMismatch = () => {
+    if (credentials.password && credentials.confirmPassword && credentials.password !== credentials.confirmPassword) {
+      setAlertData({ type: 'error', message: 'Las contraseñas no coinciden' });
+      setOpen(true);
+    } else {
+      setOpen(false);
+    }
+  };
 
-    try {
-        if (credentials.password !== credentials.confirmPassword) {
-            setAlertData({ type: 'error', message: 'Las contraseñas no coinciden' });
-            setOpen(true);
-            setLoading(false);
-            return;
-            }
-
-            const res = await AuthService.register(credentials);
-
-            if (res.success) {
-                localStorage.setItem('auth_token', res.data.token);
-                localStorage.setItem('user', JSON.stringify(res.data.user));
-                nav('/owner/dashboard', { state: { alert: { type: 'info', message: 'Cuenta creada correctamente.' } } });
-            } else {
-                setAlertData({ type: 'error', message: res.message });
-                setOpen(true);
-            }
-        } catch (err) {
-            setAlertData({ type: 'error', message: 'Error al registrarse. Por favor, inténtelo nuevamente.' });
-            setOpen(true);
-        } finally {
-            setLoading(false);
-        }
-    };
+  const passwordsMatch = !credentials.confirmPassword || credentials.password === credentials.confirmPassword;
 
   return (
     <>
@@ -78,17 +56,12 @@ const Register: React.FC = () => {
         />
         <Box
           className="form-container"
-          component="form"
-          onSubmit={handleSubmit}
           sx={{ 
             p: 4,
             bgcolor: '#FFF'
           }}
-          noValidate
-          autoComplete="off"
         >
           <Stack spacing={4}>
-
             <h2>Crear Cuenta</h2>
 
             <TextField
@@ -126,25 +99,14 @@ const Register: React.FC = () => {
               label="Confirmar Contraseña"
               variant="outlined" 
               value={credentials.confirmPassword}
-              onChange={(e) => setCredentials({
-                ...credentials,
-                confirmPassword: e.target.value
-              })}
+              onChange={(e) => setCredentials({ ...credentials, confirmPassword: e.target.value })}
+              onBlur={handlePasswordMismatch}
+              error={!passwordsMatch}
+              helperText={!passwordsMatch ? 'Las contraseñas no coinciden' : ''}
               required
             />
 
-            <Paypal />
-
-            <Button 
-              type="submit"
-              variant="contained"
-              disabled={loading}
-              color="primary"
-              size="large"
-            >
-              {loading ? 'Registrando...' : 'Registrarse'}
-            </Button>
-
+            <Paypal credentials={credentials} />
           </Stack>
         </Box>
       </Container>
