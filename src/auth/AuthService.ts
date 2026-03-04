@@ -35,20 +35,17 @@ export class AuthService {
         return await res.json();
     }
 
-    static async createPaypalOrder(): Promise<{ orderID: string }> {
+    static async createPaypalOrder(email: string): Promise<{ orderID: string }> {
         const res = await fetch(`${API_BASE_URL}/order.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
         });
         if (!res.ok) throw new Error('Error al crear la orden de PayPal');
         return await res.json();
     }
 
-    static async capturePaypalAndRegister(payload: {
-        orderID: string;
-        email: string;
-        password: string;
-    }): Promise<AuthResponse> {
+    static async capturePaypalAndRegister(payload: { orderID: string; email: string; password: string; }): Promise<AuthResponse> {
         const res = await fetch(`${API_BASE_URL}/capture.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

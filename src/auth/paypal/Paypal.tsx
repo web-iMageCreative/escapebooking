@@ -16,7 +16,7 @@ const Paypal: React.FC<PaypalProps> = ({ credentials }) => {
   };
 
   const createOrder = async () => {
-    const res = await AuthService.createPaypalOrder();
+    const res = await AuthService.createPaypalOrder(credentials.email);
     return res.orderID;
   };
 

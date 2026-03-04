@@ -7,6 +7,9 @@ header('Access-Control-Allow-Credentials: true');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { http_response_code(200); exit(); }
 
+$data  = json_decode(file_get_contents('php://input'), true);
+$email = $data['email'] ?? 'sin-email';
+
 $clientId     = 'AcVoDh51dfGFZRauylq59NZYdjJAJZRHES2-v9eYgTck08AHeBMDgCc5myqz9QDYsD3aZUjOB4hCbdKb';
 $clientSecret = 'EIa9Tbf9QeHNWvLM04gFJ32FoReKk02bRMZJ0iLhf54EPPpXl5oIVSeAtZLxnUtidPyRPVs7b98wDqyW';
 $base         = 'https://api-m.sandbox.paypal.com';
@@ -26,8 +29,27 @@ try {
             'method'  => 'POST',
             'header'  => "Content-Type: application/json\r\nAuthorization: Bearer {$tokenRes['access_token']}",
             'content' => json_encode([
-                'intent'         => 'CAPTURE',
-                'purchase_units' => [['amount' => ['currency_code' => 'EUR', 'value' => '9.99']]]
+                'intent' => 'CAPTURE',
+                'purchase_units' => [[
+                    'reference_id'    => 'plan_owner',
+                    'description'     => 'Cuenta Owner - Acceso completo a la plataforma',
+                    'custom_id'       => $email,
+                    'soft_descriptor' => 'Plan Owner',
+                    'amount' => [
+                        'currency_code' => 'EUR',
+                        'value'         => '9.99',
+                        'breakdown'     => [
+                            'item_total' => ['currency_code' => 'EUR', 'value' => '9.99']
+                        ]
+                    ],
+                    'items' => [[
+                        'name'        => 'Plan Owner',
+                        'description' => 'Suscripción EscapeBooking plan Owner ',
+                        'quantity'    => '1',
+                        'unit_amount' => ['currency_code' => 'EUR', 'value' => '9.99'],
+                        'category'    => 'DIGITAL_GOODS',
+                    ]]
+                ]]
             ]),
         ]
     ])), true);

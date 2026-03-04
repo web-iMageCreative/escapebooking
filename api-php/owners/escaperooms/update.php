@@ -38,7 +38,7 @@ try {
   $params['phone']       = $data['phone'];
   
   
-  $query = "UPDATE escaperooms SET name, address, postal_code, cif, email, phone = :name, :address, :postal_code, :cif, :email, :phone WHERE id = :id";
+  $query = "UPDATE escaperooms SET name = :name, address = :address, postal_code = :postal_code, cif = :cif, email = :email, phone = :phone WHERE id = :id";
   
   $escaperoom = $db->execute($query, $params);
   
