@@ -36,7 +36,7 @@ export class AuthService {
     }
 
     static async createPaypalOrder(): Promise<{ orderID: string }> {
-        const res = await fetch(`${API_BASE_URL}/paypal_create_order.php`, {
+        const res = await fetch(`${API_BASE_URL}/order.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
         });
@@ -49,7 +49,7 @@ export class AuthService {
         email: string;
         password: string;
     }): Promise<AuthResponse> {
-        const res = await fetch(`${API_BASE_URL}/paypal_capture_register.php`, {
+        const res = await fetch(`${API_BASE_URL}/capture.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)

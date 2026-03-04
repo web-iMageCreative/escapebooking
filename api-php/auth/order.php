@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { http_response_code(200); exit();
 
 $clientId     = 'AcVoDh51dfGFZRauylq59NZYdjJAJZRHES2-v9eYgTck08AHeBMDgCc5myqz9QDYsD3aZUjOB4hCbdKb';
 $clientSecret = 'EIa9Tbf9QeHNWvLM04gFJ32FoReKk02bRMZJ0iLhf54EPPpXl5oIVSeAtZLxnUtidPyRPVs7b98wDqyW';
-$base         = 'https://api-m.paypal.com';
+$base         = 'https://api-m.sandbox.paypal.com';
 
 try {
     $auth     = base64_encode("$clientId:$clientSecret");
