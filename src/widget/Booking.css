@@ -19,15 +19,15 @@
 }
 
 .MuiDateCalendar-root .full:disabled {
-  background-color: rgb(240, 203, 198) !important;
+  background-color: #f5cdcd !important;
 }
 
 .MuiDateCalendar-root .half {
-  background-color: rgb(233, 202, 167) !important;
+  background-color: #f1e5b1!important;
 }
 
 .MuiDateCalendar-root .free {
-  background-color: rgb(181, 209, 181) !important;
+  background-color: #d6f1d6 !important;
 }
 
 .MuiDateCalendar-root .Mui-selected {
