@@ -4,6 +4,7 @@ import { RoomService } from '../Room.Service';
 import { AuthService } from '../../../auth/AuthService';
 import { RoomModel } from '../Room.Model';
 import { useParams } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import {
   Button,
   Dialog,
@@ -165,7 +166,7 @@ const RoomList: React.FC<any> = ({ id }) => {
         <div className="promo-card">
           <div className="promo-card-content">
             <h3>¿Quieres hacer crecer tu negocio?</h3>
-            <button type="button" className="buttonLink">Contratar Ahora</button>
+            <Link to={'/register'}>Empezar Ahora</Link>
           </div>
         </div>
       )}

@@ -244,3 +244,45 @@ input::placeholder, textarea::placeholder {
   height: 55vh;
   position: relative;
 }
+
+
+.promo-card {
+  display: flex;
+  justify-content: center;
+  padding: 48px 0 40px;
+}
+
+.promo-card-content {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  background: #273746;
+  border-radius: 12px;
+  padding: 16px 28px;
+}
+
+.promo-card-content h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #ebebeb;
+  white-space: nowrap;
+}
+
+.promo-card-content a {
+  background: #4fa6f8;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 9px 20px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+  text-decoration: none;
+}
+
+.promo-card-content a:hover {
+  background: #3684ce;
+}

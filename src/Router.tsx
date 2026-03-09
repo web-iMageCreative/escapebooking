@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthService } from './auth/AuthService';
 import { ROUTES } from './routes';
 import Login from './auth/login/Login';
+import Register from './auth/register/Register';
 import OwnerDashboard from './owners/dashboard/OwnerDashboard';
 import EscapeRoomList from './owners/escaperooms/components/EscapeRoom.List';
 import EscapeRoom from './owners/escaperooms/components/EscapeRoom';
@@ -56,6 +57,10 @@ const AppRouter: React.FC = () => {
                 <PublicRoute>
                     <Login />
                 </PublicRoute>
+            } />
+
+            <Route path={ROUTES.REGISTER} element={
+                    <Register />
             } />
 
             <Route path={ROUTES.WIDGET} element={

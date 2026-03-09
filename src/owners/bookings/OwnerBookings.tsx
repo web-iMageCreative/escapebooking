@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import { BookingModel } from "../../widget/Booking.Model";
 import { BookingService } from "../../widget/Booking.Service";
 import { RoomModel } from "../rooms/Room.Model";
@@ -59,7 +60,7 @@ const OwnerBookings: React.FC = () => {
     const getEscaperooms = async () => {
         try {
             const res = await EscapeRoomService.getEscaperooms(ownerId);
-            setEscaperooms(res.data);
+            setEscaperooms(Array.isArray(res.data) ? res.data : []);
             if (res.data.length > 0) setSelectedEscaperoom(res.data[0].id!);
         } catch {
             setError('Error al obtener los escaperooms.');
@@ -132,12 +133,13 @@ const OwnerBookings: React.FC = () => {
             </div>
             <div className='actions'>
                 <select value={selectedEscaperoom} onChange={handleEscaperoomChange}>
+                    {escaperooms.length === 0 && <option value={0}>Sin Escaperooms</option>}
                     {escaperooms.map(escaperoom => (
                         <option key={escaperoom.id} value={escaperoom.id}>{escaperoom.name}</option>
                     ))}
                 </select>
                 <select value={selectedRoom} onChange={handleRoomChange}>
-                    {rooms.length === 0 && <option value={0}>Sin salas</option>}
+                    {rooms.length === 0 && <option value={0}>Sin Salas</option>}
                     {rooms.map(room => (
                         <option key={room.id} value={room.id}>{room.name}</option>
                     ))}
@@ -197,10 +199,10 @@ const OwnerBookings: React.FC = () => {
 
             {user.email === 'madrid@escaperooms.com' && (
                 <div className="promo-card">
-                <div className="promo-card-content">
-                    <h3>¿Quieres hacer crecer tu negocio?</h3>
-                    <button type="button" className="buttonLink">Contratar Ahora</button>
-                </div>
+                    <div className="promo-card-content">
+                        <h3>¿Quieres hacer crecer tu negocio?</h3>
+                        <Link to={'/register'}>Empezar Ahora</Link>
+                    </div>
                 </div>
             )}
 

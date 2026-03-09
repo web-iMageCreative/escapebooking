@@ -4,6 +4,7 @@ import { EscapeRoomModel } from '../EscapeRoom.Model';
 import { EscapeRoomService } from '../EscapeRoom.Service';
 import { User } from '../../../users/UserModel';
 import { AuthService } from '../../../auth/AuthService';
+import { Link } from 'react-router-dom';
 import {
   Button,
   Dialog,
@@ -50,7 +51,7 @@ const EscapeRoomList: React.FC = () => {
     setLoading(true);
     try {
       const res = await EscapeRoomService.getEscaperooms(currentUser.id);
-      setData(res.data);
+      setData(Array.isArray(res.data) ? res.data : []);
     } catch(err: any) {
       setAlertData( { 'message': err?.message, 'type': 'error' } );
       setOpenSnackbar(true);
@@ -127,7 +128,7 @@ const EscapeRoomList: React.FC = () => {
         <div className="promo-card">
           <div className="promo-card-content">
             <h3>¿Quieres hacer crecer tu negocio?</h3>
-            <button type="button" className="buttonLink">Contratar Ahora</button>
+            <Link to={'/register'}>Empezar Ahora</Link>
           </div>
         </div>
       )}
