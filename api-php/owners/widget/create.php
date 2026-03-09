@@ -12,8 +12,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 require_once '../../shared/Database.php';
+require_once '../../shared/Mailer.php';
 
 $db = new Database();
+$mailer = new Mailer();
 
 try {
     $data = json_decode(file_get_contents('php://input'), true);
@@ -45,6 +47,13 @@ try {
     if (!$createBooking) {
         throw new Exception( 'No se pudo hacer la reserva ' );
     }
+
+    $mailer->send(
+      $params['email'],
+      $params['name'],
+      'Confirmación de Reserva - EscapeBooking',
+      "Hola {$params['name']},\n\nTu reserva ha sido registrada correctamente.\n\nFecha: {$params['date']}\nJugadores: {$params['num_players']}\nPrecio: {$params['price']}€"
+    );
 
   http_response_code(200);
   echo json_encode([

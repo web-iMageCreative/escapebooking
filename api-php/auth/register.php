@@ -12,8 +12,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 require_once __DIR__ . '/../shared/Database.php';
+require_once __DIR__ . '/../shared/Mailer.php';
 
 $db = new Database();
+$mailer = new Mailer();
 
 try {
     $data = json_decode(file_get_contents('php://input'), true);
@@ -53,6 +55,13 @@ try {
     $new = $db->execute($queryNew, $params);
 
     $lastId = $db->lastId();
+
+    $mailer->send(
+        $email,
+        $email,
+        'Bienvenido/a - EscapeBooking',
+        "Hola,\n\nTu cuenta ha sido creada correctamente.\n\nYa puedes acceder con tu email: $email"
+    );
 
     $token = base64_encode(json_encode([
         'user_id' => $lastId,
