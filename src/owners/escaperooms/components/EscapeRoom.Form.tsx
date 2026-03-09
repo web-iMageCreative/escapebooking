@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { EscapeRoomFormProps, EscapeRoomModel } from '../EscapeRoom.Model';
-import  { Snackbar, Alert } from '@mui/material';
+import { EscapeRoomFormProps, EscapeRoomModel, EscapeRoomFormError } from '../EscapeRoom.Model';
+import  { Snackbar, Alert, Chip, TextField, FormControl, InputAdornment, FormHelperText, MenuItem, Button } from '@mui/material';
 
 const EscapeRoomForm: React.FC<EscapeRoomFormProps> = ({
   initialData,
@@ -14,6 +14,14 @@ const EscapeRoomForm: React.FC<EscapeRoomFormProps> = ({
 }) => {
   const [data, setData] = useState<EscapeRoomModel>(initialData);
   const [open, setOpen] = useState<boolean>(false);
+  const [validationError, setValidationError] = useState<EscapeRoomFormError>({
+      name: { success: true, message: '' },
+      address: { success: true, message: '' },
+      postal_code: { success: true, message: '' },
+      cif:  { success: true, message: '' },
+      email: { success: true, message: '' },
+      phone: { success: true, message: '' },
+    })
 
   useEffect(() => {
     if ( error !== null ) {
@@ -47,13 +55,84 @@ const EscapeRoomForm: React.FC<EscapeRoomFormProps> = ({
     });
   };
 
+  const validate = ( e: React.FocusEvent<HTMLInputElement>) => {
+      const { id, value } = e.target;
+  
+      switch (id) {
+        case 'name':
+          if ( value.length > 100 ) {
+            setValidationError({...validationError, name: {success: false, message: 'Máximo 100 caracteres'}} );
+          } else {
+            setValidationError({...validationError, name: {success: true, message: ''}} );
+          }
+          break;
+      
+        case 'address':
+          if ( value.length > 500 ) {
+            setValidationError({...validationError, address: {success: false, message: 'Máximo 500 caracteres'}} );
+          } else {
+            setValidationError({...validationError, address: {success: true, message: ''}} );
+          }
+          break;
+
+        case 'postal_code': {
+          const postalCodeRegex = /^[0-9]{5}$/;
+          if ( !value ) {
+            setValidationError({...validationError, postal_code: {success: false, message: 'El código postal es obligatorio'}} );
+          } else if ( !postalCodeRegex.test(value) ) {
+            setValidationError({...validationError, postal_code: {success: false, message: 'El código postal debe tener 5 dígitos'}} );
+          } else {
+            setValidationError({...validationError, postal_code: {success: true, message: ''}} );
+          }
+          break;
+        }
+
+        case 'cif': {
+          const cifRegex = /^[A-HJNP-SUVW][0-9]{7}[0-9A-J]$/i;
+          if ( !value ) {
+            setValidationError({...validationError, cif: {success: false, message: 'El CIF es obligatorio'}} );
+          } else if ( !cifRegex.test(value) ) {
+            setValidationError({...validationError, cif: {success: false, message: 'El CIF no tiene un formato válido (ej: B12345678)'}} );
+          } else {
+            setValidationError({...validationError, cif: {success: true, message: ''}} );
+          }
+          break;
+        }
+
+        case 'email': {
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if ( !value ) {
+            setValidationError({...validationError, email: {success: false, message: 'El email es obligatorio'}} );
+          } else if ( !emailRegex.test(value) ) {
+            setValidationError({...validationError, email: {success: false, message: 'El email no tiene un formato válido'}} );
+          } else {
+            setValidationError({...validationError, email: {success: true, message: ''}} );
+          }
+          break;
+        }
+
+        case 'phone': {
+          const phoneRegex = /^(\+34|0034)?[6789][0-9]{8}$/;
+          if ( !value ) {
+            setValidationError({...validationError, phone: {success: false, message: 'El teléfono es obligatorio'}} );
+          } else if ( !phoneRegex.test(value.replace(/\s/g, '')) ) {
+            setValidationError({...validationError, phone: {success: false, message: 'El teléfono no tiene un formato válido (ej: 612345678)'}} );
+          } else {
+            setValidationError({...validationError, phone: {success: true, message: ''}} );
+          }
+          break;
+        }
+  
+        default:
+          return true;
+      }
+  }
+
   return (
     <div>
       <form className="form contained" onSubmit={handleSubmit}>
-
         <h2>{title}</h2>
 
-        {/* Campo: Nombre */}
         <div className="form-group">
           <div className="col-label">
             <label htmlFor="name">Nombre</label>
@@ -63,15 +142,27 @@ const EscapeRoomForm: React.FC<EscapeRoomFormProps> = ({
             </p>
           </div>
           <div className="col-value">
-            <input
-              type="text"
-              id="name"
-              value={data.name}
-              onChange={handleInputChange}
-              placeholder="Escape Masters Madrid"
-              required
-              disabled={loading}
-            />
+            <FormControl variant="filled" fullWidth>
+              <TextField
+                variant='filled'
+                sx={{backgroundColor: 'white'}}
+                id="name"
+                label="Nombre"
+                slotProps={{
+                    input: {
+                      "aria-label": "Nombre"
+                    },
+                  }}
+                value={data.name}
+                onChange={handleInputChange}
+                placeholder="Escape Masters Madrid"
+                required
+                onBlur={validate}
+                error={!validationError.name.success}
+                disabled={loading}
+              />
+              <FormHelperText error={!validationError.name.success} id="error_name">{validationError.name.message}</FormHelperText>
+            </FormControl>
           </div>
         </div>
         <div className="form-group">
@@ -82,50 +173,102 @@ const EscapeRoomForm: React.FC<EscapeRoomFormProps> = ({
             </p>
           </div>
           <div className="col-value">
-            <input
-              type="text"
-              id="address"
-              value={data.address}
-              onChange={handleInputChange}
-              placeholder="Calle Victoria 13"
-              required
-              disabled={loading}
-            />
-            <input
+            <FormControl variant="filled" fullWidth>
+              <TextField
+                sx={{backgroundColor: 'white'}}
+                variant="filled"
+                type="text"
+                id="address"
+                label="Dirección"
+                slotProps={{
+                    input: {
+                      "aria-label": "Dirección"
+                    },
+                  }}
+                value={data.address}
+                onBlur={validate}
+                onChange={handleInputChange}
+                disabled={loading}
+                required
+                error={!validationError.address.success}
+              />
+              <FormHelperText error={!validationError.address.success} id="error_address">{validationError.address.message}</FormHelperText>
+            </FormControl>
+            <TextField
+              sx={{backgroundColor: 'white'}}
+              variant="filled"
               type="text"
               id="postal_code"
+              label="Código Postal"
+              slotProps={{
+                input: {
+                  "aria-label": "Código Postal"
+                },
+              }}
               value={data.postal_code}
               onChange={handleInputChange}
-              placeholder="11540"
+              onBlur={validate}
               required
               disabled={loading}
+              error={!validationError.postal_code.success}
             />
-            <input
+            <FormHelperText error={!validationError.postal_code.success} id="error_postal_code">{validationError.postal_code.message}</FormHelperText>
+
+            <TextField
+              sx={{backgroundColor: 'white'}}
+              variant="filled"
               type="text"
               id="cif"
+              label="Cif"
+              slotProps={{
+                input: {
+                  "aria-label": "Dirección"
+                },
+              }}
               value={data.cif}
               onChange={handleInputChange}
-              placeholder="B12345678"
+              onBlur={validate}
               required
               disabled={loading}
+              error={!validationError.cif.success}
             />
-            <input
+            <FormHelperText error={!validationError.cif.success} id="error_cif">{validationError.cif.message}</FormHelperText>
+            
+            <TextField
+              sx={{backgroundColor: 'white'}}
+              variant="filled"
               type="text"
               id="email"
+              label="Email"
+              slotProps={{
+                input: {
+                  "aria-label": "Dirección"
+                },
+              }}
               value={data.email}
               onChange={handleInputChange}
-              placeholder="ejemplo@ejemplo.com"
+              onBlur={validate}
               required
               disabled={loading}
+              error={!validationError.email.success}
             />
-            <input
+            <TextField
+              sx={{backgroundColor: 'white'}}
+              variant="filled"
               type="text"
               id="phone"
+              label="Teléfono"
+              slotProps={{
+                input: {
+                  "aria-label": "Dirección"
+                },
+              }}
               value={data.phone}
               onChange={handleInputChange}
-              placeholder="+34 672807144"
+              onBlur={validate}
               required
               disabled={loading}
+              error={!validationError.phone.success}
             />
           </div>
         </div>

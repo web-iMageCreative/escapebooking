@@ -236,7 +236,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
                 label="Nombre"
                 slotProps={{
                   input: {
-                    "aria-label": "Duración"
+                    "aria-label": "Nombre"
                   },
                 }}
                 required

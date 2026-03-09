@@ -17,13 +17,18 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Card,
   CardActions,
-  CardContent,
-  Typography,
   Snackbar,
-  Alert
+  Alert,
+  TableContainer, 
+  Table, 
+  TableHead, 
+  TableBody,
+  TableRow, 
+  TableCell
   } from '@mui/material';
+import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 
 
 const OwnerBookings: React.FC = () => {
@@ -146,36 +151,47 @@ const OwnerBookings: React.FC = () => {
                 </select>
             </div>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Nombre Sala</th>
-                        <th>Fecha</th>
-                        <th>Hora</th>
-                        <th>Notas</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {bookings.length === 0 &&
-                        <tr>
-                            <td colSpan={5}>No hay reservas.</td>
-                        </tr>
-                    }
-                    {bookings.map(booking => (
-                        <tr key={booking.id}>
-                            <td>{booking.room_name}</td>
-                            <td>{dayjs(booking.date).format('dddd DD MMMM')}</td>
-                            <td>{dayjs(booking.date).format('HH:mm')}</td>
-                            <td>{booking.notes ? booking.notes : <span style={{ color: '#838383' }}>———————</span>}</td>
-                            <td>
-                                <button onClick={() => handleRead(booking)}>Ver</button>
-                                <button data-id={booking.id} onClick={handleDeleteClick}>Cancelar</button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+            <TableContainer>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Nombre Sala</TableCell>
+                            <TableCell>Fecha</TableCell>
+                            <TableCell>Hora</TableCell>
+                            <TableCell>Notas</TableCell>
+                            <TableCell>Acciones</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {bookings.length === 0
+                            ? (
+                                <TableRow>
+                                    <TableCell colSpan={5}>No hay reservas.</TableCell>
+                                </TableRow>
+                            )
+                            : bookings.map(booking => (
+                                <TableRow key={booking.id}>
+                                    <TableCell>{booking.room_name}</TableCell>
+                                    <TableCell>{dayjs(booking.date).format('dddd DD MMMM')}</TableCell>
+                                    <TableCell>{dayjs(booking.date).format('HH:mm')}</TableCell>
+                                    <TableCell>
+                                        {booking.notes
+                                            ? booking.notes
+                                            : <span style={{ color: '#838383' }}>———————</span>
+                                        }
+                                    </TableCell>
+                                    <TableCell>
+                                        <CardActions>
+                                            <Button startIcon={<ArticleOutlinedIcon />} size="small" onClick={() => handleRead(booking)}>Ver</Button>
+                                            <Button startIcon={<DeleteOutlineOutlinedIcon />} size="small" onClick={handleDeleteClick} data-id={booking.id} color="error">Cancelar</Button>
+                                        </CardActions>
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        }
+                    </TableBody>
+                </Table>
+            </TableContainer>
 
             {openRead && selectedBooking && (
                 <div className='pop-overlayCreate' onClick={() => setOpenRead(false)}>
@@ -221,7 +237,7 @@ const OwnerBookings: React.FC = () => {
                     {alertData.message}
                 </Alert>
             </Snackbar>
-            
+
             <Dialog
                 open={openDialog}
                 onClose={handleDialogClose}
