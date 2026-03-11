@@ -1,24 +1,30 @@
 <?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\SMTP;
+
+require_once __DIR__ . '/../PHPMailer-master/src/Exception.php';
+require_once __DIR__ . '/../PHPMailer-master/src/PHPMailer.php';
+require_once __DIR__ . '/../PHPMailer-master/src/SMTP.php';
+
 class Mailer {
-    private $mailer;
-
-    public function __construct() {
-        require_once 'swiftmailer/lib/swift_required.php';
-
-        $transport = Swift_SmtpTransport::newInstance('mail.imagecreative.es', 587)
-            ->setUsername('notificaciones@imagecreative.es')
-            ->setPassword('imcwebprogrammer3');
-
-        $this->mailer = Swift_Mailer::newInstance($transport);
-    }
-
     public function send($to, $toName, $subject, $body) {
-        $message = Swift_Message::newInstance()
-            ->setSubject($subject)
-            ->setFrom(array('notificaciones@imagecreative.es' => 'Tu App'))
-            ->setTo(array($to => $toName))
-            ->setBody($body);
+        $mail = new PHPMailer(true);
 
-        return $this->mailer->send($message);
+        $mail->isSMTP();
+        $mail->Host       = 'mail.imagecreative.es';
+        $mail->SMTPAuth   = true;
+        $mail->Username   = 'notificaciones@imagecreative.es';
+        $mail->Password   = 'imcwebprogrammer3';
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port       = 587;
+        $mail->CharSet    = 'UTF-8';
+
+        $mail->setFrom('notificaciones@imagecreative.es', 'Tu App');
+        $mail->addAddress($to, $toName);
+        $mail->Subject = $subject;
+        $mail->Body    = $body;
+
+        return $mail->send();
     }
 }
