@@ -3,10 +3,10 @@ class Database {
     private $pdo;
     
     public function __construct() {
-        $host = 'dev3.icreative.es';
-        $dbname = 'escapebooking';
-        $username = 'root';
-        $password = '';
+        $host = 'localhost';
+        $dbname = 'imagecreative_escapebooking';
+        $username = 'userEscape';
+        $password = 'abc09abc11abc15%$&';
         
         try {
             $this->pdo = new PDO(
