@@ -3,7 +3,7 @@ class Database {
     private $pdo;
     
     public function __construct() {
-        $host = 'localhost';
+        $host = 'dev3.icreative.es';
         $dbname = 'escapebooking';
         $username = 'root';
         $password = '';

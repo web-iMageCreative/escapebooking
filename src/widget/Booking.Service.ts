@@ -1,7 +1,7 @@
 import { BookingModel } from "./Booking.Model";
 import { ApiResponse } from "../shared/models/apiResponse.Model";
 
-const API_BASE_URL = 'http://localhost/api-php';
+const API_BASE_URL = 'http://dev3.icreative.es/api-php';
 
 export class BookingService {
     static async createBooking(data: BookingModel): Promise<ApiResponse> {
