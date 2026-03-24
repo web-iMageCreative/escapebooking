@@ -32,7 +32,11 @@ h3 {
   margin-bottom: 30px;
 }
 
-.MuiFilledInput-root {
+.MuiFilledInput-root, .MuiPickersFilledInput-root {
+  background-color: white !important;
+}
+
+ /*.MuiFilledInput-root {
   background-color: #E0E0E0 !important;
 }
 
@@ -47,5 +51,5 @@ h3 {
 
 .MuiFilledInput-root:hover .MuiFilledInput-input,
 .MuiPickersFilledInput-root:hover  {
-  background-color: #F8F8F8 !important;
-}
+  background-color: #F8F8F8 !important; 
+}*/

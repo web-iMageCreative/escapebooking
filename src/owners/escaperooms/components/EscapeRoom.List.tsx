@@ -124,7 +124,8 @@ const EscapeRoomList: React.FC = () => {
         </div>
       }
 
-      {user.email === 'madrid@escaperooms.com' && (
+      {/*user.email === 'madrid@escaperooms.com' && (*/}
+      { false && (
         <div className="promo-card">
           <div className="promo-card-content">
             <h3>¿Quieres hacer crecer tu negocio?</h3>

@@ -115,10 +115,10 @@ input, select, textarea {
   transition: all .3s;
 }
 
-input:focus, select:focus, textarea:focus {
+/* input:focus, select:focus, textarea:focus {
   box-shadow: 4px 4px 10px rgba(0,0,0,0.2);
   outline: 0;
-}
+} */
 
 input::placeholder, textarea::placeholder {
   opacity: 0.5;
@@ -237,7 +237,7 @@ input::placeholder, textarea::placeholder {
 }
 
 .pop-contentCreate {
-  background: white;
+  background: #ebebeb;
   padding: 30px;
   border-radius: 12px;
   box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);

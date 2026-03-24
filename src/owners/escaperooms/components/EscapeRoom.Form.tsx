@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { EscapeRoomFormProps, EscapeRoomModel, EscapeRoomFormError } from '../EscapeRoom.Model';
 import  { Snackbar, Alert, Chip, TextField, FormControl, InputAdornment, FormHelperText, MenuItem, Button } from '@mui/material';
+import { WidthNormal } from '@mui/icons-material';
 
 const EscapeRoomForm: React.FC<EscapeRoomFormProps> = ({
   initialData,
@@ -165,111 +166,127 @@ const EscapeRoomForm: React.FC<EscapeRoomFormProps> = ({
             </FormControl>
           </div>
         </div>
-        <div className="form-group">
+        {/* <div className="form-group"> */}
+        <div>
           <div className="col-label">
             <label>Datos de Facturación</label>
             <p className="description">
               Datos de Facturación.
             </p>
           </div>
+
           <div className="col-value">
-            <FormControl variant="filled" fullWidth>
-              <TextField
-                sx={{backgroundColor: 'white'}}
-                variant="filled"
-                type="text"
-                id="address"
-                label="Dirección"
-                slotProps={{
+            <div>
+              <FormControl variant="filled" sx={{m: 2, width: '62%'}} >
+                <TextField
+                  sx={{backgroundColor: 'white'}}
+                  variant="filled"
+                  type="text"
+                  id="address"
+                  label="Dirección"
+                  slotProps={{
+                      input: {
+                        "aria-label": "Dirección"
+                      },
+                    }}
+                  value={data.address}
+                  onBlur={validate}
+                  onChange={handleInputChange}
+                  disabled={loading}
+                  required
+                  error={!validationError.address.success}
+                />
+                <FormHelperText error={!validationError.address.success} id="error_address">{validationError.address.message}</FormHelperText>
+              </FormControl>
+
+              <FormControl variant="filled" sx={{m: 2}}>
+                <TextField
+                  sx={{backgroundColor: 'white'}}
+                  variant="filled"
+                  type="text"
+                  id="postal_code"
+                  label="Código Postal"
+                  slotProps={{
+                    input: {
+                      "aria-label": "Código Postal"
+                    },
+                  }}
+                  value={data.postal_code}
+                  onChange={handleInputChange}
+                  onBlur={validate}
+                  required
+                  disabled={loading}
+                  error={!validationError.postal_code.success}
+                />
+                <FormHelperText error={!validationError.postal_code.success} id="error_postal_code">{validationError.postal_code.message}</FormHelperText>
+              </FormControl>
+            </div>
+
+            <div>
+              <FormControl variant="filled" sx={{m: 2}}>
+                <TextField
+                  sx={{backgroundColor: 'white'}}
+                  variant="filled"
+                  type="text"
+                  id="cif"
+                  label="Cif"
+                  slotProps={{
                     input: {
                       "aria-label": "Dirección"
                     },
                   }}
-                value={data.address}
-                onBlur={validate}
-                onChange={handleInputChange}
-                disabled={loading}
-                required
-                error={!validationError.address.success}
-              />
-              <FormHelperText error={!validationError.address.success} id="error_address">{validationError.address.message}</FormHelperText>
-            </FormControl>
-            <TextField
-              sx={{backgroundColor: 'white'}}
-              variant="filled"
-              type="text"
-              id="postal_code"
-              label="Código Postal"
-              slotProps={{
-                input: {
-                  "aria-label": "Código Postal"
-                },
-              }}
-              value={data.postal_code}
-              onChange={handleInputChange}
-              onBlur={validate}
-              required
-              disabled={loading}
-              error={!validationError.postal_code.success}
-            />
-            <FormHelperText error={!validationError.postal_code.success} id="error_postal_code">{validationError.postal_code.message}</FormHelperText>
+                  value={data.cif}
+                  onChange={handleInputChange}
+                  onBlur={validate}
+                  required
+                  disabled={loading}
+                  error={!validationError.cif.success}
+                />
+                <FormHelperText error={!validationError.cif.success} id="error_cif">{validationError.cif.message}</FormHelperText>
+              </FormControl>
+              
+              <FormControl variant="filled" sx={{m: 2}}>
+                <TextField
+                  sx={{backgroundColor: 'white'}}
+                  variant="filled"
+                  type="text"
+                  id="email"
+                  label="Email"
+                  slotProps={{
+                    input: {
+                      "aria-label": "Dirección"
+                    },
+                  }}
+                  value={data.email}
+                  onChange={handleInputChange}
+                  onBlur={validate}
+                  required
+                  disabled={loading}
+                  error={!validationError.email.success}
+                />
+              </FormControl>
 
-            <TextField
-              sx={{backgroundColor: 'white'}}
-              variant="filled"
-              type="text"
-              id="cif"
-              label="Cif"
-              slotProps={{
-                input: {
-                  "aria-label": "Dirección"
-                },
-              }}
-              value={data.cif}
-              onChange={handleInputChange}
-              onBlur={validate}
-              required
-              disabled={loading}
-              error={!validationError.cif.success}
-            />
-            <FormHelperText error={!validationError.cif.success} id="error_cif">{validationError.cif.message}</FormHelperText>
-            
-            <TextField
-              sx={{backgroundColor: 'white'}}
-              variant="filled"
-              type="text"
-              id="email"
-              label="Email"
-              slotProps={{
-                input: {
-                  "aria-label": "Dirección"
-                },
-              }}
-              value={data.email}
-              onChange={handleInputChange}
-              onBlur={validate}
-              required
-              disabled={loading}
-              error={!validationError.email.success}
-            />
-            <TextField
-              sx={{backgroundColor: 'white'}}
-              variant="filled"
-              type="text"
-              id="phone"
-              label="Teléfono"
-              slotProps={{
-                input: {
-                  "aria-label": "Dirección"
-                },
-              }}
-              value={data.phone}
-              onChange={handleInputChange}
-              onBlur={validate}
-              required
-              disabled={loading}
-              error={!validationError.phone.success}
-            />
+              <FormControl variant="filled" sx={{m: 2}}>
+                <TextField
+                  sx={{backgroundColor: 'white'}}
+                  variant="filled"
+                  type="text"
+                  id="phone"
+                  label="Teléfono"
+                  slotProps={{
+                    input: {
+                      "aria-label": "Dirección"
+                    },
+                  }}
+                  value={data.phone}
+                  onChange={handleInputChange}
+                  onBlur={validate}
+                  required
+                  disabled={loading}
+                  error={!validationError.phone.success}
+                />
+              </FormControl>
+            </div>
           </div>
         </div>
 

@@ -75,7 +75,7 @@ const OwnerDashboard: React.FC = () => {
 
       {openAdd && (
         <div className='pop-overlayCreate' onClick={() => setOpenAdd(false)}>
-            <div className='pop-contentCreate' onClick={(e) => e.stopPropagation()}>
+            <div className='pop-contentCreate' style={{backgroundColor: '#f4f4f4'}} onClick={(e) => e.stopPropagation()}>
                   <EscapeRoomCreate onCancel={handlePopupClose}/>
             </div>
       </div>

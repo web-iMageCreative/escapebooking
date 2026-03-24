@@ -476,7 +476,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
             <FormControl variant="filled" fullWidth>
               <TextField
                 variant="filled"
-                sx={{backgroundColor: 'white'}}
+                sx={{backgroundColor: 'transparent'}}
                 id="notes"
                 label="Notas (opcional)"
                 value={data.notes ?? ''}
