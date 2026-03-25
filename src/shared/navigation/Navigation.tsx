@@ -4,7 +4,11 @@ import { AuthService } from '../../auth/AuthService';
 import { ROUTES } from '../../routes';
 import './Navigation.css'
 
-const Navigation: React.FC = () => {
+interface NavigationProps {
+  onNavigate?: () => void;
+}
+
+const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
     const navigate = useNavigate();
     const user = AuthService.getCurrentUser();
     
@@ -18,7 +22,7 @@ const Navigation: React.FC = () => {
             <div className="nav-links">
                 {AuthService.isAuthenticated() ? (
                     <>
-                        <Link to={ROUTES.OWNER_DASHBOARD}>Dashboard</Link>
+                        <Link to={ROUTES.OWNER_DASHBOARD} onClick={onNavigate} >Dashboard</Link>
                         
                         {user?.role_name === 'admin' && (
                             <>
@@ -28,8 +32,8 @@ const Navigation: React.FC = () => {
                         
                         {user?.role_name === 'owner' && (
                             <>
-                                <Link to={ROUTES.OWNER_BOOKINGS}>Reservas</Link>
-                                <Link to={ROUTES.OWNER_ESCAPE_ROOMS}>EscapeRooms</Link>
+                                <Link to={ROUTES.OWNER_BOOKINGS} onClick={onNavigate} >Reservas</Link>
+                                <Link to={ROUTES.OWNER_ESCAPE_ROOMS} onClick={onNavigate} >EscapeRooms</Link>
                             </>
                         )}
                         
@@ -45,7 +49,7 @@ const Navigation: React.FC = () => {
                         {user?.email}
                     </>
                 ) : (
-                    <Link to={ROUTES.LOGIN}>Login</Link>
+                    <Link to={ROUTES.LOGIN} onClick={onNavigate} >Login</Link>
                 )}
             </div>
         </nav>

@@ -33,3 +33,61 @@
 .MuiDateCalendar-root .Mui-selected {
   background-color: #1976d2 !important;
 }
+
+
+@media (max-width: 767px) {
+
+  .booking.form {
+    padding: 0 16px;
+  }
+  
+  .booking.form form {
+    margin-bottom: 32px;
+  }
+
+  .booking.form h3 {
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+
+  .booking.form .MuiStack-root {
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+
+  .box-selector {
+    padding: 16px !important;
+  }
+
+  .box-selector h4 {
+    font-size: 15px;
+    margin-bottom: 10px;
+  }
+
+  .box-selector .MuiButton-root.MuiButton-containedPrimary {
+    font-size: 12px !important;
+    padding: 4px 10px !important;
+    width: auto !important;
+  }
+
+  .MuiDateCalendar-root {
+    width: 100% !important;
+    height: auto !important;
+    max-height: 320px;
+  }
+
+  .box-selector .MuiButton-root {
+    margin: 4px !important;
+    font-size: 12px;
+    padding: 4px 10px;
+  }
+
+  .booking.form .MuiFormControl-root {
+    width: 100%;
+  }
+
+  .booking.form .MuiButton-containedPrimary {
+    width: 100%;
+    padding: 12px;
+  }
+}
