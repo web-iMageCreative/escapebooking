@@ -8,7 +8,6 @@ import { Link } from 'react-router-dom';
 const Room: React.FC = () => {
     const params = useParams();
     const id:string | undefined = params.id;
-
     const [room, setRoom] = useState<RoomModel>({
         id: 0,
         name: '',
@@ -19,21 +18,10 @@ const Room: React.FC = () => {
         prices: [],
         escaperoom_id: 0
     });
-    const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const dayWeek = [
-        'Lunes',
-        'Martes',
-        'Miércoles',
-        'Jueves',
-        'Viernes',
-        'Sábado',
-        'Domingo'
-    ]
-
-    useEffect(() => {
-        getRoom();
-    }, []);
+    const dayWeek = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+        
+    useEffect(() => { getRoom() }, []);
         
     const getRoom = async () => {
         try {
@@ -47,7 +35,9 @@ const Room: React.FC = () => {
     }
 
     return (
-        <div className="form contained">
+        <div className="form contained rooms">
+
+            {error && <div className="error">{error}</div>}
 
             <div className="header-file">
                 <div><h3>{room.name}</h3></div>
@@ -77,19 +67,19 @@ const Room: React.FC = () => {
                 <div className="col-value">
                     {room.prices.length === 0
                         ? <p>No hay precios</p> : room.prices.map((price, i) => (
-                            <p key={i}>{price.num_players} jugadores — {price.price} €</p>
+                            <p key={i}>{price.num_players} {price.num_players == 1 ? 'jugador' : 'jugadores'} — {price.price} €</p>
                         ))
                     }
                 </div>
             </div>
 
-            <div className="form-group">
+            <div>
                 <div className="col-label"><label>Horarios</label></div>
-                <div className="col-value">
+                <div className="schedules">
                     {room.schedule.length === 0
                         ? <p>No hay horarios</p> : dayWeek.map((dayWeek, i) => (
                             <div key={i}>
-                                <h3>{dayWeek}</h3>
+                                <h4>{dayWeek}</h4>
                                 {room.schedule.filter((schedule) => schedule.day_week === i).map((schedule, j) => (
                                     <p key={j}>{schedule.strHour}</p>
                                 ))}

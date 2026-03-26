@@ -1,0 +1,17 @@
+.owner-bookings .filter {
+  display: flex;
+  justify-content: flex-end;
+  width: 40%;
+}
+
+.owner-bookings .filter > div {
+  margin-left: 20px
+}
+
+.owner-bookings h2 {
+  width: 60%;
+}
+
+.MuiTableContainer-root {
+  width: initial;
+}

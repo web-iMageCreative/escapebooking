@@ -35,6 +35,8 @@ const RoomForm: React.FC<RoomFormProps> = ({
     max_players: { success: true, message: '' },
     prices: []
   })
+  let tempSchedules: Schedule[] = [];
+  let tempOrderedSchedules: any = [[],[],[],[],[],[],[]];
 
   useEffect(() => {
     setData(initialData);
@@ -50,7 +52,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
     
     setSchedules(initialData.schedule);
 
-    let s: Schedule[] = RoomFormHandlers.sortSchedule([...initialData.schedule]);
+    let s: Schedule[] = sortSchedule([...initialData.schedule]);
     
     for (let i = 0; i <= 6; i++) {
       orderedSchedules[i] = s.filter(obj => obj.day_week === i);
@@ -64,37 +66,43 @@ const RoomForm: React.FC<RoomFormProps> = ({
 
     setValidationError(validationError);
   }, [initialData]);
-
+  
   useEffect(() => {
     if (+data.min_players > +data.max_players 
       && +data.min_players !== 0 
       && +data.max_players !== 0 ) return;
-
-    const max = data.max_players;
-    const min = data.min_players;
-    const newPrices: Price[] = [];
-
-    for (let i = min; i <= max; i++) {
-      const existe = data.prices.find(x => x.num_players === i)
-      const hasId = data.id !== 0;
-      validationError.prices.push({success: true, message: ''})
-      newPrices.push(
-        { id_room: hasId ? data.id : 0, num_players: i, price: existe ? existe.price : 0 }
-      );
-    }
-
-    setData(({
-      ...data,
-      prices: newPrices
-    }));
-  }, [data.min_players, data.max_players]);
-
+      
+      const max = data.max_players;
+      const min = data.min_players;
+      const newPrices: Price[] = [];
+      
+      for (let i = min; i <= max; i++) {
+        const existe = data.prices.find(x => x.num_players === i)
+        const hasId = data.id !== 0;
+        validationError.prices.push({success: true, message: ''})
+        newPrices.push(
+          { id_room: hasId ? data.id : 0, num_players: i, price: existe ? existe.price : 0 }
+        );
+      }
+      
+      setData(({
+        ...data,
+        prices: newPrices
+      }));
+    }, [data.min_players, data.max_players]);
+    
   useEffect(() => {
     setData({
       ...data,
       schedule: schedules
     });
+    
+    // tempSchedules = [];
   }, [schedules]);
+
+  useEffect(() => {
+    tempOrderedSchedules = [[],[],[],[],[],[],[]];
+  }, [orderedSchedules])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     RoomFormHandlers.handleInputChange(e, data, setData);
@@ -105,33 +113,130 @@ const RoomForm: React.FC<RoomFormProps> = ({
   };
 
   const handleDayChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setValidationError({...validationError, hour: {success: true, message: ''}} );
     RoomFormHandlers.handleDayChange(e, setDay);
   };
 
   const handleHourChange = (value: dayjs.Dayjs | null) => {
+    setValidationError({...validationError, hour: {success: true, message: ''}} );
     RoomFormHandlers.handleHourChange(value, setHour);
   };
 
   const handleAddSchedule = () => {
-    const check:boolean[] = RoomFormHandlers.checkRange(schedules, initialData, hour, day);
+    let check: boolean[] = [];
     
-    if ( check.includes(false) ) {
-      setValidationError({...validationError, hour: {success: false, message: 'Hora ocupada'}} );
-      setScheduleOK(false);
+    tempSchedules = schedules;
 
-      return;
+    switch (day) {
+      case 7:
+        for (let i = 1; i <= 5; i++) {
+          check = RoomFormHandlers.checkRange(schedules, initialData, hour, i);
+    
+          if ( check.includes(false) ) {
+            setValidationError({...validationError, hour: {success: false, message: 'Hora ocupada'}} );
+            setScheduleOK(false);
+
+            return;
+          }
+
+          addSchedule( i, hour );
+        }
+      break;
+
+      case 8:
+        check = RoomFormHandlers.checkRange(schedules, initialData, hour, 6);
+    
+        if ( check.includes(false) ) {
+          setValidationError({...validationError, hour: {success: false, message: 'Hora ocupada'}} );
+          setScheduleOK(false);
+
+          return;
+        }
+
+        check = RoomFormHandlers.checkRange(schedules, initialData, hour, 0);
+    
+        if ( check.includes(false) ) {
+          setValidationError({...validationError, hour: {success: false, message: 'Hora ocupada'}} );
+          setScheduleOK(false);
+
+          return;
+        }
+
+        addSchedule( 6, hour );
+
+        addSchedule( 0, hour );
+
+      break;
+
+      case 9:
+        for (let i = 0; i <= 6; i++) {
+          check = RoomFormHandlers.checkRange(schedules, initialData, hour, i);
+    
+          if ( check.includes(false) ) {
+            setValidationError({...validationError, hour: {success: false, message: 'Hora ocupada'}} );
+            setScheduleOK(false);
+
+            return;
+          }
+
+          addSchedule( i, hour );
+        }
+      break;
+    
+      default:
+        check = RoomFormHandlers.checkRange(schedules, initialData, hour, day);
+    
+        if ( check.includes(false) ) {
+          setValidationError({...validationError, hour: {success: false, message: 'Hora ocupada'}} );
+          setScheduleOK(false);
+
+          return;
+        }
+
+        addSchedule( day, hour );
+      break;
     }
 
-    RoomFormHandlers.handleAddSchedule(
-      initialData,
-      day,
-      hour,
-      schedules,
-      setSchedules,
-      orderedSchedules,
-      setOrderedSchedules
-    );
+    if (scheduleOK) {
+      setSchedules([...tempSchedules]);
+      setOrderedSchedules([...tempOrderedSchedules]);
+    }
+
   };
+
+  const addSchedule = (
+    day: number,
+    hour: Date
+  ) => {    
+    let s: Schedule[] = [...tempSchedules, {
+      id_room: initialData.id,
+      day_week: day,
+      hour: hour,
+      strHour: new Intl.DateTimeFormat("es-ES", { hour: 'numeric', minute: 'numeric' }).format(hour.getTime())
+    }];
+
+    s = sortSchedule(s);
+
+    for (let i = 0; i <= 6; i++) {
+      const day_num = i < 6 ? i + 1 : 0;
+      tempOrderedSchedules[day_num] = s.filter(obj => obj.day_week === day_num);
+    }
+
+    tempSchedules.push({
+      id_room: initialData.id,
+      day_week: day,
+      hour: hour,
+      strHour: new Intl.DateTimeFormat("es-ES", { hour: 'numeric', minute: 'numeric' }).format(hour.getTime())
+    });
+  }
+
+  const sortSchedule = (s: Schedule[]) => {
+    const result: Schedule[] = s.sort((a, b) => {
+      return a.hour.getTime() - b.hour.getTime();
+    });
+
+    return result;
+  }
 
   const handleDeleteHour = (i: number, j: number) => {
     RoomFormHandlers.handleDeleteHour(i, j, orderedSchedules, schedules, setSchedules, setOrderedSchedules, initialData.id);
@@ -193,7 +298,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
 
     switch (id) {
       case 'day':
-        if ( day > 6 ) {
+        if ( day > 9 ) {
           setValidationError({...validationError, day: {success: false, message: 'Selecciona día de la semana'}} );
           setScheduleOK(false);
         } else {
@@ -295,10 +400,9 @@ const RoomForm: React.FC<RoomFormProps> = ({
                   {d.map((s: Schedule, j: number) => (
                     <div key={j} className="hour">
                       <Chip
-                        sx={{ width: '95%', fontSize: '12px' }}
+                        sx={{ width: '95%', fontSize: '12px', bgcolor: '#fff' }}
                         label={ s.strHour }
                         onDelete={() => handleDeleteHour(i, j)}
-                        color='primary'
                       />
                     </div>
                   ))}
@@ -324,6 +428,9 @@ const RoomForm: React.FC<RoomFormProps> = ({
                 <MenuItem value={5}>Viernes</MenuItem>
                 <MenuItem value={6}>Sábado</MenuItem>
                 <MenuItem value={0}>Domingo</MenuItem>
+                <MenuItem value={7}>Entre semana L-V</MenuItem>
+                <MenuItem value={8}>Fin de Semana S-D</MenuItem>
+                <MenuItem value={9}>Toda la semana L-D</MenuItem>
               </TextField>
               <FormHelperText error={!validationError.day.success} id="error_duration">{validationError.day.message}</FormHelperText>
             </FormControl>

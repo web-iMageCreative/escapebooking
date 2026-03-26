@@ -23,11 +23,13 @@ export interface EscapeRoomFormProps {
 
 export interface CreateFormProp {
   onCancel: () => void;
+  onSuccess: () => void;
 }
 
 export interface UpdateFormProp {
   id?: number,
   onCancel: () => void;
+  onSuccess: () => void;
 }
 
 export interface EscapeRoomFormError {

@@ -2,7 +2,7 @@ export interface BookingModel {
   id: number,
   name: string,
   email: string,
-  phone: number,
+  phone: string,
   num_players: number,
   date: Date,
   price: number | string,

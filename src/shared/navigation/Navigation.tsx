@@ -40,9 +40,8 @@ const Navigation: React.FC = () => {
                         )}
                         
                         <button onClick={handleLogout} className="logout-btn">
-                            Logout
+                            Salir
                         </button>
-                        {user?.email}
                     </>
                 ) : (
                     <Link to={ROUTES.LOGIN}>Login</Link>

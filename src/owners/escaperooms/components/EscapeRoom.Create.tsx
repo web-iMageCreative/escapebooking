@@ -1,17 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { EscapeRoomFormProps, EscapeRoomModel, CreateFormProp } from '../EscapeRoom.Model';
+import React, { useState } from 'react';
+import { EscapeRoomModel, CreateFormProp } from '../EscapeRoom.Model';
 import { EscapeRoomService } from '../EscapeRoom.Service';
 import { AuthService } from '../../../auth/AuthService';
 import { User } from '../../../users/UserModel';
 import EscapeRoomForm from './EscapeRoom.Form';
-import { useNavigate } from 'react-router-dom';
 
 
-const EscapeRoomCreate: React.FC<CreateFormProp> = ({onCancel}) => {
+const EscapeRoomCreate: React.FC<CreateFormProp> = ({onCancel, onSuccess}) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const currentUser: User = AuthService.getCurrentUser();
-  const nav = useNavigate();
 
   // Datos iniciales para creación
   const initialData: EscapeRoomModel = {
@@ -33,7 +31,7 @@ const EscapeRoomCreate: React.FC<CreateFormProp> = ({onCancel}) => {
       const res = await EscapeRoomService.create(data);
 
       if (res.success) {
-        onCancel();
+        onSuccess();
       } else {
         setError(res.message);
       }

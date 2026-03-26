@@ -149,7 +149,7 @@ input::placeholder, textarea::placeholder {
 }
 
 .actions {
-  padding: 50px 0
+  padding-bottom: 30px
 }
 
 .buttonLink {
@@ -285,4 +285,54 @@ input::placeholder, textarea::placeholder {
 
 .promo-card-content a:hover {
   background: #3684ce;
+}
+
+.rooms .schedules {
+  display: flex;
+  justify-content: space-between;
+  background: white;
+  border-radius: 4px
+}
+
+.rooms .schedules > div {
+  padding: 0 15px;
+  text-align: center;
+}
+
+.rooms .schedules > div > p {
+  padding: 8px 0;
+}
+
+.rooms .form-group {
+  align-items: center;
+  padding: 10px 0;
+  margin: 0
+}
+
+.rooms .col-value {
+  background: white;
+  border-radius: 4px
+}
+
+.rooms .header-file {
+  padding: 40px 0
+}
+
+.rooms .header-file h3 {
+  margin:0;
+}
+
+.rooms .header-file .actions {
+  padding: 0
+}
+
+.card-title {
+  cursor: pointer;
+}
+
+@media (max-width: 767px) {
+  .rooms .schedules {
+    flex-direction: column;
+    justify-content: space-between;
+  }
 }

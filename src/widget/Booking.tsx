@@ -6,10 +6,10 @@ import { BookingModel, BookingFormError, Availability } from './Booking.Model';
 import { BookingService } from './Booking.Service';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateCalendar, LocalizationProvider } from '@mui/x-date-pickers';
-import dayjs from 'dayjs';
-import 'dayjs/locale/es';
 import { RoomService } from '../owners/rooms/Room.Service';
 import { Box, Button, Stack, TextField, FormControl, FormHelperText } from '@mui/material';
+import dayjs from 'dayjs';
+import 'dayjs/locale/es';
 import { esES } from '@mui/x-date-pickers/locales';
 import './Booking.css'
 
@@ -30,7 +30,7 @@ const Booking: React.FC = () => {
     const isToday = clickDay?.format('YYYY-MM-DD') === dayjs().format('YYYY-MM-DD');
     const currentHour = dayjs().format('HH:mm');
     const [validationError, setValidationError] = useState<BookingFormError>({
-        name: { success: true, message: '' },
+        name:  { success: true, message: '' },
         email: { success: true, message: '' },
         phone: { success: true, message: '' },
       })
@@ -46,9 +46,9 @@ const Booking: React.FC = () => {
     });
     const [bookingData, setBookingData] = useState<BookingModel>({
         id: 0,
-        name: 'Miguel',
-        email: 'web@imagecreative.es',
-        phone: 66555444,
+        name: '',
+        email: '',
+        phone: '',
         num_players: 0,
         date: new Date(),
         price: 0,

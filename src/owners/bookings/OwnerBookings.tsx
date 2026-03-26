@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from 'react-router-dom';
-import { Link } from "react-router-dom";
 import { BookingModel } from "../../widget/Booking.Model";
 import { BookingService } from "../../widget/Booking.Service";
 import { RoomModel } from "../rooms/Room.Model";
@@ -8,28 +7,14 @@ import { RoomService } from "../rooms/Room.Service";
 import { EscapeRoomModel } from "../escaperooms/EscapeRoom.Model";
 import { EscapeRoomService } from "../escaperooms/EscapeRoom.Service";
 import { AuthService } from "../../auth/AuthService";
-import dayjs from "dayjs";
-import "./OwnerBookings.css";
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  CardActions,
-  Snackbar,
-  Alert,
-  TableContainer, 
-  Table, 
-  TableHead, 
-  TableBody,
-  TableRow, 
-  TableCell
-  } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, CardActions, Snackbar, Alert, TableContainer,  Table,  TableHead,  TableBody, TableRow,  TableCell } from '@mui/material';
 import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-
+import dayjs from "dayjs";
+import 'dayjs/locale/es';
+import { esES } from '@mui/x-date-pickers/locales';
+import "./OwnerBookings.css";
+dayjs.locale('es');
 
 const OwnerBookings: React.FC = () => {
     const ownerId = AuthService.getCurrentUser()?.id;
@@ -46,7 +31,6 @@ const OwnerBookings: React.FC = () => {
     const [openDialog, setOpenDialog] = useState<boolean>(false);
     const location = useLocation();
     const [alertData, setAlertData] = useState<any>(location.state?.alert || {});
-    const [user, setUser] = useState(AuthService.getCurrentUser());
 
     useEffect(() => {
         getEscaperooms();
@@ -113,7 +97,7 @@ const OwnerBookings: React.FC = () => {
         setOpenDialog(true) ;
       }
     
-      const handleDelete = async () => {
+    const handleDelete = async () => {
         handleDialogClose();
         
         if (idToDelete !== 0) {
@@ -122,7 +106,7 @@ const OwnerBookings: React.FC = () => {
           if ( res.success ) {
             setIdToDelete(0);
             getEscaperooms();
-            setAlertData( { 'message': res.message , 'type': 'info' } );
+            setAlertData( { 'message': res.message , 'type': 'success' } );
             setOpenSnackbar(true);
           }
         }
@@ -132,26 +116,34 @@ const OwnerBookings: React.FC = () => {
     const handleDialogClose = () => { setOpenDialog(false); }
 
     return (
-        <div className='contained'>
+        <div className='contained owner-bookings'>
+            {error && <div className='error-message'>{error}</div>}
+
             <div className='header-file'>
                 <h2>Mis Reservas</h2>
-            </div>
-            <div className='actions'>
-                <select value={selectedEscaperoom} onChange={handleEscaperoomChange}>
-                    {escaperooms.length === 0 && <option value={0}>Sin Escaperooms</option>}
-                    {escaperooms.map(escaperoom => (
-                        <option key={escaperoom.id} value={escaperoom.id}>{escaperoom.name}</option>
-                    ))}
-                </select>
-                <select value={selectedRoom} onChange={handleRoomChange}>
-                    {rooms.length === 0 && <option value={0}>Sin Salas</option>}
-                    {rooms.map(room => (
-                        <option key={room.id} value={room.id}>{room.name}</option>
-                    ))}
-                </select>
+                <div className="filter">
+                    <div>
+                        <label htmlFor="select-escaperoom">Escaperoom:</label>
+                        <select value={selectedEscaperoom} onChange={handleEscaperoomChange} id="select-escaperoom">
+                            {escaperooms.length === 0 && <option value={0}>Sin Escaperooms</option>}
+                            {escaperooms.map(escaperoom => (
+                                <option key={escaperoom.id} value={escaperoom.id}>{escaperoom.name}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div>
+                        <label htmlFor="select-room">Sala:</label>
+                        <select value={selectedRoom} onChange={handleRoomChange} id="select-room" disabled={rooms.length === 0}>
+                            {rooms.length === 0 && <option value={0}>Sin Salas</option>}
+                            {rooms.map(room => (
+                                <option key={room.id} value={room.id}>{room.name}</option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
             </div>
 
-            <TableContainer>
+            <TableContainer sx={{bgcolor: 'white', borderRadius:'4px'}}>
                 <Table>
                     <TableHead>
                         <TableRow>
@@ -209,15 +201,6 @@ const OwnerBookings: React.FC = () => {
                             <p>Notas: {selectedBooking.notes}</p>
                         )}
                         <button onClick={() => setOpenRead(false)}>Cerrar</button>
-                    </div>
-                </div>
-            )}
-
-            {user.email === 'madrid@escaperooms.com' && (
-                <div className="promo-card">
-                    <div className="promo-card-content">
-                        <h3>¿Quieres hacer crecer tu negocio?</h3>
-                        <Link to={'/register'}>Empezar Ahora</Link>
                     </div>
                 </div>
             )}

@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { EscapeRoomModel } from '../EscapeRoom.Model';
 import { EscapeRoomService } from '../EscapeRoom.Service';
-import { useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import RoomList from '../../rooms/components/Room.List';
+import { Alert, Snackbar } from '@mui/material';
 
 const EscapeRoom: React.FC = () => {
     const params = useParams();
     const id:number = parseInt(params.id!);
+    const nav = useNavigate();
+    const location = useLocation();
+    const alertData = location.state?.alert || {};
+    const [open, setOpen] = useState<boolean>(false);
 
     const [escapeRoom, setEscapeRoom] = useState<EscapeRoomModel>({
         id: 0,
@@ -23,6 +28,11 @@ const EscapeRoom: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
+        if (alertData.type) {
+            setOpen(true);
+            window.history.replaceState({}, document.title);
+        }
+
         getEscaperoom();
     }, []);
         
@@ -37,6 +47,8 @@ const EscapeRoom: React.FC = () => {
         }
     }
 
+    const handleSnackbarClose = () => { setOpen(false); }
+
     return (
         <div className='contained'>
             <div className='header-file'>
@@ -49,6 +61,22 @@ const EscapeRoom: React.FC = () => {
             { escapeRoom && 
                 <RoomList id={params.id}/>
             }
+
+            <Snackbar
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+                open={open}
+                autoHideDuration={5000}
+                onClose={handleSnackbarClose}
+            >
+            <Alert
+                onClose={handleSnackbarClose}
+                severity={alertData.type}
+                variant="filled"
+                sx={{ width: '100%' }}
+            >
+                {alertData.message}
+            </Alert>
+            </Snackbar>
         </div>
     );
 }

@@ -104,33 +104,6 @@ export class RoomFormHandlers {
     });
   }
 
-  static handleAddSchedule(
-    initialData: RoomModel,
-    day: number,
-    hour: Date,
-    schedules: Schedule[],
-    setSchedules: React.Dispatch<React.SetStateAction<Schedule[]>>,
-    orderedSchedules: any,
-    setOrderedSchedules: React.Dispatch<React.SetStateAction<any>>
-  ) {    
-    let s: Schedule[] = [...schedules, {
-      id_room: initialData.id,
-      day_week: day,
-      hour: hour,
-      strHour: new Intl.DateTimeFormat("es-ES", { hour: 'numeric', minute: 'numeric' }).format(hour.getTime())
-    }];
-
-    s = this.sortSchedule(s);
-
-    for (let i = 0; i <= 6; i++) {
-      const day_num = i < 6 ? i + 1 : 0;
-      orderedSchedules[day_num] = s.filter(obj => obj.day_week === day_num);
-    }
-
-    setOrderedSchedules([...orderedSchedules]);
-    setSchedules(s);
-  }
-
   static handleDeleteHour(
     i: number,
     j: number,
@@ -150,12 +123,5 @@ export class RoomFormHandlers {
 
     delete orderedSchedules[i][j];
     setOrderedSchedules([...orderedSchedules]);
-  }
-
-  static sortSchedule(s: Schedule[]) {
-    const result: Schedule[] = s.sort((a, b) => {
-      return a.hour.getTime() - b.hour.getTime();
-    });
-    return result;
   }
 }

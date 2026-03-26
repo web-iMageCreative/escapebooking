@@ -5,7 +5,6 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import  { Snackbar, Alert } from '@mui/material';
 import './OwnerDashboard.css';
 import EscapeRoomList from '../escaperooms/components/EscapeRoom.List';
-import EscapeRoomCreate from '../escaperooms/components/EscapeRoom.Create';
 
 
 const OwnerDashboard: React.FC = () => {
@@ -14,10 +13,7 @@ const OwnerDashboard: React.FC = () => {
   const [open, setOpen] = useState<boolean>(false);
   const nav = useNavigate();
   const location = useLocation();
-  const alertData = location.state?.alert || {};
-  const [openAdd, setOpenAdd] = useState<boolean>(false)
-  const [myseed, setMyseed] = useState<number>(0)
-
+  const [alertData, setAlertData] = useState<any>(location.state?.alert || {});
 
   useEffect(() => {
     if (alertData.type) {
@@ -36,15 +32,10 @@ const OwnerDashboard: React.FC = () => {
   }, []);
 
   const handleSnackbarClose = () => { setOpen(false); }
-  const handlePopupClose = () => {
-    setOpenAdd(false);
-    setMyseed( Math.random());
-  }
-
+  
   if (loading) {
     return <div className="loading">Cargando datos de usuario...</div>;
   }
-  console.log(user);
 
   if (!user) {
     return <div>No se encuentran datos de usuario. <a href="/login">Identifíquese de nuevo</a></div>;
@@ -52,17 +43,20 @@ const OwnerDashboard: React.FC = () => {
 
   return (
     <div className="dashboard-container contained">
-      <header className="dashboard-header">
-        <div className="user-info">
-          <span>Bienvenido, <strong>{user.email}</strong></span>
-        </div>
-        <div className="actions">
-          <button type="button" className='buttonLink' onClick={() => setOpenAdd(true)}>Añadir Nuevo Negocio</button>
-        </div>
-      </header>          
       <div className="dashboard-content">
+        <div className="info">
+          <p className="user-info"><span>Bienvenido, <strong>{user.email}</strong></span></p>
+          <p>
+            En esta aplicación podrá gestionar sus locales de Escape Rooms.
+            Cree sus negocios y defina sus salas de juego.
+          </p>
+          <p>
+            A continuación puede ver sus negocios de Escape Rooms.
+            Si aún no ha definido ninguno, haga clic en "Añadir nuevo negocio".
+          </p>
+        </div>
 
-        <EscapeRoomList key={myseed}/>
+        <EscapeRoomList />
 
         <div className="debug-card">
           <h3>Debug</h3>
@@ -73,13 +67,7 @@ const OwnerDashboard: React.FC = () => {
         </div>
       </div>
 
-      {openAdd && (
-        <div className='pop-overlayCreate' onClick={() => setOpenAdd(false)}>
-            <div className='pop-contentCreate' style={{backgroundColor: '#f4f4f4'}} onClick={(e) => e.stopPropagation()}>
-                  <EscapeRoomCreate onCancel={handlePopupClose}/>
-            </div>
-      </div>
-      )}
+      
 
       <Snackbar
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}

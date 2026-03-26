@@ -5,10 +5,9 @@ import { EscapeRoomService } from '../EscapeRoom.Service';
 import EscapeRoomForm from './EscapeRoom.Form';
 import { ApiResponse } from '../../../shared/models/apiResponse.Model';
 
-const EscapeRoomUpdate: React.FC<UpdateFormProp> = ({id: updateId, onCancel}) => {
+const EscapeRoomUpdate: React.FC<UpdateFormProp> = ({id: updateId, onCancel, onSuccess}) => {
   const { id: paramId } = useParams<{ id: string }>();
   const id = updateId ?? (paramId ? parseInt(paramId) : undefined);
-  const nav = useNavigate();
   const [initialData, setInitialData] = useState<EscapeRoomModel | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -34,7 +33,7 @@ const EscapeRoomUpdate: React.FC<UpdateFormProp> = ({id: updateId, onCancel}) =>
     try {
       const res = await EscapeRoomService.update(data);
       if (res.success) {
-        onCancel();
+        onSuccess();
       } else {
         setError(res.message);
       }
