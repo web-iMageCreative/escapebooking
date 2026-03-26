@@ -22,3 +22,30 @@
   text-align: center;
   margin-bottom: 15px !important;
 }
+
+
+
+@media (max-width: 767px) {
+
+  .login-container {
+    margin-top: 24px;
+    padding: 0 16px;
+  }
+
+  .form-container {
+    padding: 24px 16px;
+    border-radius: 0 0 12px 12px;
+  }
+
+  .form-container h2 {
+    font-size: 22px;
+    margin-bottom: 12px !important;
+  }
+
+  .test-credentials {
+    margin-top: 16px;
+    margin-bottom: 24px;
+    padding: 16px;
+    font-size: 11px;
+  }
+}

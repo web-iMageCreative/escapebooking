@@ -15,3 +15,64 @@
 .MuiTableContainer-root {
   width: initial;
 }
+
+@media (max-width: 767px) {
+
+  /* ── Selectores ───────────────────── */
+  .actions select {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  /* ── Contenedor con scroll horizontal */
+  .MuiTableContainer-root {
+    overflow-x: auto;
+    overflow-y: visible;
+    width: 100%;
+  }
+
+  /* ── Tabla alargada ───────────────── */
+  .MuiTable-root {
+    min-width: 600px;
+    width: 100%;
+  }
+
+  /* ── Cabecera sticky ──────────────── */
+  .MuiTableHead-root .MuiTableCell-root {
+    font-weight: 600;
+    font-size: 13px;
+    padding: 10px 12px;
+    white-space: nowrap;
+    background-color: #f5f5f5;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+
+  /* ── Filas ────────────────────────── */
+  .MuiTableBody-root .MuiTableRow-root {
+    display: table-row;
+  }
+
+  /* ── Celdas ───────────────────────── */
+  .MuiTableBody-root .MuiTableCell-root {
+    font-size: 13px;
+    padding: 10px 12px;
+    white-space: nowrap;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  /* ── Acciones ─────────────────────── */
+  .MuiTableBody-root .MuiCardActions-root {
+    padding: 0;
+    gap: 4px;
+    flex-wrap: nowrap;
+  }
+
+  .MuiTableBody-root .MuiButton-root {
+    font-size: 12px;
+    padding: 4px 8px;
+    min-width: unset;
+    white-space: nowrap;
+  }
+}

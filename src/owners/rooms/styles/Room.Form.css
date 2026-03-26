@@ -61,3 +61,61 @@
 .calendar .day-of-week:nth-child(2) {
   border-left: none;
 }
+
+
+@media (max-width: 767px) {
+
+  .schedules {
+    margin-bottom: 16px;
+  }
+
+  .schedules label {
+    font-size: 15px;
+    line-height: 1.4;
+  }
+
+  .calendar {
+    display: flex;
+    margin: 12px 0;
+    min-height: 200px;
+    max-height: 260px;
+    overflow-x: auto;
+    overflow-y: auto;
+    border: 1px solid #bbb;
+  }
+
+  .calendar .day-of-week {
+    min-width: 90px;
+    flex: 0 0 90px;
+  }
+
+  .calendar .day-name {
+    font-size: 11px;
+    padding: 8px 3px;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: #d4d4d4;
+  }
+
+  .calendar .hour {
+    margin: 4px 2px;
+    font-size: 12px;
+  }
+
+  .schedule-form {
+    flex-direction: column;
+    gap: 8px;
+    margin: 12px 0;
+  }
+
+  .schedule-form > div {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+
+  .schedule-form .action .MuiButtonBase-root {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+}
