@@ -111,6 +111,8 @@ const RoomList: React.FC<any> = ({ id }) => {
                 <Typography gutterBottom variant="h6" component="h3">
                   {room.name}
                 </Typography>
+                <p><strong>Duración:</strong> {room.duration} minutos.</p>
+                <p><strong>Jugadores:</strong> de {room.min_players} a {room.max_players}.</p>
               </CardContent>
               <CardActions>
                 <Button startIcon={<ArticleOutlinedIcon />} size="small" data-id={room.id} onClick={handleReadClick}>Ver</Button>

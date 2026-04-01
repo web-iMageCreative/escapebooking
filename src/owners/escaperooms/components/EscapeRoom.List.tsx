@@ -90,11 +90,21 @@ const EscapeRoomList: React.FC = () => {
 
   return (
     <div className='contained'>
-      <h3>Mis Escape Rooms</h3>
+      <header className='header-file'>
+        <h3>Mis Escape Rooms</h3>
 
-      <div className="actions">
-        <button type="button" className='buttonLink' onClick={() => setAddOpen(true)}>Añadir Nuevo Negocio</button>
-      </div>
+        <div className="actions">
+          <Button
+            type="button"
+            color='primary'
+            size='large'
+            variant="contained"
+            onClick={() => setAddOpen(true)}
+          >
+            Añadir nuevo negocio
+          </Button>
+        </div>
+      </header>
 
       {!loading && 
         <div className='list'>

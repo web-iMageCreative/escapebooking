@@ -4,7 +4,7 @@ import { EscapeRoomService } from '../EscapeRoom.Service';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import RoomList from '../../rooms/components/Room.List';
-import { Alert, Snackbar } from '@mui/material';
+import { Alert, Button, Snackbar } from '@mui/material';
 
 const EscapeRoom: React.FC = () => {
     const params = useParams();
@@ -54,7 +54,15 @@ const EscapeRoom: React.FC = () => {
             <div className='header-file'>
                 <h2>{escapeRoom.name}</h2>
                 <div className="actions">
-                    <Link to={'/owner/rooms/new/' + escapeRoom.id}>Crear nueva Sala</Link>
+                    <Button
+                        type="button"
+                        color='primary'
+                        size='large'
+                        variant="contained"
+                        onClick={() => nav('/owner/rooms/new/' + escapeRoom.id)}
+                    >
+                        Crear nueva Sala
+                    </Button>
                 </div>
             </div>
 
@@ -68,14 +76,14 @@ const EscapeRoom: React.FC = () => {
                 autoHideDuration={5000}
                 onClose={handleSnackbarClose}
             >
-            <Alert
-                onClose={handleSnackbarClose}
-                severity={alertData.type}
-                variant="filled"
-                sx={{ width: '100%' }}
-            >
-                {alertData.message}
-            </Alert>
+                <Alert
+                    onClose={handleSnackbarClose}
+                    severity={alertData.type}
+                    variant="filled"
+                    sx={{ width: '100%' }}
+                >
+                    {alertData.message}
+                </Alert>
             </Snackbar>
         </div>
     );

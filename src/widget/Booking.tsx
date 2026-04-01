@@ -168,38 +168,35 @@ const Booking: React.FC = () => {
     };
 
     const validate = (e: React.FocusEvent<HTMLInputElement>) => {
-    const { id, value } = e.target;
+        const { id, value } = e.target;
 
-    switch (id) {
-      case 'name':
-        if (value.length > 100) {
-          setValidationError({...validationError, name: {success: false, message: 'Máximo 100 caracteres'}});
-        } else {
-          setValidationError({...validationError, name: {success: true, message: ''}});
+        switch (id) {
+            case 'name':
+                if (value.length > 100) {
+                setValidationError({...validationError, name: {success: false, message: 'Máximo 100 caracteres'}});
+                } else {
+                setValidationError({...validationError, name: {success: true, message: ''}});
+                }
+            break;
+
+            case 'email':
+                const emailValidate = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+                if (!emailValidate.test(value)) {
+                setValidationError({...validationError, email: {success: false, message: 'Email no válido'}});
+                } else {
+                setValidationError({...validationError, email: {success: true, message: ''}});
+                }
+            break;
+
+            case 'phone':
+                const phoneValidate = /^[(]?[0-9]{0,9}[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}[)]?$/im;
+                if (!phoneValidate.test(value)) {
+                setValidationError({...validationError, phone: {success: false, message: 'Teléfono no válido'}});
+                } else {
+                setValidationError({...validationError, phone: {success: true, message: ''}});
+                }
+            break;
         }
-        break;
-
-      case 'email':
-        const emailValidate = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-        if (!emailValidate.test(value)) {
-          setValidationError({...validationError, email: {success: false, message: 'Email no válido'}});
-        } else {
-          setValidationError({...validationError, email: {success: true, message: ''}});
-        }
-        break;
-
-      case 'phone':
-        const phoneValidate = /^[(]?[0-9]{0,9}[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}[)]?$/im;
-        if (!phoneValidate.test(value)) {
-          setValidationError({...validationError, phone: {success: false, message: 'Teléfono no válido'}});
-        } else {
-          setValidationError({...validationError, phone: {success: true, message: ''}});
-        }
-        break;
-
-      default:
-        break;
-    }
     }
 
     const getAvailability = async (date: dayjs.Dayjs | null) => {
@@ -269,172 +266,179 @@ const Booking: React.FC = () => {
     return (
         <div className="booking form contained">
             <h3 style={{ textAlign: 'center' }}>Reservar {room.name}</h3>
+
+            {error && (
+                <p style={{ textAlign: 'center', color: 'red', marginBottom: '16px' }}>
+                    {error}
+                </p>
+            )}
+
             {room.notes && (
                 <p style={{ textAlign: 'center', color: '#555', marginBottom: '16px' }}>
                     {room.notes}
                 </p>
             )}
-                <form onSubmit={handleSubmit}>
-                    <Stack spacing={2} maxWidth={350} margin={'0 auto'}>
-                        <Box className="box-selector" sx={{boxShadow: 2, backgroundColor: 'white', p: 2, borderBottom: '2px solid #aaa'}}>
-                            <h4>Días disponibles:</h4>
-                            <LocalizationProvider 
-                                dateAdapter={AdapterDayjs}
-                                localeText={esES.components.MuiLocalizationProvider.defaultProps.localeText}
-                                adapterLocale='es'
-                            >
-                                <DateCalendar 
-                                    sx={{ border: 1, borderColor: '#141414', width: '100%', height: '340px', borderWidth: 0 }}
-                                    defaultValue={null}
-                                    disableHighlightToday={true}
-                                    views={['month', 'day']}
-                                    disablePast={true}
-                                    value={clickDay}
-                                    onChange={handleClickDay}
-                                    shouldDisableDate={(date) => mustDisable(date)}
-                                    onMonthChange={getAvailability}
-                                    onYearChange={getAvailability}
-                                    slotProps={{
-                                        day: (ownerState) => ({
-                                            
-                                            // disabled: (isAvailable(ownerState.day) === 'not' || isAvailable(ownerState.day) === 'full') ? true : false,
-                                            className: isAvailable(ownerState.day)
-                                        })
-                                    }}
-                                />
-                            </LocalizationProvider>
-                        </Box>
 
-                        {clickDay &&
-                        <Box className="box-selector" sx={{boxShadow: 2, backgroundColor: 'white', p: 2, borderBottom: '2px solid #aaa'}}>
-                            <h4>Horas disponibles:</h4>
-                            {hours?.map((h, i) => {
-                                const isNotAvailable = availableHours.includes(h.hour) || (isToday && h.hour < currentHour);
-                                return (
-                                    <Button
-                                        sx={{margin: '5px'}}
-                                        variant='contained'
-                                        size='small'
-                                        key={i}
-                                        color={iHourSelected === i ? 'primary' : 'inherit'}
-                                        onClick={() => handleClickHour(h, i)}
-                                        disabled={isNotAvailable}
-                                    >
-                                        {h.hour.substring(0, 5)}
-                                    </Button>
-                                );
-                            })}
-                            {hours.length === 0 &&
-                                <span>No hay horas disponibles</span>
-                            }
-                        </Box>
-                        }
-                        {hourSelected && (
-                        <Box className="box-selector" sx={{boxShadow: 2, backgroundColor: 'white', p: 2, borderBottom: '2px solid #aaa'}}>
-                            <h4>Número de jugadores:</h4>
-                            {room.prices?.map((p, i) => (
+            <form onSubmit={handleSubmit}>
+                <Stack spacing={2} maxWidth={350} margin={'0 auto'}>
+                    <Box className="box-selector" sx={{boxShadow: 2, backgroundColor: 'white', p: 2, borderBottom: '2px solid #aaa'}}>
+                        <h4>Días disponibles:</h4>
+                        <LocalizationProvider 
+                            dateAdapter={AdapterDayjs}
+                            localeText={esES.components.MuiLocalizationProvider.defaultProps.localeText}
+                            adapterLocale='es'
+                        >
+                            <DateCalendar 
+                                sx={{ border: 1, borderColor: '#141414', width: '100%', height: '340px', borderWidth: 0 }}
+                                defaultValue={null}
+                                disableHighlightToday={true}
+                                views={['month', 'day']}
+                                disablePast={true}
+                                value={clickDay}
+                                onChange={handleClickDay}
+                                shouldDisableDate={(date) => mustDisable(date)}
+                                onMonthChange={getAvailability}
+                                onYearChange={getAvailability}
+                                slotProps={{
+                                    day: (ownerState) => ({
+                                        
+                                        // disabled: (isAvailable(ownerState.day) === 'not' || isAvailable(ownerState.day) === 'full') ? true : false,
+                                        className: isAvailable(ownerState.day)
+                                    })
+                                }}
+                            />
+                        </LocalizationProvider>
+                    </Box>
+
+                    {clickDay &&
+                    <Box className="box-selector" sx={{boxShadow: 2, backgroundColor: 'white', p: 2, borderBottom: '2px solid #aaa'}}>
+                        <h4>Horas disponibles:</h4>
+                        {hours?.map((h, i) => {
+                            const isNotAvailable = availableHours.includes(h.hour) || (isToday && h.hour < currentHour);
+                            return (
                                 <Button
                                     sx={{margin: '5px'}}
                                     variant='contained'
                                     size='small'
                                     key={i}
-                                    color={iPlayersSelected === i ? 'primary' : 'inherit'}
-                                    onClick={() => {
-                                            setIPlayersSelected(i)
-                                            setBookingData({
-                                                ...bookingData,
-                                                num_players: p.num_players,
-                                                price: p.price
-                                            })
-                                        }
-                                    }
+                                    color={iHourSelected === i ? 'primary' : 'inherit'}
+                                    onClick={() => handleClickHour(h, i)}
+                                    disabled={isNotAvailable}
                                 >
-                                    {p.num_players} {p.num_players == 1 ? 'jugador' : 'jugadores'} · {p.price} €
+                                    {h.hour.substring(0, 5)}
                                 </Button>
-                            ))}
-                        </Box> 
-                        )}
-
-                        {bookingData.num_players > 0 && (
-                        <>
-                        <Stack spacing={2}>
-                            <FormControl variant="filled" fullWidth>
-                                <TextField
-                                    variant="filled"
-                                    id="name"
-                                    label="Nombre"
-                                    value={bookingData.name}
-                                    onChange={handleChange}
-                                    onBlur={validate}
-                                    error={!validationError.name.success}
-                                    placeholder="Nombre"
-                                    required
-                                    disabled={loading}
-                                />
-                                <FormHelperText error={!validationError.name.success} id="error_name">{validationError.name.message}</FormHelperText>
-                            </FormControl>
-
-                            <FormControl variant="filled" fullWidth> 
-                                <TextField
-                                    variant="filled"
-                                    id="email"
-                                    label="E-mail"
-                                    value={bookingData.email}
-                                    onChange={handleChange}
-                                    onBlur={validate}
-                                    error={!validationError.email.success}
-                                    placeholder="Email"
-                                    required
-                                    disabled={loading}
-                                />
-                                <FormHelperText error={!validationError.email.success} id="error_email">{validationError.email.message}</FormHelperText>
-                            </FormControl>    
-
-                            <FormControl variant="filled" fullWidth>
-                                <TextField
-                                    variant="filled"
-                                    id="phone"
-                                    label="Teléfono"
-                                    value={bookingData.phone}
-                                    onChange={handleChange}
-                                    onBlur={validate}
-                                    error={!validationError.phone.success}
-                                    placeholder="Teléfono"
-                                    required
-                                    disabled={loading}
-                                />
-                                <FormHelperText error={!validationError.phone.success} id="error_phone">{validationError.phone.message}</FormHelperText>
-                            </FormControl>
-
-                            <FormControl variant="filled" fullWidth>
-                                <TextField
-                                    variant="filled"
-                                    id="notes"
-                                    label="Notas (opcional)"
-                                    value={bookingData.notes}
-                                    onChange={handleChange}
-                                    placeholder="Comentarios adicionales..."
-                                    multiline
-                                    rows={4}
-                                    disabled={loading}
-                                />
-                            </FormControl>    
-                       
-                       
-                            <Button 
-                                size={'large'} 
-                                variant="contained" 
-                                color="primary" 
-                                type="submit"
-                                disabled={loading}
+                            );
+                        })}
+                        {hours.length === 0 &&
+                            <span>No hay horas disponibles</span>
+                        }
+                    </Box>
+                    }
+                    {hourSelected && (
+                    <Box className="box-selector" sx={{boxShadow: 2, backgroundColor: 'white', p: 2, borderBottom: '2px solid #aaa'}}>
+                        <h4>Número de jugadores:</h4>
+                        {room.prices?.map((p, i) => (
+                            <Button
+                                sx={{margin: '5px'}}
+                                variant='contained'
+                                size='small'
+                                key={i}
+                                color={iPlayersSelected === i ? 'primary' : 'inherit'}
+                                onClick={() => {
+                                        setIPlayersSelected(i)
+                                        setBookingData({
+                                            ...bookingData,
+                                            num_players: p.num_players,
+                                            price: p.price
+                                        })
+                                    }
+                                }
                             >
-                                Reservar
+                                {p.num_players} {p.num_players == 1 ? 'jugador' : 'jugadores'} · {p.price} €
                             </Button>
-                        </Stack>
-                        </>
-                        )}
-                    </Stack>
+                        ))}
+                    </Box> 
+                    )}
 
+                    {bookingData.num_players > 0 && (
+                    <>
+                    <Stack spacing={2}>
+                        <FormControl variant="filled" fullWidth>
+                            <TextField
+                                variant="filled"
+                                id="name"
+                                label="Nombre"
+                                value={bookingData.name}
+                                onChange={handleChange}
+                                onBlur={validate}
+                                error={!validationError.name.success}
+                                placeholder="Nombre"
+                                required
+                                disabled={loading}
+                            />
+                            <FormHelperText error={!validationError.name.success} id="error_name">{validationError.name.message}</FormHelperText>
+                        </FormControl>
+
+                        <FormControl variant="filled" fullWidth> 
+                            <TextField
+                                variant="filled"
+                                id="email"
+                                label="E-mail"
+                                value={bookingData.email}
+                                onChange={handleChange}
+                                onBlur={validate}
+                                error={!validationError.email.success}
+                                placeholder="Email"
+                                required
+                                disabled={loading}
+                            />
+                            <FormHelperText error={!validationError.email.success} id="error_email">{validationError.email.message}</FormHelperText>
+                        </FormControl>    
+
+                        <FormControl variant="filled" fullWidth>
+                            <TextField
+                                variant="filled"
+                                id="phone"
+                                label="Teléfono"
+                                value={bookingData.phone}
+                                onChange={handleChange}
+                                onBlur={validate}
+                                error={!validationError.phone.success}
+                                placeholder="Teléfono"
+                                required
+                                disabled={loading}
+                            />
+                            <FormHelperText error={!validationError.phone.success} id="error_phone">{validationError.phone.message}</FormHelperText>
+                        </FormControl>
+
+                        <FormControl variant="filled" fullWidth>
+                            <TextField
+                                variant="filled"
+                                id="notes"
+                                label="Notas (opcional)"
+                                value={bookingData.notes}
+                                onChange={handleChange}
+                                placeholder="Comentarios adicionales..."
+                                multiline
+                                rows={4}
+                                disabled={loading}
+                            />
+                        </FormControl>    
+                    
+                    
+                        <Button 
+                            size={'large'} 
+                            variant="contained" 
+                            color="primary" 
+                            type="submit"
+                            disabled={loading}
+                        >
+                            Reservar
+                        </Button>
+                    </Stack>
+                    </>
+                    )}
+                </Stack>
             </form>
         </div>
   );    

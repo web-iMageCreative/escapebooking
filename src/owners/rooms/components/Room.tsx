@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { RoomModel } from '../Room.Model';
 import { RoomService } from '../Room.Service';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import { Button } from '@mui/material';
 
 
 const Room: React.FC = () => {
+    const nav = useNavigate();
     const params = useParams();
     const id:string | undefined = params.id;
     const [room, setRoom] = useState<RoomModel>({
@@ -42,60 +44,79 @@ const Room: React.FC = () => {
             <div className="header-file">
                 <div><h3>{room.name}</h3></div>
                 <div className="actions">
-                    <Link to={'/owner/rooms/edit/' + id}>Editar Sala</Link>
-                    <Link to={'/booking/' + id}>Reservar Sala</Link>
+                    <Button
+                        sx={{marginRight: '20px'}}
+                        type="button"
+                        color='primary'
+                        size='large'
+                        variant="contained"
+                        onClick={() => nav('/owner/rooms/edit/' + id)}
+                    >
+                        Editar Sala
+                    </Button>
+
+                    <Button
+                        type="button"
+                        color='primary'
+                        size='large'
+                        variant="contained"
+                        onClick={() => nav('/booking/' + id)}
+                    >
+                        Reservar Sala
+                    </Button>
                 </div>
             </div>
 
-            <div className="form-group">
-                <div className="col-label"><label>Duración</label></div>
-                <div className="col-value"><p>{room.duration} min</p></div>
-            </div>
-
-            <div className="form-group">
-                <div className="col-label"><label>Mínimo de jugadores</label></div>
-                <div className="col-value"><p>{room.min_players}</p></div>
-            </div>
-
-            <div className="form-group">
-                <div className="col-label"><label>Máximo de jugadores</label></div>
-                <div className="col-value"><p>{room.max_players}</p></div>
-            </div>
-
-            <div className="form-group">
-                <div className="col-label"><label>Precios</label></div>
-                <div className="col-value">
-                    {room.prices.length === 0
-                        ? <p>No hay precios</p> : room.prices.map((price, i) => (
-                            <p key={i}>{price.num_players} {price.num_players == 1 ? 'jugador' : 'jugadores'} — {price.price} €</p>
-                        ))
-                    }
-                </div>
-            </div>
-
-            <div>
-                <div className="col-label"><label>Horarios</label></div>
-                <div className="schedules">
-                    {room.schedule.length === 0
-                        ? <p>No hay horarios</p> : dayWeek.map((dayWeek, i) => (
-                            <div key={i}>
-                                <h4>{dayWeek}</h4>
-                                {room.schedule.filter((schedule) => schedule.day_week === i).map((schedule, j) => (
-                                    <p key={j}>{schedule.strHour}</p>
-                                ))}
-                            </div>
-                        ))
-                    }
-                </div>
-            </div>
-
-            {room.notes && (
+            <div className="roomsheet">
                 <div className="form-group">
-                    <div className="col-label"><label>Notas</label></div>
-                    <div className="col-value"><p>{room.notes}</p></div>
+                    <div className="col-label"><label>Duración</label></div>
+                    <div className="col-value"><p>{room.duration} min</p></div>
                 </div>
-            )}
 
+                <div className="form-group">
+                    <div className="col-label"><label>Mínimo de jugadores</label></div>
+                    <div className="col-value"><p>{room.min_players}</p></div>
+                </div>
+
+                <div className="form-group">
+                    <div className="col-label"><label>Máximo de jugadores</label></div>
+                    <div className="col-value"><p>{room.max_players}</p></div>
+                </div>
+
+                <div className="form-group">
+                    <div className="col-label"><label>Precios</label></div>
+                    <div className="col-value">
+                        {room.prices.length === 0
+                            ? <p>No hay precios</p> : room.prices.map((price, i) => (
+                                <p key={i}>{price.num_players} {price.num_players == 1 ? 'jugador' : 'jugadores'} — {price.price} €</p>
+                            ))
+                        }
+                    </div>
+                </div>
+
+                <div>
+                    <div className="col-label"><label>Horarios</label></div>
+                    <div className="schedules">
+                        {room.schedule.length === 0
+                            ? <p>No hay horarios</p> : dayWeek.map((dayWeek, i) => (
+                                <div key={i}>
+                                    <h4>{dayWeek}</h4>
+                                    {room.schedule.filter((schedule) => schedule.day_week === i).map((schedule, j) => (
+                                        <p key={j}>{schedule.strHour}</p>
+                                    ))}
+                                </div>
+                            ))
+                        }
+                    </div>
+                </div>
+
+                {room.notes && (
+                    <div className="form-group">
+                        <div className="col-label"><label>Notas</label></div>
+                        <div className="col-value"><p>{room.notes}</p></div>
+                    </div>
+                )}
+            </div>
         </div>
     );
 }

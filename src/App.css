@@ -149,7 +149,7 @@ input::placeholder, textarea::placeholder {
 }
 
 .actions {
-  padding-bottom: 30px
+  /* padding-bottom: 30px; */
 }
 
 .buttonLink {
@@ -495,7 +495,7 @@ input::placeholder, textarea::placeholder {
   }
 
   .actions {
-    padding: 24px 0;
+    /* padding: 24px 0; */
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
@@ -511,9 +511,19 @@ input::placeholder, textarea::placeholder {
 
   .header-file {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     gap: 10px;
     margin-bottom: 14px;
+  }
+
+  .header-file > h3 {
+    margin-top: 30px;
+    margin-bottom: 30px;
+  }
+
+  .roomsheet {
+    padding: 20px;
+    background: white
   }
 
 
