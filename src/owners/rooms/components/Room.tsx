@@ -86,7 +86,7 @@ const Room: React.FC = () => {
                 <div className="form-group">
                     <div className="col-label"><label>Precios</label></div>
                     <div className="col-value">
-                        {room.prices.length === 0
+                        {room.prices.length == 0
                             ? <p>No hay precios</p> : room.prices.map((price, i) => (
                                 <p key={i}>{price.num_players} {price.num_players == 1 ? 'jugador' : 'jugadores'} — {price.price} €</p>
                             ))
@@ -97,11 +97,11 @@ const Room: React.FC = () => {
                 <div>
                     <div className="col-label"><label>Horarios</label></div>
                     <div className="schedules">
-                        {room.schedule.length === 0
+                        {room.schedule.length == 0
                             ? <p>No hay horarios</p> : dayWeek.map((dayWeek, i) => (
                                 <div key={i}>
                                     <h4>{dayWeek}</h4>
-                                    {room.schedule.filter((schedule) => schedule.day_week === i).map((schedule, j) => (
+                                    {room.schedule.filter((schedule) => schedule.day_week == i).map((schedule, j) => (
                                         <p key={j}>{schedule.strHour}</p>
                                     ))}
                                 </div>

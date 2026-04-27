@@ -56,7 +56,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
     let s: Schedule[] = sortSchedule([...initialData.schedule]);
     
     for (let i = 0; i <= 6; i++) {
-      orderedSchedules[i] = s.filter(obj => obj.day_week === i);
+      orderedSchedules[i] = s.filter(obj => obj.day_week == i);
     }
 
     setOrderedSchedules([...orderedSchedules]);
@@ -65,6 +65,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
       validationError.prices.push({success: true, message: ''})
     }
 
+    console.log(orderedSchedules);
     setValidationError(validationError);
   }, [initialData]);
   
@@ -78,7 +79,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
       const newPrices: Price[] = [];
       
       for (let i = min; i <= max; i++) {
-        const existe = data.prices.find(x => x.num_players === i)
+        const existe = data.prices.find(x => x.num_players == i)
         const hasId = data.id !== 0;
         validationError.prices.push({success: true, message: ''})
         newPrices.push(
@@ -103,6 +104,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
 
   useEffect(() => {
     tempOrderedSchedules = [[],[],[],[],[],[],[]];
+    console.log(orderedSchedules);
   }, [orderedSchedules])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -220,7 +222,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
 
     for (let i = 0; i <= 6; i++) {
       const day_num = i < 6 ? i + 1 : 0;
-      tempOrderedSchedules[day_num] = s.filter(obj => obj.day_week === day_num);
+      tempOrderedSchedules[day_num] = s.filter(obj => obj.day_week == day_num);
     }
 
     tempSchedules.push({
@@ -309,7 +311,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
       break;
 
       case 'hour':
-        if ( hour.getFullYear() === 2000 ) {
+        if ( hour.getFullYear() == 2000 ) {
           setValidationError({...validationError, hour: {success: false, message: 'Añade una hora'}} );
           setScheduleOK(false);
         } else {
@@ -393,22 +395,24 @@ const RoomForm: React.FC<RoomFormProps> = ({
         <div className="schedules">
           <h3>Horarios</h3>
           <div className="calendar">
-            {orderedSchedules
-              .map((d: any, i: number) => {
-                return (
-                <div key={i} className="day-of-week"> 
+            {orderedSchedules && orderedSchedules.length > 0 ? (
+              orderedSchedules.map((d: any, i: number) => (
+                <div key={i} className="day-of-week">
                   <div className="day-name">{days_of_week[i]}</div>
-                  {d.map((s: Schedule, j: number) => (
+                  {d && d.map((s: Schedule, j: number) => (
                     <div key={j} className="hour">
                       <Chip
                         sx={{ width: '95%', fontSize: '12px', bgcolor: '#fff' }}
-                        label={ s.strHour }
+                        label={s.strHour}
                         onDelete={() => handleDeleteHour(i, j)}
                       />
                     </div>
                   ))}
                 </div>
-              )})}
+              ))
+            ) : (
+              <div className="loading-schedules">Cargando horarios...</div>
+            )}
           </div>
 
           <div className="schedule-form">
@@ -540,7 +544,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
             {data.prices.map((x, index: number) => (
               <div key={x.num_players} className="form-group indented">
                 <div className="col-label">
-                  <label htmlFor={'price_' + x.num_players}>{x.num_players} {x.num_players === 1 ? 'jugador' : 'jugadores'}</label>
+                  <label htmlFor={'price_' + x.num_players}>{x.num_players} {x.num_players == 1 ? 'jugador' : 'jugadores'}</label>
                 </div>
                 <div className="col-value">
                   <FormControl variant="filled" fullWidth>

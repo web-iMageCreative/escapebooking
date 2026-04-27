@@ -48,7 +48,7 @@ try {
         throw new Exception( 'No se pudo hacer la reserva ' );
     }
 
-    $mailer->send(
+    $res = $mailer->send(
       $params['email'],
       $params['name'],
       'Confirmación de Reserva - EscapeBooking',
@@ -58,7 +58,8 @@ try {
   http_response_code(200);
   echo json_encode([
     'success' => true,
-    'message' => 'Reserva realizada',
+    // 'message' => 'Reserva realizada',
+    'message' => $res,
     'data' => []
   ]);
 } catch (Exception $e) {

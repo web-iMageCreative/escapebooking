@@ -94,18 +94,19 @@ const OwnerBookings: React.FC = () => {
 
     const handleDeleteClick = (e: React.MouseEvent<HTMLButtonElement>) => { 
         setIdToDelete( parseInt( e.currentTarget.dataset.id! ) );
-        setOpenDialog(true) ;
+        setOpenDialog(true);
       }
     
     const handleDelete = async () => {
         handleDialogClose();
         
         if (idToDelete !== 0) {
-          const res = await EscapeRoomService.delete(idToDelete);
+          const res = await BookingService.delete(idToDelete);
           
           if ( res.success ) {
             setIdToDelete(0);
-            getEscaperooms();
+            // getEscaperooms();
+            getBookings();
             setAlertData( { 'message': res.message , 'type': 'success' } );
             setOpenSnackbar(true);
           }

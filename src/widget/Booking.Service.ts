@@ -15,10 +15,12 @@ export class BookingService {
     
         if (!res.ok) {
             const result = await res.json();
+            console.log(result.message);
             throw new Error(result.message);
         }
     
         const result = await res.json();
+        console.log(result.message);
     
         return result;
         }
@@ -77,4 +79,24 @@ export class BookingService {
         return result;
     }
 
+    static async delete(id: number): Promise<ApiResponse> {
+        const data = { 'id': id };
+        const response = await fetch(`${API_BASE_URL}/owners/widget/delete.php`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+            const result = await response.json();
+            throw new Error(result.message);
+        }
+
+        const result = await response.json();
+
+        return result;
+    }
 }
