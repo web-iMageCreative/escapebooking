@@ -40,6 +40,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
 
   useEffect(() => {
     setData(initialData);
+    
     if (error !== null) {
       setOpenSnackbar(true);
     } else {

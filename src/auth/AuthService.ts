@@ -1,6 +1,6 @@
 import { LoginCredentials, AuthResponse, RegisterCredentials } from '../users/UserModel';
 
-const API_BASE_URL = 'https://dev3.icreative.es/api-php/auth';
+const API_BASE_URL = 'http://localhost:3000/api-php/auth';
 
 export class AuthService {
     static async login(credentials: LoginCredentials): Promise<AuthResponse> {

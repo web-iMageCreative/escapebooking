@@ -3,15 +3,15 @@ class Database {
     private $pdo;
     
     public function __construct() {
-        $host = 'localhost';
-        $dbname = 'imagecreative_escapebooking';
-        $username = 'imagecreative_userEscape';
-        $password = 'abc09abc11abc15%$&';
-
         // $host = 'localhost';
-        // $dbname = 'escapebooking';
-        // $username = 'root';
-        // $password = '';
+        // $dbname = 'imagecreative_escapebooking';
+        // $username = 'imagecreative_userEscape';
+        // $password = 'abc09abc11abc15%$&';
+
+        $host = 'localhost';
+        $dbname = 'escapebooking';
+        $username = 'root';
+        $password = '';
         
         try {
             $this->pdo = new PDO(
