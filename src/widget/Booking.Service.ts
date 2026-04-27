@@ -1,7 +1,7 @@
 import { BookingModel } from "./Booking.Model";
 import { ApiResponse } from "../shared/models/apiResponse.Model";
 
-const API_BASE_URL = 'http://localhost:3000/api-php';
+const API_BASE_URL = 'http://localhost/api-php';
 
 export class BookingService {
     static async createBooking(data: BookingModel): Promise<ApiResponse> {

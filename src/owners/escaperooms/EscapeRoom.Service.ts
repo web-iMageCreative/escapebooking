@@ -1,7 +1,7 @@
 import { EscapeRoomModel } from './EscapeRoom.Model';
 import { ApiResponse } from '../../shared/models/apiResponse.Model';
 
-const API_BASE_URL = 'http://localhost:3000/api-php';
+const API_BASE_URL = 'http://localhost/api-php';
 const token = localStorage.getItem('auth_token');
 
 export class EscapeRoomService {
