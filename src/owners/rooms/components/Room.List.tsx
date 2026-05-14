@@ -38,15 +38,9 @@ const RoomList: React.FC<any> = ({ id }) => {
   const location = useLocation();
   const [alertData, setAlertData] = useState<any>(location.state?.alert || {});
 
-
-
+  
   useEffect(() => {
     getRooms();
-
-    // if (alertData.type) {
-    //   setOpenSnackbar(true);
-    //   window.history.replaceState({}, document.title);
-    // }
   }, []);
 
   const getRooms = async () => {

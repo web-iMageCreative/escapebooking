@@ -21,7 +21,7 @@ try {
 
     $query = "SELECT b.*, r.name as room_name FROM bookings b 
         INNER JOIN rooms r ON b.id_room = r.id 
-        WHERE b.id_room = :room_id
+        WHERE b.id_room = :room_id AND b.date >= CURDATE()
         ORDER BY b.date ASC";
 
     $getOwnerBookings = $db->fetchAll($query, $params);

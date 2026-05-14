@@ -1,4 +1,4 @@
-import { RoomModel } from './Room.Model';
+import { RoomHolidaysModel, RoomModel } from './Room.Model';
 import { ApiResponse } from '../../shared/models/apiResponse.Model';
 
 const API_BASE_URL = 'http://localhost/api-php';
@@ -91,4 +91,61 @@ export class RoomService {
     return result;
   }
 
+  static async getHolidays(id: number): Promise<ApiResponse> {
+    const res = await fetch(`${API_BASE_URL}/owners/rooms/holidays/list.php?room_id=${id}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }); 
+
+    if (!res.ok) {
+      const result = await res.json();
+      throw new Error(result.message);
+    }
+
+    const result = await res.json();
+
+    return result;
+  }
+
+  static async createHoliday(data: RoomHolidaysModel): Promise<ApiResponse> {
+    const res = await fetch(`${API_BASE_URL}/owners/rooms/holidays/create.php`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(data)
+    });
+
+    if (!res.ok) {
+      const result = await res.json()
+      throw new Error(result.message);
+    } 
+    
+    const result = await res.json();
+
+    return result;
+  }
+
+  static async deleteHoliday(id: number): Promise<ApiResponse> {
+    const data = { 'room_id': id };
+    const res = await fetch(`${API_BASE_URL}/owners/rooms/holidays/delete.php`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(data)
+    });
+    
+    if (!res.ok) {
+      const result = await res.json();
+      throw new Error(result.message);
+    }
+
+    const result = await res.json();
+
+    return result;
+  }
 }

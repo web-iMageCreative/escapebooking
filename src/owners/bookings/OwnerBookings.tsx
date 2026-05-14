@@ -7,7 +7,7 @@ import { RoomService } from "../rooms/Room.Service";
 import { EscapeRoomModel } from "../escaperooms/EscapeRoom.Model";
 import { EscapeRoomService } from "../escaperooms/EscapeRoom.Service";
 import { AuthService } from "../../auth/AuthService";
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, CardActions, Snackbar, Alert, TableContainer,  Table,  TableHead,  TableBody, TableRow,  TableCell } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, CardActions, Snackbar, Alert, TableContainer,  Table,  TableHead,  TableBody, TableRow,  TableCell, TablePagination } from '@mui/material';
 import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import dayjs from "dayjs";
@@ -31,6 +31,8 @@ const OwnerBookings: React.FC = () => {
     const [openDialog, setOpenDialog] = useState<boolean>(false);
     const location = useLocation();
     const [alertData, setAlertData] = useState<any>(location.state?.alert || {});
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
 
     useEffect(() => {
         getEscaperooms();
@@ -70,6 +72,7 @@ const OwnerBookings: React.FC = () => {
         try {
             const res = await BookingService.getOwnerBookings(selectedRoom);
             setBookings(res.data ?? []);
+            setPage(0);
         } catch {
             setError('Error al obtener las reservas.');
         }
@@ -85,6 +88,7 @@ const OwnerBookings: React.FC = () => {
     const handleRoomChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedRoom(parseInt(e.target.value));
         setBookings([]);
+        setPage(0);
     };
 
     const handleRead = (booking: BookingModel) => {
@@ -112,6 +116,15 @@ const OwnerBookings: React.FC = () => {
           }
         }
     }
+
+    const handleChangePage = (event: unknown, newPage: number) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
 
     const handleSnackbarClose = () => { setOpenSnackbar(false); }
     const handleDialogClose = () => { setOpenDialog(false); }
@@ -162,7 +175,13 @@ const OwnerBookings: React.FC = () => {
                                     <TableCell colSpan={5}>No hay reservas.</TableCell>
                                 </TableRow>
                             )
-                            : bookings.map(booking => (
+                            : (() => {
+                                // Calcula las reservas a mostrar en la página actual
+                                const startIndex = page * rowsPerPage;
+                                const endIndex = startIndex + rowsPerPage;
+                                const currentBookings = bookings.slice(startIndex, endIndex);
+                                
+                                return currentBookings.map(booking => (
                                 <TableRow key={booking.id}>
                                     <TableCell>{booking.room_name}</TableCell>
                                     <TableCell>{dayjs(booking.date).format('dddd DD MMMM')}</TableCell>
@@ -180,28 +199,55 @@ const OwnerBookings: React.FC = () => {
                                         </CardActions>
                                     </TableCell>
                                 </TableRow>
-                            ))
+                            ));
+                        })()
                         }
                     </TableBody>
                 </Table>
+
+                <TablePagination
+                    rowsPerPageOptions={[5, 10, 25]}
+                    component="div"
+                    count={bookings.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                    labelRowsPerPage="Filas por página:"
+                    labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
+                />
             </TableContainer>
 
             {openRead && selectedBooking && (
                 <div className='pop-overlayCreate' onClick={() => setOpenRead(false)}>
                     <div className='pop-contentCreate' onClick={(e) => e.stopPropagation()}>
                         <h3>Detalles de la reserva</h3>
-                        <p>Hora: {dayjs(selectedBooking.date).format('HH:mm')}</p>
-                        <p>Nombre: {selectedBooking.name}</p>
-                        <p>Email: {selectedBooking.email}</p>
-                        <p>Teléfono: {selectedBooking.phone}</p>
-                        <p>Jugadores: {selectedBooking.num_players}</p>
-                        <p>Precio: {selectedBooking.price} €</p>
-                        <p>Sala: {selectedBooking.room_name}</p>
-                        <p>Fecha: {dayjs(selectedBooking.date).format('dddd DD MMMM')}</p>
+                        <div className="row-data"><div>Fecha:</div><div>{dayjs(selectedBooking.date).format('dddd DD MMMM')}</div></div>
+                        <div className="row-data"><div>Hora:</div><div>{dayjs(selectedBooking.date).format('HH:mm')}</div></div>
+                        <div className="row-data"><div>Sala:</div><div>{selectedBooking.room_name}</div></div>
+                        <hr />
+                        <div className="row-data"><div>Nombre:</div><div>{selectedBooking.name}</div></div>
+                        <div className="row-data"><div>Email:</div><div>{selectedBooking.email}</div></div>
+                        <div className="row-data"><div>Teléfono:</div><div>{selectedBooking.phone}</div></div>
+                        <hr />
+                        <div className="row-data"><div>Jugadores:</div><div>{selectedBooking.num_players}</div></div>
+                        <div className="row-data"><div>Precio:</div><div>{selectedBooking.price} €</div></div>
                         {selectedBooking.notes && (
-                            <p>Notas: {selectedBooking.notes}</p>
+                            <>
+                            <hr />
+                            <p>Notas:<br />{selectedBooking.notes}</p>
+                            </>
                         )}
-                        <button onClick={() => setOpenRead(false)}>Cerrar</button>
+                        <Button
+                            sx={{marginTop: '30px'}}
+                            type="button"
+                            color='primary'
+                            size='large'
+                            variant="contained"
+                            onClick={() => setOpenRead(false)}
+                        >
+                            Cerrar
+                        </Button>
                     </div>
                 </div>
             )}

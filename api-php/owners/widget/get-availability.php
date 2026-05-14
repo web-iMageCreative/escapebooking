@@ -30,6 +30,11 @@ try {
         'month' => $month,
         'year' => $year
     );
+    $params['holidays_by_month'] = array(
+        'id_room' => $idRoom,
+        'month' => $month,
+        'year' => $year
+    );
 
     $query['hours_by_day'] = "SELECT day_week, count(*) AS availables FROM schedule WHERE id_room = :id_room GROUP BY day_week";
 
@@ -47,11 +52,28 @@ try {
         ORDER BY date;
     ";
 
+    $query['holidays_by_month'] = "
+        SELECT 
+            DATE(date_ini) as date_ini,
+            DATE(date_end) as date_end,
+            name
+        FROM holidays
+        WHERE 
+            MONTH(date_ini) >= :month AND
+            YEAR(date_ini) = :year AND
+            MONTH(date_end) <= :month AND
+            YEAR(date_end) = :year AND
+            room_id = :id_room
+        ORDER BY date_ini;
+    ";
+
     $hours_by_day = $db->fetchAll( $query['hours_by_day'], $params['hours_by_day'] );
     $bookings_by_month = $db->fetchAll( $query['bookings_by_month'], $params['bookings_by_month'] );
+    $holidays_by_month = $db->fetchAll( $query['holidays_by_month'], $params['holidays_by_month'] );
 
     $data['hours_by_day'] = $hours_by_day ? $hours_by_day : array();
     $data['bookings_by_month'] = $bookings_by_month ? $bookings_by_month : array();
+    $data['holidays_by_month'] = $holidays_by_month ? $holidays_by_month : array();
 
     echo json_encode([
         'success' => true,

@@ -36,7 +36,8 @@ export interface BookingFormError {
 
 export interface Availability {
   hours_by_day: HoursByDay[],
-  bookings_by_month: BookingsByMonth[]
+  bookings_by_month: BookingsByMonth[],
+  holidays_by_month: Holiday[]
 }
 
 interface HoursByDay {
@@ -48,4 +49,9 @@ interface BookingsByMonth {
   bookings: string
   date: string
   dayWeek: string
+}
+
+interface Holiday {
+  date_ini: string
+  date_end: string
 }

@@ -15,6 +15,7 @@ import Booking from './widget/Booking';
 import OwnerBookings from './owners/bookings/OwnerBookings';
 import OwnerLayout from './OwnerLayout';
 import PublicLayout from './PublicLayout';
+import RoomHolidays from './owners/rooms/components/Room.Holidays';
 
 //import AdminUsers from './admin/Users/AdminUsers';
 //import CustomerBrowse from './customer/Browse/CustomerBrowse';
@@ -116,6 +117,12 @@ const AppRouter: React.FC = () => {
                 <Route path={ROUTES.OWNER_ROOM} element={
                     <ProtectedRoute requiredRole="owner">
                         <Room />
+                    </ProtectedRoute>
+                } />
+
+                <Route path={ROUTES.OWNER_ROOMS_HOLIDAYS} element={
+                    <ProtectedRoute requiredRole="owner">
+                        <RoomHolidays />
                     </ProtectedRoute>
                 } />
             </Route>

@@ -27,6 +27,7 @@ const Booking: React.FC = () => {
     const [iPlayersSelected, setIPlayersSelected] = useState<number>(-1);
     const [availableHours, setAvailableHours] = useState<string[]>([]);
     const [availability, setAvailability] = useState<Availability>();
+    const [submitMessage, setSubmitMessage] = useState<string | null>(null);
     const isToday = clickDay?.format('YYYY-MM-DD') === dayjs().format('YYYY-MM-DD');
     const currentHour = dayjs().format('HH:mm');
     const [validationError, setValidationError] = useState<BookingFormError>({
@@ -159,7 +160,13 @@ const Booking: React.FC = () => {
             date: dayjs(bookingData.date).format('YYYY-MM-DD HH:mm:ss')
         };
         try {
-            await BookingService.createBooking(formattedDate as any);
+            const res = await BookingService.createBooking(formattedDate as any);
+
+            if (!res.success) {
+                setSubmitMessage('Ha ocurrido un error al realizar la reserva.<br>Por favor, inténtalo de nuevo más tarde.<br>Si el problema persiste, contacta con el propietario del escape room para más información.<br>'+ (res.message ? `Mensaje del servidor: ${res.message}` : ''));
+            } else {
+                setSubmitMessage('Reserva realizada con éxito.<br>Recibirás un email de confirmación con los detalles de tu reserva.<br>¡Gracias por confiar en nosotros!');
+            }
         } catch {
             setError('Error al realizar la reserva.');
         } finally {
@@ -248,6 +255,13 @@ const Booking: React.FC = () => {
             const hasAvailable = availability!.hours_by_day.find( (dayWithHours) => {
                 return dayWithHours.day_week == String(dayWeek);
             } );
+            const hasHoliday = availability!.holidays_by_month.find( (holiday) => {
+                return holiday.date_ini <= date && holiday.date_end >= date
+            } );
+
+            if (hasHoliday) {
+                return true;
+            }
 
             if (!hasAvailable) {
                 return true;
@@ -266,13 +280,15 @@ const Booking: React.FC = () => {
     return (
         <div className="booking form contained">
             <h3 style={{ textAlign: 'center' }}>Reservar {room.name}</h3>
-
-            {error && (
-                <p style={{ textAlign: 'center', color: 'red', marginBottom: '16px' }}>
-                    {error}
-                </p>
+            
+            {submitMessage && (
+                <div style={{ textAlign: 'center', marginBottom: '16px' }}>
+                    <span dangerouslySetInnerHTML={{ __html: submitMessage }} />
+                </div>  
             )}
 
+            {!submitMessage && (
+            <>
             {room.notes && (
                 <p style={{ textAlign: 'center', color: '#555', marginBottom: '16px' }}>
                     {room.notes}
@@ -440,6 +456,7 @@ const Booking: React.FC = () => {
                     )}
                 </Stack>
             </form>
+            </> )}
         </div>
   );    
 };

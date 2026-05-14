@@ -44,3 +44,17 @@ export interface RoomFormError {
   max_players: { success: boolean, message:string },
   prices: { success: boolean, message:string }[]
 }
+
+export interface RoomHolidaysFormError {
+  name:    { success: boolean, message:string },
+  dateIni: { success: boolean, message:string },
+  dateEnd: { success: boolean, message:string }
+}
+
+export interface RoomHolidaysModel {
+  id: number,
+  name: string,
+  date_ini: string,
+  date_end: string,
+  room_id: number
+}

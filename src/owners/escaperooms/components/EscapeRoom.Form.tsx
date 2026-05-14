@@ -22,7 +22,7 @@ const EscapeRoomForm: React.FC<EscapeRoomFormProps> = ({
       cif:  { success: true, message: '' },
       email: { success: true, message: '' },
       phone: { success: true, message: '' },
-    })
+  });
 
   useEffect(() => {
     if ( error !== null ) {

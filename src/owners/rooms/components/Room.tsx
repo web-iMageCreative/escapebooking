@@ -7,118 +7,129 @@ import { Button } from '@mui/material';
 
 
 const Room: React.FC = () => {
-    const nav = useNavigate();
-    const params = useParams();
-    const id:string | undefined = params.id;
-    const [room, setRoom] = useState<RoomModel>({
-        id: 0,
-        name: '',
-        duration: 0,
-        schedule: [],
-        min_players: 0,
-        max_players: 0,
-        prices: [],
-        escaperoom_id: 0
-    });
-    const [error, setError] = useState<string | null>(null);
-    const dayWeek = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
-        
-    useEffect(() => { getRoom() }, []);
-        
-    const getRoom = async () => {
-        try {
-            const res = await RoomService.getRoom( parseInt(params.id!) );
-            setRoom(res.data);
-        } catch {
-            setError('Error en la carga de Escaperooms');
-        } finally {
-            return;
-        }
+  const nav = useNavigate();
+  const params = useParams();
+  const id: string | undefined = params.id;
+  const [room, setRoom] = useState<RoomModel>({
+    id: 0,
+    name: '',
+    duration: 0,
+    schedule: [],
+    min_players: 0,
+    max_players: 0,
+    prices: [],
+    escaperoom_id: 0
+  });
+  const [error, setError] = useState<string | null>(null);
+  const dayWeek = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+
+  useEffect(() => { getRoom() }, []);
+
+  const getRoom = async () => {
+    try {
+      const res = await RoomService.getRoom(parseInt(params.id!));
+      setRoom(res.data);
+    } catch {
+      setError('Error en la carga de Escaperooms');
+    } finally {
+      return;
     }
+  }
 
-    return (
-        <div className="form contained rooms">
+  return (
+    <div className="form contained rooms">
 
-            {error && <div className="error">{error}</div>}
+      {error && <div className="error">{error}</div>}
 
-            <div className="header-file">
-                <div><h3>{room.name}</h3></div>
-                <div className="actions">
-                    <Button
-                        sx={{marginRight: '20px'}}
-                        type="button"
-                        color='primary'
-                        size='large'
-                        variant="contained"
-                        onClick={() => nav('/owner/rooms/edit/' + id)}
-                    >
-                        Editar Sala
-                    </Button>
+      <div className="header-file">
+        <div><h3>{room.name}</h3></div>
+        <div className="actions">
+          <Button
+            sx={{ marginRight: '20px' }}
+            type="button"
+            color='primary'
+            size='large'
+            variant="contained"
+            onClick={() => nav('/owner/rooms/edit/' + id)}
+          >
+            Editar Sala
+          </Button>
 
-                    <Button
-                        type="button"
-                        color='primary'
-                        size='large'
-                        variant="contained"
-                        onClick={() => nav('/booking/' + id)}
-                    >
-                        Reservar Sala
-                    </Button>
-                </div>
-            </div>
+          <Button
+            sx={{ marginRight: '20px' }}
+            type="button"
+            color='primary'
+            size='large'
+            variant="contained"
+            onClick={() => nav('/booking/' + id)}
+          >
+            Reservar Sala
+          </Button>
 
-            <div className="roomsheet">
-                <div className="form-group">
-                    <div className="col-label"><label>Duración</label></div>
-                    <div className="col-value"><p>{room.duration} min</p></div>
-                </div>
-
-                <div className="form-group">
-                    <div className="col-label"><label>Mínimo de jugadores</label></div>
-                    <div className="col-value"><p>{room.min_players}</p></div>
-                </div>
-
-                <div className="form-group">
-                    <div className="col-label"><label>Máximo de jugadores</label></div>
-                    <div className="col-value"><p>{room.max_players}</p></div>
-                </div>
-
-                <div className="form-group">
-                    <div className="col-label"><label>Precios</label></div>
-                    <div className="col-value">
-                        {room.prices.length == 0
-                            ? <p>No hay precios</p> : room.prices.map((price, i) => (
-                                <p key={i}>{price.num_players} {price.num_players == 1 ? 'jugador' : 'jugadores'} — {price.price} €</p>
-                            ))
-                        }
-                    </div>
-                </div>
-
-                <div>
-                    <div className="col-label"><label>Horarios</label></div>
-                    <div className="schedules">
-                        {room.schedule.length == 0
-                            ? <p>No hay horarios</p> : dayWeek.map((dayWeek, i) => (
-                                <div key={i}>
-                                    <h4>{dayWeek}</h4>
-                                    {room.schedule.filter((schedule) => schedule.day_week == i).map((schedule, j) => (
-                                        <p key={j}>{schedule.strHour}</p>
-                                    ))}
-                                </div>
-                            ))
-                        }
-                    </div>
-                </div>
-
-                {room.notes && (
-                    <div className="form-group">
-                        <div className="col-label"><label>Notas</label></div>
-                        <div className="col-value"><p>{room.notes}</p></div>
-                    </div>
-                )}
-            </div>
+          <Button
+            type="button"
+            color='primary'
+            size='large'
+            variant="contained"
+            onClick={() => nav('/owner/rooms/holidays/' + id)}
+          >
+            Fijar vacaciones
+          </Button>
         </div>
-    );
+      </div>
+
+      <div className="roomsheet">
+        <div className="form-group">
+          <div className="col-label"><label>Duración</label></div>
+          <div className="col-value"><p>{room.duration} min</p></div>
+        </div>
+
+        <div className="form-group">
+          <div className="col-label"><label>Mínimo de jugadores</label></div>
+          <div className="col-value"><p>{room.min_players}</p></div>
+        </div>
+
+        <div className="form-group">
+          <div className="col-label"><label>Máximo de jugadores</label></div>
+          <div className="col-value"><p>{room.max_players}</p></div>
+        </div>
+
+        <div className="form-group">
+          <div className="col-label"><label>Precios</label></div>
+          <div className="col-value">
+            {room.prices.length == 0
+              ? <p>No hay precios</p> : room.prices.map((price, i) => (
+                <p key={i}>{price.num_players} {price.num_players == 1 ? 'jugador' : 'jugadores'} — {price.price} €</p>
+              ))
+            }
+          </div>
+        </div>
+
+        <div>
+          <div className="col-label"><label>Horarios</label></div>
+          <div className="schedules">
+            {room.schedule.length == 0
+              ? <p>No hay horarios</p> : dayWeek.map((dayWeek, i) => (
+                <div key={i}>
+                  <h4>{dayWeek}</h4>
+                  {room.schedule.filter((schedule) => schedule.day_week == i).map((schedule, j) => (
+                    <p key={j}>{schedule.strHour}</p>
+                  ))}
+                </div>
+              ))
+            }
+          </div>
+        </div>
+
+        {room.notes && (
+          <div className="form-group">
+            <div className="col-label"><label>Notas</label></div>
+            <div className="col-value"><p>{room.notes}</p></div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }
 
 export default Room;
