@@ -11,7 +11,7 @@ import RoomList from './owners/rooms/components/Room.List';
 import RoomCreate from './owners/rooms/components/Room.Create';
 import Room from './owners/rooms/components/Room';
 import RoomUpdate from './owners/rooms/components/RoomUpdate';
-import Booking from './widget/Booking';
+import Booking from './users/widget/Booking';
 import OwnerBookings from './owners/bookings/OwnerBookings';
 import OwnerLayout from './OwnerLayout';
 import PublicLayout from './PublicLayout';

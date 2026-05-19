@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from 'react-router-dom';
-import { BookingModel } from "../../widget/Booking.Model";
-import { BookingService } from "../../widget/Booking.Service";
+import { BookingModel } from "../../users/widget/Booking.Model";
+import { BookingService } from "../../users/widget/Booking.Service";
 import { RoomModel } from "../rooms/Room.Model";
 import { RoomService } from "../rooms/Room.Service";
 import { EscapeRoomModel } from "../escaperooms/EscapeRoom.Model";
@@ -13,7 +13,6 @@ import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined
 import dayjs from "dayjs";
 import 'dayjs/locale/es';
 import { esES } from '@mui/x-date-pickers/locales';
-import "./OwnerBookings.css";
 dayjs.locale('es');
 
 const OwnerBookings: React.FC = () => {

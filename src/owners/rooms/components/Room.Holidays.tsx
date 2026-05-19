@@ -2,7 +2,6 @@ import React, { RefAttributes, useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { RoomService } from '../Room.Service';
 import { Alert, Button, FormControl, FormHelperText, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from '@mui/material';
-import '../styles/Room.Holidays.css'
 import { RoomHolidaysFormError, RoomHolidaysModel } from '../Room.Model';
 import { DatePicker, DatePickerProps, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
