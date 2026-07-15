@@ -2,23 +2,37 @@ import { RoomHolidaysModel, RoomModel } from './Room.Model';
 import { ApiResponse } from '../../shared/models/apiResponse.Model';
 
 const API_BASE_URL = 'http://localhost/api-php';
-const token = localStorage.getItem('auth_token');
 
 export class RoomService {
-  
-  
+
   static async getRooms(escaperoomId: number): Promise<ApiResponse> {
-    const res = await fetch(`${API_BASE_URL}/owners/rooms/list.php?escaperoom_id=${escaperoomId}`);
+    const token = localStorage.getItem('auth_token');
+    const res = await fetch(`${API_BASE_URL}/owners/rooms/list.php?escaperoom_id=${escaperoomId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
 
     if (!res.ok) {
-      throw new Error('Error obteniendo salas');
+      res.json().then(result => {
+        throw new Error(result.message);
+      });
     }
     
     return res.json();
   }
 
   static async getRoom(id: number, dayWeek?: number): Promise<ApiResponse> {
-    const res = await fetch(`${API_BASE_URL}/owners/rooms/get.php?id=${id}` + (dayWeek ? `&dayWeek = ${dayWeek}` : ``));
+    const token = localStorage.getItem('auth_token');
+    const res = await fetch(`${API_BASE_URL}/owners/rooms/get.php?id=${id}` + (dayWeek ? `&dayWeek = ${dayWeek}` : ``), {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
 
     if (!res.ok) {
       const result = await res.json();
@@ -31,6 +45,7 @@ export class RoomService {
   }
 
   static async create(data: RoomModel): Promise<ApiResponse> {
+    const token = localStorage.getItem('auth_token');
     const res = await fetch(`${API_BASE_URL}/owners/rooms/create.php`, {
       method: 'POST',
       headers: {
@@ -51,6 +66,7 @@ export class RoomService {
   }
 
   static async update(data: RoomModel): Promise<ApiResponse> {
+    const token = localStorage.getItem('auth_token');
     const res = await fetch(`${API_BASE_URL}/owners/rooms/update.php`, {
       method: 'PUT',
       headers: {
@@ -71,6 +87,7 @@ export class RoomService {
   }
 
   static async delete(id: number): Promise<ApiResponse> {
+    const token = localStorage.getItem('auth_token');
     const data = { 'id': id };
     const res = await fetch(`${API_BASE_URL}/owners/rooms/delete.php`, {
       method: 'DELETE',
@@ -92,8 +109,11 @@ export class RoomService {
   }
 
   static async getHolidays(id: number): Promise<ApiResponse> {
+    const token = localStorage.getItem('auth_token');
     const res = await fetch(`${API_BASE_URL}/owners/rooms/holidays/list.php?room_id=${id}`, {
+      method: 'GET',
       headers: {
+        'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
       }
     }); 
@@ -109,6 +129,7 @@ export class RoomService {
   }
 
   static async createHoliday(data: RoomHolidaysModel): Promise<ApiResponse> {
+    const token = localStorage.getItem('auth_token');
     const res = await fetch(`${API_BASE_URL}/owners/rooms/holidays/create.php`, {
       method: 'POST',
       headers: {
@@ -129,7 +150,8 @@ export class RoomService {
   }
 
   static async deleteHoliday(id: number): Promise<ApiResponse> {
-    const data = { 'room_id': id };
+    const token = localStorage.getItem('auth_token');
+    const data = { 'holidays_id': id };
     const res = await fetch(`${API_BASE_URL}/owners/rooms/holidays/delete.php`, {
       method: 'DELETE',
       headers: {

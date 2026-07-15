@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { EscapeRoomFormProps, EscapeRoomModel, EscapeRoomFormError } from '../EscapeRoom.Model';
-import  { Snackbar, Alert, Chip, TextField, FormControl, InputAdornment, FormHelperText, MenuItem, Button } from '@mui/material';
-import { WidthNormal } from '@mui/icons-material';
+import  { Snackbar, Alert, Chip, TextField, FormControl, InputAdornment, FormHelperText, MenuItem, Button, Fab } from '@mui/material';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
 const EscapeRoomForm: React.FC<EscapeRoomFormProps> = ({
   initialData,
@@ -132,14 +132,18 @@ const EscapeRoomForm: React.FC<EscapeRoomFormProps> = ({
   return (
     <div>
       <form className="form contained" onSubmit={handleSubmit}>
-        <h2>{title}</h2>
+        <div className="title">
+          <Fab aria-label="add" sx={{width: '36px', height: '36px', fontSize: '12px', backgroundColor: 'white'}}  onClick={onCancel}>
+            <ArrowBackIosNewIcon />
+          </Fab>
+          <h2>{title}</h2>
+        </div>
 
         <div className="form-group">
           <div className="col-label">
             <label htmlFor="name">Nombre</label>
             <p className="description">
-              Nombre comercial de tu escape room.
-              Aparecerá en los listados de búsqueda.
+              Nombre comercial de tu escape room. Si tienes varios locales, incluye en el nombre algún elemento diferenciador para distinguirlos.
             </p>
           </div>
           <div className="col-value">
@@ -171,13 +175,13 @@ const EscapeRoomForm: React.FC<EscapeRoomFormProps> = ({
           <div className="col-label">
             <label>Datos de Facturación</label>
             <p className="description">
-              Datos de Facturación.
+              Esta información aparecerá en las reservas que realicen tus clientes. Incluya su provincia en el campo de dirección.
             </p>
           </div>
 
           <div className="col-value">
             <div>
-              <FormControl variant="filled" sx={{m: 2, width: '62%'}} >
+              <FormControl variant="filled" fullWidth sx={{margin: "10px 0"}}>
                 <TextField
                   sx={{backgroundColor: 'white'}}
                   variant="filled"
@@ -199,7 +203,7 @@ const EscapeRoomForm: React.FC<EscapeRoomFormProps> = ({
                 <FormHelperText error={!validationError.address.success} id="error_address">{validationError.address.message}</FormHelperText>
               </FormControl>
 
-              <FormControl variant="filled" sx={{m: 2}}>
+              <FormControl variant="filled" fullWidth sx={{margin: "10px 0"}}>
                 <TextField
                   sx={{backgroundColor: 'white'}}
                   variant="filled"
@@ -223,7 +227,7 @@ const EscapeRoomForm: React.FC<EscapeRoomFormProps> = ({
             </div>
 
             <div>
-              <FormControl variant="filled" sx={{m: 2}}>
+              <FormControl variant="filled" fullWidth sx={{margin: "10px 0"}}>
                 <TextField
                   sx={{backgroundColor: 'white'}}
                   variant="filled"
@@ -245,7 +249,7 @@ const EscapeRoomForm: React.FC<EscapeRoomFormProps> = ({
                 <FormHelperText error={!validationError.cif.success} id="error_cif">{validationError.cif.message}</FormHelperText>
               </FormControl>
               
-              <FormControl variant="filled" sx={{m: 2}}>
+              <FormControl variant="filled" fullWidth sx={{margin: "10px 0"}}>
                 <TextField
                   sx={{backgroundColor: 'white'}}
                   variant="filled"
@@ -266,7 +270,7 @@ const EscapeRoomForm: React.FC<EscapeRoomFormProps> = ({
                 />
               </FormControl>
 
-              <FormControl variant="filled" sx={{m: 2}}>
+              <FormControl variant="filled" fullWidth sx={{margin: "10px 0"}}>
                 <TextField
                   sx={{backgroundColor: 'white'}}
                   variant="filled"
@@ -292,22 +296,26 @@ const EscapeRoomForm: React.FC<EscapeRoomFormProps> = ({
 
         {/* Acciones */}
         <div className="form-actions">
-          <button
+          <Button
+            sx={{marginRight: '20px'}}
             type="submit"
+            color='primary'
+            size='large'
+            variant="contained"
             disabled={loading}
-            className="btn-primary button"
           >
             {loading ? 'Procesando...' : submitText}
-          </button>
+          </Button>
 
-          <button
+          <Button
             type="button"
+            color='inherit'
+            size='large'
+            variant="contained"
             onClick={onCancel}
-            disabled={loading}
-            className="btn-secondary button"
           >
             {cancelText}
-          </button>
+          </Button>
         </div>
 
       </form>

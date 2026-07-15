@@ -19,6 +19,31 @@ $db = new Database();
 try {
   $data = json_decode(file_get_contents('php://input'), true);
 
+  if (function_exists('getallheaders')) {
+      $headers = getallheaders();
+      $token = str_replace('Bearer ', '', $headers['Authorization'] ?? '');
+      $token = base64_decode($token);
+      $token = json_decode($token, true);
+      $user_id = $token['user_id'];
+  }
+
+  if (!isset($token) || !isset($user_id)) {
+    throw new Exception('Token de autorización no proporcionado: ' . json_encode($token));
+  }
+
+  $id = $data['escaperoom_id'];
+  $params = array('id' => $id);
+  $query = "SELECT * FROM escaperooms WHERE id = :id ORDER BY name";
+  $escaperoom = $db->fetchSingle($query, $params);
+
+  if (!$escaperoom) {
+    throw new Exception('EscapeRoom no encontrado.');
+  }
+
+  if ($escaperoom['owner'] != $user_id) {
+    throw new Exception('No tienes permiso para acceder a este EscapeRoom.');
+  }
+
   if ( ! (isset( $data['name'] ) && trim($data['name']) != '') ) throw new Exception('Falta el nombre de la sala');
   if ( ! (isset( $data['duration'] ) && trim($data['duration']) != '') ) throw new Exception('Falta la duración de la sala');
   if ( ! (isset( $data['min_players'] ) && trim($data['min_players']) != '') ) throw new Exception('Falta el mínimo de jugadores');
@@ -31,7 +56,7 @@ try {
   $params['min_players']   = $data['min_players'];
   $params['max_players']   = $data['max_players'];
   $params['escaperoom_id'] = $data['escaperoom_id'];
-  $params['notes'] = $data['notes'];
+  $params['notes']         = $data['notes'] || '';
   $prices = $data['prices'];
   $schedule = $data['schedule'];
 

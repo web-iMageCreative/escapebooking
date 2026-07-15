@@ -20,6 +20,10 @@ export interface LoginCredentials {
 }
 
 export interface RegisterCredentials {
+  businessName: string;
+  address: string,
+  phone: string,
+  city: string,
   email: string;
   password: string;
   confirmPassword: string;

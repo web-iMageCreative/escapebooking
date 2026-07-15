@@ -49,21 +49,11 @@ const OwnerDashboard: React.FC = () => {
             En esta aplicación podrá gestionar sus locales de Escape Rooms.
             Cree sus negocios y defina sus salas de juego.
           </p>
-          <p>
-            A continuación puede ver sus negocios de Escape Rooms.
-            Si aún no ha definido ninguno, haga clic en "Añadir nuevo negocio".
-          </p>
         </div>
-
-        <EscapeRoomList />
-
-        <div className="debug-card">
-          <h3>Debug</h3>
-          <pre className="debug-info">
-            {JSON.stringify(user, null, 2)}
-          </pre>
-          <p>Existe token: {AuthService.isAuthenticated() ? '✅ SI' : '❌ NO'}</p>
-        </div>
+        
+        { localStorage.getItem('auth_token') &&
+          <EscapeRoomList />
+        }
       </div>
 
       

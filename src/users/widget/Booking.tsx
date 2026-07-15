@@ -1,22 +1,26 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { RoomModel } from '../../owners/rooms/Room.Model';
 import { BookingModel, BookingFormError, Availability } from './Booking.Model';
 import { BookingService } from './Booking.Service';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateCalendar, LocalizationProvider } from '@mui/x-date-pickers';
 import { RoomService } from '../../owners/rooms/Room.Service';
-import { Box, Button, Stack, TextField, FormControl, FormHelperText } from '@mui/material';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import dayjs from 'dayjs';
+import { Box, Button, Stack, TextField, FormControl, FormHelperText, Fab } from '@mui/material';
 import 'dayjs/locale/es';
 import { esES } from '@mui/x-date-pickers/locales';
 import './Booking.css'
+import { AuthService } from '../../auth/AuthService';
 
 
 const Booking: React.FC = () => {
     const params = useParams();
     const id:string | undefined = params.id;
+    const nav = useNavigate();
+    const isAuthenticated = AuthService.isAuthenticated();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [clickDay, setClickDay] = useState<dayjs.Dayjs | null>(null);
@@ -71,6 +75,7 @@ const Booking: React.FC = () => {
     const getRoom = async () => {
         try {
             const res = await RoomService.getRoom(parseInt(id!));
+            console.log('res room: ', res);
             setRoom(res.data);
         } catch {
             console.log('Error cargando sala');
@@ -180,18 +185,18 @@ const Booking: React.FC = () => {
         switch (id) {
             case 'name':
                 if (value.length > 100) {
-                setValidationError({...validationError, name: {success: false, message: 'Máximo 100 caracteres'}});
+                    setValidationError({...validationError, name: {success: false, message: 'Máximo 100 caracteres'}});
                 } else {
-                setValidationError({...validationError, name: {success: true, message: ''}});
+                    setValidationError({...validationError, name: {success: true, message: ''}});
                 }
             break;
 
             case 'email':
                 const emailValidate = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
                 if (!emailValidate.test(value)) {
-                setValidationError({...validationError, email: {success: false, message: 'Email no válido'}});
+                    setValidationError({...validationError, email: {success: false, message: 'Email no válido'}});
                 } else {
-                setValidationError({...validationError, email: {success: true, message: ''}});
+                    setValidationError({...validationError, email: {success: true, message: ''}});
                 }
             break;
 
@@ -279,7 +284,14 @@ const Booking: React.FC = () => {
 
     return (
         <div className="booking form contained">
-            <h3 style={{ textAlign: 'center' }}>Reservar {room.name}</h3>
+            <div className="title" style={{ maxWidth: '350px', margin: '30px auto' }}>
+                {isAuthenticated && (
+                    <Fab aria-label="add" sx={{width: '36px', height: '36px', fontSize: '12px', backgroundColor: 'white'}}  onClick={() => nav('/owner/room/' + id)}>
+                        <ArrowBackIosNewIcon />
+                    </Fab>
+                )}
+                <h2>Reservar {room.name}</h2>
+            </div>
             
             {submitMessage && (
                 <div style={{ textAlign: 'center', marginBottom: '16px' }}>
@@ -299,6 +311,7 @@ const Booking: React.FC = () => {
                 <Stack spacing={2} maxWidth={350} margin={'0 auto'}>
                     <Box className="box-selector" sx={{boxShadow: 2, backgroundColor: 'white', p: 2, borderBottom: '2px solid #aaa'}}>
                         <h4>Días disponibles:</h4>
+                        
                         <LocalizationProvider 
                             dateAdapter={AdapterDayjs}
                             localeText={esES.components.MuiLocalizationProvider.defaultProps.localeText}
@@ -350,6 +363,7 @@ const Booking: React.FC = () => {
                         }
                     </Box>
                     }
+
                     {hourSelected && (
                     <Box className="box-selector" sx={{boxShadow: 2, backgroundColor: 'white', p: 2, borderBottom: '2px solid #aaa'}}>
                         <h4>Número de jugadores:</h4>

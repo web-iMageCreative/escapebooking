@@ -17,15 +17,29 @@ require_once '../../shared/Database.php';
 $db = new Database();
 
 try {
+    if (function_exists('getallheaders')) {
+        $headers = getallheaders();
+        $token = str_replace('Bearer ', '', $headers['Authorization'] ?? '');
+        $token = base64_decode($token);
+        $token = json_decode($token, true);
+        $user_id = $token['user_id'];
+    } 
+    
+    if (!isset($token) || !isset($user_id)) {
+        throw new Exception('Token de autorización no proporcionado: ' . json_encode($token));
+    }
+
     $id = $_GET['id'];
     $params = array('id' => $id);
-
     $query = "SELECT * FROM escaperooms WHERE id = :id ORDER BY name";
-
     $escaperoom = $db->fetchSingle($query, $params);
 
     if (!$escaperoom) {
         throw new Exception('EscapeRoom no encontrado.');
+    }
+
+    if ($escaperoom['owner'] != $user_id) {
+        throw new Exception('No tienes permiso para acceder a este EscapeRoom.');
     }
 
     echo json_encode([

@@ -19,6 +19,7 @@ const RoomCreate: React.FC = () => {
     min_players: 0,
     max_players: 0,
     prices: [],
+    notes: '',
     escaperoom_id: parseInt(escaperoom_id!)
   };
 

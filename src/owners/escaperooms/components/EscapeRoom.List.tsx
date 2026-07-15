@@ -4,12 +4,18 @@ import { EscapeRoomModel } from '../EscapeRoom.Model';
 import { EscapeRoomService } from '../EscapeRoom.Service';
 import { User } from '../../../users/UserModel';
 import { AuthService } from '../../../auth/AuthService';
+import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Card, CardActions, CardContent, Typography, Snackbar, Alert, Fab} from '@mui/material';
+import Helper from '../../../shared/components/Helpers';
+import EscapeRoomUpdate from './EscapeRoom.Update';
+import EscapeRoomCreate from './EscapeRoom.Create';
+import NotchedContainer from '../../../shared/components/CircularNotchedBox';
 import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-import EscapeRoomUpdate from './EscapeRoom.Update';
-import EscapeRoomCreate from './EscapeRoom.Create';
-import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Card, CardActions, CardContent, Typography, Snackbar, Alert} from '@mui/material';
+import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
+import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
+import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
+import AddIcon from '@mui/icons-material/Add';
 
 const EscapeRoomList: React.FC = () => {
   const [data, setData] = useState<EscapeRoomModel[]>([]);
@@ -26,17 +32,24 @@ const EscapeRoomList: React.FC = () => {
   const alertState = location.state?.alert || {};
 
   useEffect(() => {
-    fetchEscapeRooms();
+    getEscapeRooms();
     if (alertState.type) {
       showSnackbar(alertState.message, alertState.type);
       window.history.replaceState({}, document.title);
     }
   }, []);
 
-  const fetchEscapeRooms = async () => {
+  const getEscapeRooms = async () => {
     setLoading(true);
+    //console.log('currentUser: ', currentUser);
+
     try {
       const res = await EscapeRoomService.getEscaperooms(currentUser.id);
+
+      if (!res.success) {
+        showSnackbar(res.message, 'info' );
+      }
+
       setData(Array.isArray(res.data) ? res.data : []);
     } catch(err: any) {
       showSnackbar(err?.message, 'error');
@@ -51,80 +64,89 @@ const EscapeRoomList: React.FC = () => {
 
   const handleModalClose = (type: 'edit' | 'add', canceled: boolean = true) => {
     if (canceled) showSnackbar(`${type === 'edit' ? 'Edición' : 'Creación'} cancelada`, 'info');
+
     if (type === 'edit') setEditId(null);
     else setAddOpen(false);
   };
 
   const handleModalSuccess = (type: 'edit' | 'add') => {
     showSnackbar(`Escaperoom ${type === 'edit' ? 'modificado' : 'creado'} correctamente`, 'success');
+
     if (type === 'edit') setEditId(null);
     else setAddOpen(false);
-    fetchEscapeRooms();
+
+    getEscapeRooms();
   };
 
   const handleDelete = async () => {
     setDialogOpen(false);
+
     if (idToDelete !== 0) {
       const res = await EscapeRoomService.delete(idToDelete);
+
       if (res.success) {
         setIdToDelete(0);
-        fetchEscapeRooms();
+        getEscapeRooms();
         showSnackbar(res.message, 'success');
       }
     }
   };
 
-  const formatPhone = (num: string) => {
-    let cleanNum = num.replace(/\s/g, '');
-    let anyElse = cleanNum.startsWith('+');
-    let pref = anyElse ? '+' : '';
-    let nums = anyElse ? cleanNum.substring(1) : cleanNum;
-    if (nums.length === 0) return num;
-    
-    let groups = [];
-    for (let i = nums.length; i > 0; i -= 3) {
-      groups.unshift(nums.substring(Math.max(0, i - 3), i));
-    }
-    return pref + groups.join(' ');
-  };
-
   return (
-    <div className='contained'>
-      <header className='header-file'>
-        <h3>Mis Escape Rooms</h3>
+    <div className='escaperoom-list contained'>
 
-        <div className="actions">
-          <Button
-            type="button"
-            color='primary'
-            size='large'
-            variant="contained"
-            onClick={() => setAddOpen(true)}
-          >
-            Añadir nuevo negocio
-          </Button>
-        </div>
-      </header>
+      <div className="info">
+        <p>
+          A continuación puede ver sus negocios de Escaperooms.
+          Si aún no ha definido ninguno, haga clic en el botón flotante "+".
+        </p>
+      </div>
 
-      {!loading && 
+      <div className="list-container">
+        
+        <NotchedContainer 
+          width={60}
+          cornerRadius={20}
+          bgColor="#f8f8f8"
+          side="top"
+          pos="end"
+        />
+
+        <header className='header-section'>
+          <div className='title' style={{ width: 'calc(80%)'}}><h3>Mis Escaperooms</h3></div>
+          <div className="actions">
+            <Fab color="primary" aria-label="add" sx={{width: '50px', height: '50px'}}  onClick={() => setAddOpen(true)}>
+              <AddIcon />
+            </Fab>
+          </div>
+          <div style={{ width: 'calc(20%)' }}></div>
+        </header>
+
         <div className='list'>
-          {data.map(escaperoom => (
-            <Card key={escaperoom.id} sx={{ maxWidth: 345 }}>
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div" data-id={escaperoom.id} onClick={() => nav('/owner/escape-room/' + escaperoom.id)}>
-                  <span className='card-title'>{escaperoom.name}</span>
-                </Typography>
-                <p>{escaperoom.cif}<br />{escaperoom.email} · {formatPhone(escaperoom.phone)}<br />{escaperoom.address} {escaperoom.postal_code}</p>
-              </CardContent>
-              <CardActions>
-                <Button startIcon={<ArticleOutlinedIcon />} size="small" onClick={() => nav('/owner/escape-room/' + escaperoom.id)}>Ver</Button>
-                <Button startIcon={<EditOutlinedIcon />} size="small" onClick={() => { setEditId(escaperoom.id); }}>Editar</Button>
-                <Button startIcon={<DeleteOutlineOutlinedIcon />} size="small" onClick={() => { setIdToDelete(escaperoom.id); setDialogOpen(true); }} color="error">Eliminar</Button>
-              </CardActions>
-            </Card>
-          ))}
-        </div>
-      }
+        {!loading && data.length > 0 &&
+            data.map(escaperoom => (
+              <>
+              <Card key={escaperoom.id} elevation={5}>
+                <CardContent>
+                  <Typography gutterBottom variant="subtitle2" component="div" data-id={escaperoom.id} onClick={() => nav('/owner/escape-room/' + escaperoom.id)}>
+                    <span className='card-title'>{escaperoom.name}</span>
+                  </Typography>
+                  <p>
+                    <EmailOutlinedIcon sx={{color: '#888', fontSize: '16px', verticalAlign: 'middle'}} /> {escaperoom.email}<br />
+                    <LocalPhoneOutlinedIcon sx={{color: '#888', fontSize: '16px', verticalAlign: 'middle'}} /> { Helper.formatPhone(escaperoom.phone)}<br />
+                    <LocationOnOutlinedIcon sx={{color: '#888', fontSize: '16px', verticalAlign: 'middle'}} /> {escaperoom.address} {escaperoom.postal_code}
+                  </p>
+                </CardContent>
+                <CardActions>
+                  <Button startIcon={<ArticleOutlinedIcon />} size="small" onClick={() => nav('/owner/escape-room/' + escaperoom.id)}>Ver</Button>
+                  <Button startIcon={<EditOutlinedIcon />} size="small" onClick={() => { setEditId(escaperoom.id); }}>Editar</Button>
+                  <Button startIcon={<DeleteOutlineOutlinedIcon />} size="small" onClick={() => { setIdToDelete(escaperoom.id); setDialogOpen(true); }} color="error">Eliminar</Button>
+                </CardActions>
+              </Card>
+              </>
+            ))}
+          </div>
+      </div>
 
       {addOpen && (
         <div className='pop-overlayCreate' onClick={() => handleModalClose('add')}>

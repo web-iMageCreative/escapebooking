@@ -18,6 +18,31 @@ $db = new Database();
 
 try {
   $data = json_decode(file_get_contents('php://input'), true);
+
+  if (function_exists('getallheaders')) {
+    $headers = getallheaders();
+    $token = str_replace('Bearer ', '', $headers['Authorization'] ?? '');
+    $token = base64_decode($token);
+    $token = json_decode($token, true);
+    $user_id = $token['user_id'];
+  }
+
+  if (!isset($token) || !isset($user_id)) {
+    throw new Exception('Token de autorización no proporcionado: ' . json_encode($token));
+  }
+
+  $id = $data['room_id'];
+  $params = array('id' => $id);
+  $query = "SELECT * FROM rooms r JOIN escaperooms e ON r.escaperoom_id = e.id WHERE r.id = :id ORDER BY r.name";
+  $room = $db->fetchSingle($query, $params);
+
+  if (!$room) {
+    throw new Exception('Sala no encontrada.');
+  }
+
+  if ($room['owner'] != $user_id) {
+    throw new Exception('No tienes permiso para acceder a esta sala.');
+  }
   
   if ( ! (isset( $data['name'] ) && trim($data['name']) != '') ) throw new Exception('Falta el nombre del periodo de vacaciones');
   if ( ! (isset( $data['date_ini'] ) && trim($data['date_ini']) != '') ) throw new Exception('Falta la fecha de inicio');
@@ -28,11 +53,9 @@ try {
   $params['name']     = trim( $data['name'] );
   $params['date_ini'] = $data['date_ini'];
   $params['date_end'] = $data['date_end'];
-  $params['room_id'] = $data['room_id'];
-
+  $params['room_id']  = $data['room_id'];
   $query = "INSERT INTO holidays (name, date_ini, date_end, room_id) 
-  VALUES (:name, :date_ini, :date_end, :room_id)";
-  
+            VALUES (:name, :date_ini, :date_end, :room_id)";
   $holiday = $db->execute($query, $params);
 
   if (!$holiday) {

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Snackbar, Alert, Chip, TextField, FormControl, InputAdornment, FormHelperText, MenuItem, Button } from '@mui/material';
+import { Snackbar, Alert, Chip, TextField, FormControl, InputAdornment, FormHelperText, MenuItem, Button, Fab } from '@mui/material';
 import { LocalizationProvider, TimeField } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { RoomFormProps, RoomModel, Price, Schedule, RoomFormError } from '../Room.Model';
 import { RoomFormHandlers } from './Room.Form.Handlers';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
 const RoomForm: React.FC<RoomFormProps> = ({
   initialData,
@@ -64,7 +65,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
       validationError.prices.push({success: true, message: ''})
     }
 
-    console.log(orderedSchedules);
+    // console.log(orderedSchedules);
     setValidationError(validationError);
   }, [initialData]);
   
@@ -103,7 +104,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
 
   useEffect(() => {
     tempOrderedSchedules = [[],[],[],[],[],[],[]];
-    console.log(orderedSchedules);
+    // console.log(orderedSchedules);
   }, [orderedSchedules])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -324,7 +325,12 @@ const RoomForm: React.FC<RoomFormProps> = ({
   return (
     <div>
       <form onSubmit={handleSubmit} className="form contained" noValidate autoComplete='off'>
-        <h2>{title}</h2>
+        <div className="title">
+          <Fab aria-label="add" sx={{width: '36px', height: '36px', fontSize: '12px', backgroundColor: 'white'}}  onClick={onCancel}>
+            <ArrowBackIosNewIcon />
+          </Fab>
+          <h2>{title}</h2>
+        </div>
 
         <div className="form-group">
           <div className="col-label">
@@ -393,6 +399,11 @@ const RoomForm: React.FC<RoomFormProps> = ({
 
         <div className="schedules">
           <h3>Horarios</h3>
+
+          <div className="description">
+            Añade los horarios disponibles para esta sala. Elige para qué dias quieres añadir nuevas horas e introduce dicha hora antes de pulsar en "Añadir horario".
+          </div>
+
           <div className="calendar">
             {orderedSchedules && orderedSchedules.length > 0 ? (
               orderedSchedules.map((d: any, i: number) => (
@@ -412,7 +423,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
             ) : (
               <div className="loading-schedules">Cargando horarios...</div>
             )}
-          </div>
+          </div>  
 
           <div className="schedule-form">
             <FormControl fullWidth>
@@ -471,6 +482,10 @@ const RoomForm: React.FC<RoomFormProps> = ({
         </div>
 
         <h3>Precios <small>/ número de jugadores</small></h3>
+
+        <div className="description">
+          Asigna el número mínimo y máximo de jugadores para esta sala para poder definir los precios correspondientes a cada número de jugadores.
+        </div>
 
         <div className="form-group">
           <div className="col-label">
@@ -579,9 +594,9 @@ const RoomForm: React.FC<RoomFormProps> = ({
         <div className="form-group">
           <div className="col-label">
             <label htmlFor="notes">Notas</label>
-              <p className="description">
-                Información adicional sobre la sala.
-              </p>
+              <div className="description">
+                Información adicional sobre la sala. Esta información se mostrará en la página de reservas para que los clientes puedan consultarla antes de reservar.
+              </div>
           </div>
           <div className="col-value">
             <FormControl variant="filled" fullWidth>

@@ -16,6 +16,8 @@ import OwnerBookings from './owners/bookings/OwnerBookings';
 import OwnerLayout from './OwnerLayout';
 import PublicLayout from './PublicLayout';
 import RoomHolidays from './owners/rooms/components/Room.Holidays';
+import ForgotPassword from './auth/reset/Forgot.Password';
+import ResetPassword from './auth/reset/Reset.Password';
 
 //import AdminUsers from './admin/Users/AdminUsers';
 //import CustomerBrowse from './customer/Browse/CustomerBrowse';
@@ -63,6 +65,18 @@ const AppRouter: React.FC = () => {
                 <Route path={ROUTES.LOGIN} element={ 
                     <PublicRoute>
                         <Login />
+                    </PublicRoute>
+                } />
+
+                <Route path={ROUTES.FORGOT} element={ 
+                    <PublicRoute>
+                        <ForgotPassword />
+                    </PublicRoute>
+                } />
+
+                <Route path={ROUTES.RESET} element={ 
+                    <PublicRoute>
+                        <ResetPassword />
                     </PublicRoute>
                 } />
 

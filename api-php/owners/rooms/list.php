@@ -17,15 +17,42 @@ require_once '../../shared/Database.php';
 $db = new Database();
 
 try {
+    if (function_exists('getallheaders')) {
+        $headers = getallheaders();
+        $token = str_replace('Bearer ', '', $headers['Authorization'] ?? '');
+        $token = base64_decode($token);
+        $token = json_decode($token, true);
+        $user_id = $token['user_id'];
+    }
+
+    if (!isset($token) || !isset($user_id)) {
+        throw new Exception('Token de autorización no proporcionado: ' . json_encode($token));
+    }
+
     $id = $_GET['escaperoom_id'];
+    $params = array('id' => $id);
+    $query = "SELECT * FROM escaperooms WHERE id = :id ORDER BY name";
+    $escaperoom = $db->fetchSingle($query, $params);
+
+    if (!$escaperoom) {
+        throw new Exception('EscapeRoom no encontrado.');
+    }
+
+    if ($escaperoom['owner'] != $user_id) {
+        throw new Exception('No tienes permiso para acceder a este EscapeRoom.');
+    }
+
     $params = array('escaperoom_id' => $id);
-
     $query = "SELECT * FROM rooms WHERE escaperoom_id = :escaperoom_id";
-
     $rooms = $db->fetchAll($query, $params);
 
     if (! $rooms) {
-        throw new Exception('No se han encontrado salas.');
+        echo json_encode([
+            'success' => false,
+            'message' => 'No se han encontrado salas.',
+            'data' => $rooms
+        ]);
+        exit;
     }
 
     echo json_encode([
@@ -33,10 +60,12 @@ try {
         'message' => 'Salas cargadas.',
         'data' => $rooms
     ]);
+    exit;
 } catch (Exception $e) {
     http_response_code(401);
     echo json_encode([
         'success' => false,
         'message' => $e->getMessage()
     ]);
+    exit;
 }

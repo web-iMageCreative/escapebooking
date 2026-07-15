@@ -17,7 +17,23 @@ require_once '../../shared/Database.php';
 $db = new Database();
 
 try {
+  if (function_exists('getallheaders')) {
+    $headers = getallheaders();
+    $token = str_replace('Bearer ', '', $headers['Authorization'] ?? '');
+    $token = base64_decode($token);
+    $token = json_decode($token, true);
+    $user_id = $token['user_id'];
+  } 
+  
+  if (!isset($token) || !isset($user_id)) {
+    throw new Exception('Token de autorización no proporcionado: ' . json_encode($token));
+  }
+  
   $data = json_decode(file_get_contents('php://input'), true);
+  
+  if ($data['owner'] != $user_id) {
+      throw new Exception('No tienes permiso para acceder a este EscapeRoom.');
+  }
 
   if ( ! (isset( $data['name'] ) && trim($data['name']) != '') ) throw new Exception('Falta el nombre del negocio');
   if ( ! (isset( $data['owner'] ) && $data['owner'] != '') ) throw new Exception('Falta el id del dueño del negocio');
@@ -30,9 +46,9 @@ try {
   $params = array();
   $params['name']        = trim( $data['name'] );
   $params['owner']       = $data['owner'];
-  $params['address']       = $data['address'];
-  $params['postal_code']       = $data['postal_code'];
-  $params['cif']       = $data['cif'];
+  $params['address']     = $data['address'];
+  $params['postal_code'] = $data['postal_code'];
+  $params['cif']         = $data['cif'];
   $params['email']       = $data['email'];
   $params['phone']       = $data['phone'];
   

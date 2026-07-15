@@ -1,48 +1,42 @@
 import React, { useState } from 'react';
 import { AuthService } from '../AuthService';
-import { LoginCredentials } from '../../users/UserModel';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Alert, Box, Button, Container, Snackbar, Stack, TextField } from '@mui/material';
 import { ROUTES } from '../../routes';
-import LockPersonOutlinedIcon from '@mui/icons-material/LockPersonOutlined';
+import { Link } from 'react-router-dom';
+import LockResetIcon from '@mui/icons-material/LockReset';
 import NotchedContainer from '../../shared/components/CircularNotchedBox';
 
-const Login: React.FC = () => {
-  const [credentials, setCredentials] = useState<LoginCredentials>({
-    email: '',
-    password: ''
-  });
+const ResetPassword: React.FC = () => {
+  const [password, setPassword] = useState<{ password: string }>({ password: '' });
   const [loading, setLoading] = useState(false);
-  const nav = useNavigate();
   const [open, setOpen] = useState<boolean>(false);
-  const location = useLocation();
-  const [alertData, setAlertData] = useState<any>( location.state?.alert || {} );
-
-  const handleSnackbarClose = () => { setOpen(false); }
+  const [alertData, setAlertData] = useState<any>({});
+  const [confirmPassword, setConfirmPassword] = useState<{ confirmPassword: string }>({ confirmPassword: '' });
+  const [passwordsMatch, setPasswordsMatch] = useState<boolean>(true);
+  const token = window.location.pathname.split('/').pop(); // Get the token from the URL
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-
     try {
-      const res = await AuthService.login(credentials);
+      const res = await AuthService.resetPassword(password.password, token!); 
 
       if (res.success) {
-        localStorage.setItem('auth_token', res.data.token);
-        localStorage.setItem('user', JSON.stringify(res.data.user));
-
-        if (res.data.user.role_name === 'owner') {
-          nav('/owner/dashboard', { state: { alert: { type: 'info', message: 'Usuario identificado. Bienvenido.' } } });
-        }
-      } else {
-        setAlertData({type: 'error', message: res.message});
+        setAlertData({type: 'success', message: res.message});
         setOpen(true);
       }
-    } catch (err) {
-      setAlertData({type: 'error', message: 'Error de identificación. Por favor, inténtelo nuevamente.'});
+    } catch (error: any) {
+      setAlertData({type: 'error', message: error.message || 'Error al restablecer la contraseña'});
       setOpen(true);
     } finally {
       setLoading(false);
+    }
+  }
+
+  const handlePasswordMismatch = () => {
+    if (password.password && confirmPassword.confirmPassword && password.password !== confirmPassword.confirmPassword) {
+      setPasswordsMatch(false);
+    } else {
+      setPasswordsMatch(true);
     }
   };
 
@@ -55,7 +49,7 @@ const Login: React.FC = () => {
           justifyContent: 'center',
           marginBottom: -70
         }}>
-          <LockPersonOutlinedIcon sx={{
+          <LockResetIcon sx={{
             fontSize: 30,
             width: 30,
             height: 30,
@@ -63,7 +57,7 @@ const Login: React.FC = () => {
             color: 'common.white',
             p: 2,
             borderRadius: '50%'
-          }}
+            }}
           />
         </Box>
         <NotchedContainer 
@@ -86,21 +80,9 @@ const Login: React.FC = () => {
         >
           <Stack spacing={4}>
 
-            <h2>Mi perfil</h2>
+            <h2>Solicitar cambio de contraseña</h2>
 
-            <TextField
-              sx={{ minWidth:"100%" }} 
-              type="email"
-              id="email" 
-              label="E-mail"
-              variant="outlined" 
-              value={credentials.email}
-              onChange={(e) => setCredentials({
-                ...credentials,
-                email: e.target.value
-              })}
-              required
-            />
+            <input type="hidden" name="token" value={token} />
 
             <TextField
               sx={{ minWidth:"100%" }} 
@@ -108,11 +90,25 @@ const Login: React.FC = () => {
               id="password" 
               label="Contraseña"
               variant="outlined" 
-              value={credentials.password}
-              onChange={(e) => setCredentials({
-                ...credentials,
+              value={password.password}
+              onChange={(e) => setPassword({
+                ...password,
                 password: e.target.value
               })}
+              required
+            />
+
+            <TextField
+              sx={{ minWidth:"100%" }} 
+              type="password"
+              id="confirmPassword" 
+              label="Confirmar Contraseña"
+              variant="outlined" 
+              value={confirmPassword.confirmPassword}
+              onChange={(e) => setConfirmPassword({ ...confirmPassword , confirmPassword: e.target.value })}
+              onBlur={handlePasswordMismatch}
+              error={!passwordsMatch}
+              helperText={!passwordsMatch ? 'Las contraseñas no coinciden' : ''}
               required
             />
 
@@ -123,11 +119,9 @@ const Login: React.FC = () => {
               color="primary"
               size="large"
             >
-              {loading ? 'Identificando...' : 'Acceder'}
+              {loading ? 'Solicitando cambio...' : 'Cambiar contraseña'}
             </Button>
-            <div className="register-link">
-              <div><Link to={ROUTES.FORGOT}>¿Has olvidado tu contraseña?</Link></div>
-            </div>
+
           </Stack>
         </Box>
       </Container>
@@ -136,10 +130,10 @@ const Login: React.FC = () => {
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
         open={open}
         autoHideDuration={5000}
-        onClose={handleSnackbarClose}
+        onClose={() => setOpen(false)}
       >
         <Alert
-          onClose={handleSnackbarClose}
+          onClose={() => setOpen(false)}
           severity={alertData.type}
           variant="filled"
           sx={{ width: '100%' }}
@@ -149,18 +143,10 @@ const Login: React.FC = () => {
       </Snackbar>
 
       <div className="register-link">
-        <h2>¿Eres nuevo en EscapeBooking?</h2>
-        <div><Link to={ROUTES.REGISTER}>Regístrate</Link></div>
+        <div><Link to={ROUTES.LOGIN}>Volver al Login</Link></div>
       </div>
-
-      {/* <div className="test-credentials"> */}
-        {/* <h4>Cuentas de prueba:</h4> */}
-        {/* <p><strong>Admin:</strong> admin@escapebooking.com / password</p> */}
-        {/* <p><strong>Owner:</strong> madrid@escaperooms.com / password</p> */}
-        {/* <p><strong>Customer:</strong> juan.perez@gmail.com / password</p> */}
-      {/* </div> */}
     </>
   );
 };
 
-export default Login;
+export default ResetPassword;

@@ -1,17 +1,22 @@
 import React, { RefAttributes, useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { RoomService } from '../Room.Service';
-import { Alert, Button, FormControl, FormHelperText, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from '@mui/material';
+import { Alert, Button, Fab, FormControl, FormHelperText, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from '@mui/material';
 import { RoomHolidaysFormError, RoomHolidaysModel } from '../Room.Model';
 import { DatePicker, DatePickerProps, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import 'dayjs/locale/es';
 import dayjs from 'dayjs';
 import { esES } from '@mui/x-date-pickers/locales';
+import NotchedContainer from '../../../shared/components/CircularNotchedBox';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import AddIcon from '@mui/icons-material/Add';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+
 
 const RoomHolidays: React.FC<any> = ({ id }) => {
   const params = useParams();
+  const nav = useNavigate();
   const roomId = params.id || id;
   const [data, setData] = useState<RoomHolidaysModel>({ id: 0, name: '', date_ini: '', date_end: '', room_id: parseInt(roomId!) });
   const [loading, setLoading] = useState(false);
@@ -34,6 +39,12 @@ const RoomHolidays: React.FC<any> = ({ id }) => {
     setLoading(true);
     try {
       const res = await RoomService.getHolidays(parseInt(roomId!));
+
+      if (!res.success) {
+        setAlertData({ 'message': res.message, 'type': 'info' });
+        setOpenSnackbar(true);
+      }
+      
       setHolidays(res.data);
     } catch (err: any) {
       setAlertData({ 'message': err?.message, 'type': 'error' });
@@ -112,70 +123,87 @@ const RoomHolidays: React.FC<any> = ({ id }) => {
   }
 
   return (
-    <div className="form contained holidays">
+    <div className="contained holidays">
        
-      <h3>Periodos vacacionales</h3>
-      <p>En esta sección puedes configurar los días festivos para esta sala. Estos días no estarán disponibles para reservas.</p>
-      <p>Selecciona los días festivos en el calendario y haz clic en "Guardar" para aplicarlos.</p>
-      
-      <div className='header-file'>
-        <h4>Vacaciones fijadas</h4>
-
-        <div className="actions">
-          <Button
-            type="button"
-            color="primary"
-            size="large"
-            variant="contained"
-            onClick={() => setOpenCreate(true)}
-          >
-            Crear nuevo periodo
-          </Button>
-        </div>
+      <div className="info">
+       <div className="title">
+        <Fab aria-label="add" sx={{width: '36px', height: '36px', fontSize: '12px', backgroundColor: 'white'}}  onClick={() => nav('/owner/room/' + roomId)}>
+          <ArrowBackIosNewIcon />
+        </Fab>
+        <h2>Periodos vacacionales</h2>
+      </div>
+        <p>En esta sección puedes configurar los días festivos para esta sala. Estos días no estarán disponibles para reservas.</p>
+        <p>Selecciona los días festivos en el calendario y haz clic en "Guardar" para aplicarlos.</p>
       </div>
 
-      {holidays.length > 0 ? (
-        <TableContainer sx={{bgcolor: 'white', borderRadius:'4px'}}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Nombre</TableCell>
-                <TableCell>Fecha de inicio</TableCell>
-                <TableCell>Fecha de fin</TableCell>
-                <TableCell>Acciones</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              { holidays.map( (holiday) => (
-              <TableRow key={holiday.id}>
-                <TableCell>{holiday.name}</TableCell>
-                <TableCell>{dayjs(holiday.date_ini).format('ddd DD MMMM')}</TableCell>
-                <TableCell>{dayjs(holiday.date_end).format('ddd DD MMMM')}</TableCell>
-                <TableCell>
-                  <Button startIcon={<DeleteOutlineOutlinedIcon />} size="small" onClick={handleDeleteClick} data-id={holiday.id} color="error">
-                    Cancelar
-                  </Button>
-                </TableCell>
-              </TableRow>
-              )) }
-            </TableBody>
-          </Table>
-        </TableContainer>
-      ) : (
-        <p>No hay vacaciones fijadas.</p>
-      )}
+      <div className="list-container">
+
+        <NotchedContainer 
+          width={60}
+          cornerRadius={20}
+          bgColor="#f8f8f8"
+          side="top"
+          pos="end"
+        />
+      
+        <header className='header-section'>
+          <div className='title' style={{ width: 'calc(80%)'}}><h3>Vacaciones fijadas</h3></div>
+
+          <div className="actions">
+            <Fab color="primary" aria-label="add" sx={{width: '50px', height: '50px'}}  onClick={() => setOpenCreate(true)}>
+              <AddIcon />
+            </Fab>
+          </div>
+          <div style={{ width: 'calc(20%)' }}></div>
+        </header>
+
+        {holidays.length > 0 ? (
+          <div className="list">
+            <TableContainer sx={{bgcolor: 'white', borderRadius:'4px'}}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Nombre</TableCell>
+                    <TableCell>Fecha de inicio</TableCell>
+                    <TableCell>Fecha de fin</TableCell>
+                    <TableCell>Acciones</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  { holidays.map( (holiday) => (
+                  <TableRow key={holiday.id}>
+                    <TableCell>{holiday.name}</TableCell>
+                    <TableCell>{dayjs(holiday.date_ini).format('ddd DD MMMM')}</TableCell>
+                    <TableCell>{dayjs(holiday.date_end).format('ddd DD MMMM')}</TableCell>
+                    <TableCell>
+                      <Button startIcon={<DeleteOutlineOutlinedIcon />} size="small" onClick={handleDeleteClick} data-id={holiday.id} color="error">
+                        Cancelar
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                  )) }
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </div>
+        ) : (
+          <div className="list">
+            <p>No hay vacaciones fijadas.</p>
+          </div>
+        )}
+      </div>
 
       {openCreate && (
         <div className="pop-overlayCreate" onClick={() => setOpenCreate(false)}>
-          <div className="pop-contentCreate" onClick={(e) => e.stopPropagation()}>
+          <div className="pop-contentCreate holidays-form" onClick={(e) => e.stopPropagation()}>
             <h3>Crear nuevo periodo</h3>
 
             <div className="form-group">
               <div className="col-label">
                 <label htmlFor="name">Nombre</label>
                 <p className="description">
-                  Nombre comercial de tu escape room.
-                  Aparecerá en los listados de búsqueda.
+                  Añade un nombre que te permita reconocer fácilmente este periodo vacacional. 
+                  Por ejemplo: "Vacaciones de verano", "Navidad 2024", etc.
                 </p>
               </div>
               <div className="col-value">
@@ -208,8 +236,9 @@ const RoomHolidays: React.FC<any> = ({ id }) => {
               <div className="col-label">
                 <label htmlFor="name">Fecha de inicio</label>
                 <p className="description">
-                  Nombre comercial de tu escape room.
-                  Aparecerá en los listados de búsqueda.
+                  Selecciona la fecha de inicio del periodo vacacional. 
+                  Esta fecha estará incluida en el periodo, 
+                  por lo que la última fecha disponible para reservas será el día anterior a esta fecha.
                 </p>
               </div>
               <div className="col-value">
@@ -223,6 +252,14 @@ const RoomHolidays: React.FC<any> = ({ id }) => {
                       label="Fecha de inicio"
                       value={dayjs(data.date_ini)}
                       onChange={(value: any) => {setData({ ...data, date_ini: value ? value.format('YYYY-MM-DD') : '' })}}
+                      slotProps={{
+                        textField: {
+                          variant: 'filled', // 👈 Aquí aplicas el estilo "filled"
+                          fullWidth: true,
+                          size: 'medium',
+                          sx: { backgroundColor: 'white' }
+                        },
+                      }}
                     />
                   </LocalizationProvider>
                 </FormControl>
@@ -233,8 +270,9 @@ const RoomHolidays: React.FC<any> = ({ id }) => {
               <div className="col-label">
                 <label htmlFor="name">Fecha de Fin</label>
                 <p className="description">
-                  Nombre comercial de tu escape room.
-                  Aparecerá en los listados de búsqueda.
+                  Selecciona la fecha de fin del periodo vacacional. 
+                  Esta fecha estará incluida en el periodo, 
+                  por lo que la primera fecha disponible para reservas será el día siguiente a esta fecha.
                 </p>
               </div>
               <div className="col-value">
@@ -248,32 +286,41 @@ const RoomHolidays: React.FC<any> = ({ id }) => {
                       label="Fecha de fin"
                       value={dayjs(data.date_end)}
                       onChange={(value: any) => {setData({ ...data, date_end: value ? value.format('YYYY-MM-DD') : '' })}}
+                      slotProps={{
+                        textField: {
+                          variant: 'filled', // 👈 Aquí aplicas el estilo "filled"
+                          fullWidth: true,
+                          size: 'medium',
+                          sx: { backgroundColor: 'white' }
+                        },
+                      }}
                     />
                   </LocalizationProvider>
                 </FormControl>
 
               </div>
             </div>
-
-            <Button
-              sx={{ marginTop: "30px" }}
-              type="button"
-              color="primary"
-              size="large"
-              variant="contained"
-              onClick={handleSubmit}
-            >
-              Fijar vacaciones
-            </Button>
-            <Button
-              sx={{ marginLeft: '15px', marginTop: '30px', backgroundColor: 'transparent', color: '#444' }}
-              type="button"
-              size="large"
-              variant="contained"
-              onClick={() => setOpenCreate(false)}
-            >
-              Cancelar
-            </Button>
+          
+            <div className="form-actions">
+              <Button
+                type="button"
+                color="primary"
+                size="large"
+                variant="contained"
+                onClick={handleSubmit}
+              >
+                Añadir
+              </Button>
+              <Button
+                sx={{ marginLeft: '15px', backgroundColor: 'transparent', color: '#444' }}
+                type="button"
+                size="large"
+                variant="contained"
+                onClick={() => setOpenCreate(false)}
+              >
+                Cancelar
+              </Button>
+            </div>
           </div>
         </div>
       )}

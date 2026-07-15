@@ -17,12 +17,36 @@ require_once '../../shared/Database.php';
 $db = new Database();
 
 try {
-  $data = json_decode(file_get_contents('php://input'), true);
+  if (function_exists('getallheaders')) {
+    $headers = getallheaders();
+    $token = str_replace('Bearer ', '', $headers['Authorization'] ?? '');
+    $token = base64_decode($token);
+    $token = json_decode($token, true);
+    $user_id = $token['user_id'];
+  } 
   
-  if ( ! (isset( $data['id'] ) && trim($data['id']) != '') ) throw new Exception('Falta el id del negocio');
+  if (!isset($token) || !isset($user_id)) {
+    throw new Exception('Token de autorización no proporcionado: ' . json_encode($token));
+  }
 
-  $params = array();
-  $params['id'] = $data['id'];
+  $data = json_decode(file_get_contents('php://input'), true);
+
+  if ( ! (isset( $data['id'] ) && trim($data['id']) != '') ) {
+    throw new Exception('Falta el id del negocio');
+  }
+
+  $id = $data['id'];
+  $params = array('id' => $id);
+  $query = "SELECT * FROM escaperooms WHERE id = :id ORDER BY name";
+  $escaperoom = $db->fetchSingle($query, $params);
+
+  if (!$escaperoom) {
+    throw new Exception('EscapeRoom no encontrado.');
+  }
+
+  if ($escaperoom['owner'] != $user_id) {
+    throw new Exception('No tienes permiso para acceder a este EscapeRoom.');
+  }
 
   $query = "DELETE FROM escaperooms WHERE id = :id";
 

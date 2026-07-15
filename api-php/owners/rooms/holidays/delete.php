@@ -18,11 +18,24 @@ $db = new Database();
 
 try {
   $data = json_decode(file_get_contents('php://input'), true);
-  
-  if ( ! (isset( $data['room_id'] ) && trim($data['room_id']) != '') ) throw new Exception('Falta el id del periodo de vacaciones');
 
-  $params = array();
-  $params['id'] = $data['room_id'];
+  if (function_exists('getallheaders')) {
+    $headers = getallheaders();
+    $token = str_replace('Bearer ', '', $headers['Authorization'] ?? '');
+    $token = base64_decode($token);
+    $token = json_decode($token, true);
+    $user_id = $token['user_id'];
+  }
+
+  if (!isset($token) || !isset($user_id)) {
+    throw new Exception('Token de autorización no proporcionado: ' . json_encode($token));
+  }
+      
+  if ( ! (isset( $data['holidays_id'] ) && trim($data['holidays_id']) != '') ) throw new Exception('Falta el id del periodo de vacaciones');
+
+  $id = $data['holidays_id'];
+  $params = array('id' => $id);
+  
 
   $query = "DELETE FROM holidays WHERE id = :id";
 

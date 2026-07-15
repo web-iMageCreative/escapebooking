@@ -18,6 +18,31 @@ $db = new Database();
 
 try {
   $data = json_decode(file_get_contents('php://input'), true);
+
+  if (function_exists('getallheaders')) {
+      $headers = getallheaders();
+      $token = str_replace('Bearer ', '', $headers['Authorization'] ?? '');
+      $token = base64_decode($token);
+      $token = json_decode($token, true);
+      $user_id = $token['user_id'];
+  }
+
+  if (!isset($token) || !isset($user_id)) {
+    throw new Exception('Token de autorización no proporcionado: ' . json_encode($token));
+  }
+
+  $id = $data['id'];
+  $params = array('id' => $id);
+  $query = "SELECT * FROM rooms r JOIN escaperooms e ON r.escaperoom_id = e.id WHERE r.id = :id ORDER BY r.name";
+  $escaperoom = $db->fetchSingle($query, $params);
+
+  if (!$escaperoom) {
+    throw new Exception('EscapeRoom no encontrado.');
+  }
+
+  if ($escaperoom['owner'] != $user_id) {
+    throw new Exception('No tienes permiso para acceder a este EscapeRoom.');
+  }
   
   if ( ! (isset( $data['id'] ) && trim($data['id']) != '') ) throw new Exception('Falta el id de la sala');
 

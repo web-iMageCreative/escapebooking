@@ -17,6 +17,31 @@ require_once '../../../shared/Database.php';
 $db = new Database();
 
 try {
+    if (function_exists('getallheaders')) {
+        $headers = getallheaders();
+        $token = str_replace('Bearer ', '', $headers['Authorization'] ?? '');
+        $token = base64_decode($token);
+        $token = json_decode($token, true);
+        $user_id = $token['user_id'];
+    }
+
+    if (!isset($token) || !isset($user_id)) {
+        throw new Exception('Token de autorización no proporcionado: ' . json_encode($token));
+    }
+
+    $id = $_GET['room_id'];
+    $params = array('room_id' => $id);
+    $query = "SELECT * FROM rooms r JOIN escaperooms e ON r.escaperoom_id = e.id WHERE r.id = :room_id ORDER BY r.name";
+    $room = $db->fetchSingle($query, $params);
+
+    if (!$room) {
+        throw new Exception('Sala no encontrada.');
+    }
+
+    if ($room['owner'] != $user_id) {
+        throw new Exception('No tienes permiso para acceder a esta sala.');
+    }
+
     $id = $_GET['room_id'];
     $params = array('room_id' => $id);
 
@@ -25,7 +50,12 @@ try {
     $holidays = $db->fetchAll($query, $params);
 
     if (! $holidays) {
-        throw new Exception('No se han encontrado periodos de vacaciones.');
+         echo json_encode([
+            'success' => false,
+            'message' => 'No se han encontrado periodos de vacaciones.',
+            'data' => $holidays
+        ]);
+        exit;
     }
 
     echo json_encode([

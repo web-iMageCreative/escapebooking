@@ -13,7 +13,7 @@ export class AuthService {
         });
         
         if (!res.ok) {
-            throw new Error('Login failed');
+            throw new Error('Identificación fallida');
         }
         
         return await res.json();
@@ -25,11 +25,20 @@ export class AuthService {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({email: credentials.email, password: credentials.password})
+            body: JSON.stringify({
+                email: credentials.email,
+                password: credentials.password,
+                confirmPassword: credentials.confirmPassword,
+                businessName: credentials.businessName,
+                address: credentials.address,
+                phone: credentials.phone,
+                city: credentials.city
+            })
         });
         
         if (!res.ok) {
-            throw new Error('Login failed');
+            const errorData = await res.json();
+            throw new Error(errorData.message || 'Registro fallido');
         }
         
         return await res.json();
@@ -54,6 +63,37 @@ export class AuthService {
         if (!res.ok) throw new Error('Error al capturar el pago o registrar el usuario');
         return await res.json();
     }
+
+    static async forgotPassword(email: string): Promise<AuthResponse> {
+        const res = await fetch(`${API_BASE_URL}/forgot-password.php`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: email})
+        });
+
+        if (!res.ok) {
+            const result = await res.json();
+            throw new Error(result.message);
+        }
+
+        return await res.json();
+    }
+
+    static async resetPassword(password: string, token: string): Promise<AuthResponse> {
+        const res = await fetch(`${API_BASE_URL}/reset-password.php`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password: password, token: token })
+        });
+
+        if (!res.ok) {
+            const result = await res.json();
+            throw new Error(result.message);
+        }
+
+        return await res.json();
+    }
+
     
     static logout(): void {
         localStorage.removeItem('auth_token');

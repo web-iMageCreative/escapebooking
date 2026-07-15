@@ -17,7 +17,24 @@ require_once '../../shared/Database.php';
 $db = new Database();
 
 try {
+    if (function_exists('getallheaders')) {
+        $headers = getallheaders();
+        $token = str_replace('Bearer ', '', $headers['Authorization'] ?? '');
+        $token = base64_decode($token);
+        $token = json_decode($token, true);
+        $user_id = $token['user_id'];
+    } 
+    
+    if (!isset($token) || !isset($user_id)) {
+        throw new Exception('Token de autorización no proporcionado: ' . json_encode($token));
+    }
+
     $userid = $_GET['userid'];
+
+    if ($userid != $user_id) {
+        throw new Exception('No tienes permiso para acceder a estos EscapeRoom.');
+    }
+
     $params = array('userid' => $userid);
 
     $query = "SELECT * FROM escaperooms WHERE owner = :userid ORDER BY name";
@@ -25,7 +42,12 @@ try {
     $escaperooms = $db->fetchAll($query, $params);
 
     if (!$escaperooms) {
-        throw new Exception('Error en la carga de EscapeRooms.');
+        echo json_encode([
+            'success' => false,
+            'message' => 'No se encontraron escaperooms',
+            'data' => $escaperooms
+        ]);
+        exit;
     }
     
     echo json_encode([
@@ -33,11 +55,13 @@ try {
         'message' => 'Escaperooms cargados...',
         'data' => $escaperooms
     ]);
+    exit;
 } catch (Exception $e) {
     http_response_code(200);
     echo json_encode([
         'success' => false,
         'message' => $e->getMessage()
     ]);
+    exit;
 }
 ?>

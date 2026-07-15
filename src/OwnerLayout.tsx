@@ -12,7 +12,7 @@ const MainLayout = () => {
       <header className="app-header">
         <div className="header-wrap contained">
           <div className="branding">
-            <div>Escape<span>Booking</span></div>
+            <div>Escape<span>Booking</span><small>BETA</small></div>
           </div>
           <div className="app-nav">
             <Navigation />

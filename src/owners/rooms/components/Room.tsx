@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { RoomModel } from '../Room.Model';
 import { RoomService } from '../Room.Service';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Link } from 'react-router-dom';
-import { Button } from '@mui/material';
-
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Alert, Button, Fab, Snackbar } from '@mui/material';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
+import BeachAccessOutlinedIcon from '@mui/icons-material/BeachAccessOutlined';
 
 const Room: React.FC = () => {
   const nav = useNavigate();
   const params = useParams();
   const id: string | undefined = params.id;
+  const location = useLocation();
+  const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
+  const [alertData, setAlertData] = useState<any>(location.state?.alert || {});
   const [room, setRoom] = useState<RoomModel>({
     id: 0,
     name: '',
@@ -29,56 +34,32 @@ const Room: React.FC = () => {
     try {
       const res = await RoomService.getRoom(parseInt(params.id!));
       setRoom(res.data);
-    } catch {
-      setError('Error en la carga de Escaperooms');
+    } catch(err: any) {
+      setAlertData({ 'message': err?.message, 'type': 'error' });
+      setOpenSnackbar(true);
     } finally {
       return;
     }
   }
 
+  const handleSnackbarClose = () => { setOpenSnackbar(false); }
+
   return (
-    <div className="form contained rooms">
+    <div className="rooms contained">
 
-      {error && <div className="error">{error}</div>}
-
-      <div className="header-file">
-        <div><h3>{room.name}</h3></div>
-        <div className="actions">
-          <Button
-            sx={{ marginRight: '20px' }}
-            type="button"
-            color='primary'
-            size='large'
-            variant="contained"
-            onClick={() => nav('/owner/rooms/edit/' + id)}
-          >
-            Editar Sala
-          </Button>
-
-          <Button
-            sx={{ marginRight: '20px' }}
-            type="button"
-            color='primary'
-            size='large'
-            variant="contained"
-            onClick={() => nav('/booking/' + id)}
-          >
-            Reservar Sala
-          </Button>
-
-          <Button
-            type="button"
-            color='primary'
-            size='large'
-            variant="contained"
-            onClick={() => nav('/owner/rooms/holidays/' + id)}
-          >
-            Fijar vacaciones
-          </Button>
-        </div>
+      <div className="title">
+        <Fab aria-label="add" sx={{width: '36px', height: '36px', fontSize: '12px', backgroundColor: 'white'}}  onClick={() => nav('/owner/escape-room/' + room.escaperoom_id)}>
+          <ArrowBackIosNewIcon />
+        </Fab>
+        <h2>{room.name}</h2>
       </div>
 
       <div className="roomsheet">
+        <div className="actions">
+          <Button startIcon={<EditOutlinedIcon />} size="small" onClick={() => nav('/owner/rooms/edit/' + id)}>Editar</Button>
+          <Button startIcon={<CalendarMonthOutlinedIcon />} size="small" onClick={() => nav('/booking/' + id)}>Reservar</Button>
+          <Button startIcon={<BeachAccessOutlinedIcon />} size="small" onClick={() => nav('/owner/rooms/holidays/' + id)}>Vacaciones</Button>
+        </div>
         <div className="form-group">
           <div className="col-label"><label>Duración</label></div>
           <div className="col-value"><p>{room.duration} min</p></div>
@@ -99,19 +80,19 @@ const Room: React.FC = () => {
           <div className="col-value">
             {room.prices.length == 0
               ? <p>No hay precios</p> : room.prices.map((price, i) => (
-                <p key={i}>{price.num_players} {price.num_players == 1 ? 'jugador' : 'jugadores'} — {price.price} €</p>
+                <p key={i}>{price.num_players} {price.num_players == 1 ? 'jugador    ' : 'jugadores'} &#9;&#9;&#9; {price.price} €</p>
               ))
             }
           </div>
         </div>
 
         <div>
-          <div className="col-label"><label>Horarios</label></div>
+          <div className="col-label" style={{padding: '10px 0'}}><label>Horarios</label></div>
           <div className="schedules">
             {room.schedule.length == 0
               ? <p>No hay horarios</p> : dayWeek.map((dayWeek, i) => (
-                <div key={i}>
-                  <h4>{dayWeek}</h4>
+                <div key={i} className='schedule-day'>
+                  <h5>{dayWeek}</h5>
                   {room.schedule.filter((schedule) => schedule.day_week == i).map((schedule, j) => (
                     <p key={j}>{schedule.strHour}</p>
                   ))}
@@ -128,6 +109,22 @@ const Room: React.FC = () => {
           </div>
         )}
       </div>
+
+      <Snackbar
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        open={openSnackbar}
+        autoHideDuration={5000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={alertData.type}
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          {alertData.message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

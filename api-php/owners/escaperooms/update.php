@@ -17,7 +17,23 @@ require_once '../../shared/Database.php';
 $db = new Database();
 
 try {
+  if (function_exists('getallheaders')) {
+    $headers = getallheaders();
+    $token = str_replace('Bearer ', '', $headers['Authorization'] ?? '');
+    $token = base64_decode($token);
+    $token = json_decode($token, true);
+    $user_id = $token['user_id'];
+  } 
+  
+  if (!isset($token) || !isset($user_id)) {
+    throw new Exception('Token de autorización no proporcionado: ' . json_encode($token));
+  }
+  
   $data = json_decode(file_get_contents('php://input'), true);
+  
+  if ($data['owner'] != $user_id) {
+      throw new Exception('No tienes permiso para acceder a este EscapeRoom.');
+  }
 
   if ( ! (isset( $data['id'] ) && trim($data['id']) != '') ) throw new Exception('Falta el id del negocio');
   if ( ! (isset( $data['name'] ) && trim($data['name']) != '') ) throw new Exception('Falta el nombre del negocio');

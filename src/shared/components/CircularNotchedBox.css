@@ -1,0 +1,16 @@
+.notched-box {
+  display: flex;
+}
+
+/* .notched-box .left,
+.notched-box .right {
+  flex: 1 1 100%;
+} */
+
+/* .notched-box .middle {
+  flex: 0 0 100%;
+} */
+
+.notch {
+  display:block;
+}

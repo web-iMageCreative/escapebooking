@@ -53,8 +53,8 @@ const EscapeRoomCreate: React.FC<CreateFormProp> = ({onCancel, onSuccess}) => {
       error={error}
       onSubmit={handleSubmit}
       onCancel={handleCancel}
-      title="Nuevo Escape Room"
-      submitText="Crear Escape Room"
+      title="Nuevo Escaperoom"
+      submitText="Crear"
       cancelText="Cancelar"
     />
   );

@@ -27,7 +27,7 @@ const RoomUpdate: React.FC = () => {
       
       setInitialData(RoomRes.data);
     } catch (err: any) {
-      console.log(err);
+      // console.log(err);
       setError(err.message || 'Error cargando datos');
     } finally {
       setLoading(false);

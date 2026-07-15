@@ -3,6 +3,9 @@ export const ROUTES = {
   LOGIN: '/login',
   REGISTER: '/register',
   WIDGET: '/booking/:id',
+  FORGOT: '/forgot-password',
+  RESET: '/reset-password/:token',
+  
   
   // Owner routes
   OWNER_DASHBOARD: '/owner/dashboard',
