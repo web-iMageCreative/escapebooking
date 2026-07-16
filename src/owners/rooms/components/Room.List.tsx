@@ -55,6 +55,7 @@ const RoomList: React.FC<any> = ({ id, escapeRoomName }) => {
 
   const getRooms = async () => {
     setLoading(true);
+
     try {
       const res = await RoomService.getRooms(parseInt(escaperoom_id!));
 
@@ -107,7 +108,7 @@ const RoomList: React.FC<any> = ({ id, escapeRoomName }) => {
   }
 
   const handleCopyCode = () => {
-    const code = `<iframe src="http://localhost/booking/${selectedRoomCodeId}" frameborder="0"></iframe>`;
+    const code = `<iframe src="https://dev3.icreative.es/booking/${selectedRoomCodeId}" frameborder="0"></iframe>`;
     navigator.clipboard.writeText(code);
     setAlertData({ 'message': 'Código copiado al portapapeles', 'type': 'success' });
     setOpenSnackbar(true);
@@ -150,7 +151,7 @@ const RoomList: React.FC<any> = ({ id, escapeRoomName }) => {
                 <CardActions>
                   <Button startIcon={<CalendarMonthOutlinedIcon />} size="small" onClick={() => nav('/booking/' + room.id)}>Reservar</Button>
                   <Button startIcon={<BeachAccessOutlinedIcon />} size="small" onClick={() => nav('/owner/rooms/holidays/' + room.id)}>Vacaciones</Button>
-                  <Button startIcon={<ArticleOutlinedIcon />} size="small" onClick={() => handleViewCodeClick(room.id)}>Código</Button>
+                  <Button startIcon={<CodeIcon />} size="small" onClick={() => handleViewCodeClick(room.id)}>Código</Button>
                 </CardActions>
                 <CardContent>
                   <Typography gutterBottom variant="subtitle2" component="h3" onClick={() => nav('/owner/room/' + room.id)}>
@@ -171,17 +172,29 @@ const RoomList: React.FC<any> = ({ id, escapeRoomName }) => {
       </div>
 
       {viewCode && (
-        <div className='pop-overlayCreate' onClick={() => setViewCode(false)}>
-          <div className='pop-contentCreate' onClick={(e) => e.stopPropagation()} style={{maxWidth: '400px'}}>
+        <div className='pop-overlay' onClick={() => setViewCode(false)}>
+          <div className='pop-content' onClick={(e) => e.stopPropagation()} style={{maxWidth: '400px'}}>
             <div className="code-wrapper">
               <h3>Instrucciones para integrar el widget de reservas en su web</h3>
               <p>Para integrar el widget de reservas en su web, copie y pegue el siguiente código en la sección de su página donde desea que aparezca el formulario de reservas.</p>
-              <p style={{wordBreak: 'break-word', margin: '15px 0', fontFamily: 'monospace', fontSize: '14px'}}>
-                &lt;iframe src="http://localhost/booking/{selectedRoomCodeId}" frameborder="0"&gt;&lt;/iframe&gt;
-                <Button startIcon={<ContentCopyIcon />} size="small" onClick={handleCopyCode}>
-                  Copiar Código
-                </Button>
+              <p style={{wordBreak: 'break-word', padding: '10px', backgroundColor: 'rgba(0,0,0,.08)', margin: '15px 0', fontFamily: 'monospace', fontSize: '14px'}}>
+                &lt;iframe src="https://dev3.icreative.es/booking/{selectedRoomCodeId}" frameborder="0"&gt;&lt;/iframe&gt;
               </p>
+              <Button startIcon={<ContentCopyIcon />} size="small" onClick={handleCopyCode}>
+                Copiar Código
+              </Button>
+              <div className="form-actions">
+                <Button
+                  sx={{marginRight: '20px'}}
+                  type="button"
+                  color='primary'
+                  size='large'
+                  variant="contained"
+                  onClick={() => setViewCode(false)}
+                >
+                  Cerrar
+                </Button>
+              </div>
             </div>
           </div>
         </div>

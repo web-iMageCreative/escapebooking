@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: http://localhost:3000'); // Específico
+header('Access-Control-Allow-Origin: https://dev3.icreative.es'); // Específico
 header('Access-Control-Allow-Methods: POST');
 header('Access-Control-Allow-Headers: Content-Type, X-Auth-Token');
 header('Access-Control-Allow-Credentials: true');
@@ -48,7 +48,7 @@ try {
       $user['email'],
       'cliente',
       'Confirmación de Reserva - EscapeBooking',
-      "Estimado cliente.\n\nHas solicitado un cambio de contraseña de acceso a EscapeBooking.\n\nPor favor, haz clic en el siguiente enlace para restablecer tu contraseña:\n\nhttp://localhost/reset-password/{$token}\n\nEste enlace expirará en 1 hora."
+      "Estimado cliente.\n\nHas solicitado un cambio de contraseña de acceso a EscapeBooking.\n\nPor favor, haz clic en el siguiente enlace para restablecer tu contraseña:\n\nhttps://dev3.icreative.es/reset-password/{$token}\n\nEste enlace expirará en 1 hora."
     );
 
     echo json_encode([

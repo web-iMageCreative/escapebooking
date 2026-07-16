@@ -32,7 +32,7 @@ const Login: React.FC = () => {
         localStorage.setItem('user', JSON.stringify(res.data.user));
 
         if (res.data.user.role_name === 'owner') {
-          nav('/owner/dashboard', { state: { alert: { type: 'info', message: `Usuario identificado. Bienvenido: ${localStorage.getItem('auth_token')}` } } });
+          nav('/owner/dashboard', { state: { alert: { type: 'info', message: `Usuario identificado. Bienvenido.` } } });
         }
       } else {
         setAlertData({type: 'error', message: res.message});

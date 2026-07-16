@@ -7,12 +7,17 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import BeachAccessOutlinedIcon from '@mui/icons-material/BeachAccessOutlined';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import CodeIcon from '@mui/icons-material/Code';
+
 
 const Room: React.FC = () => {
   const nav = useNavigate();
   const params = useParams();
   const id: string | undefined = params.id;
   const location = useLocation();
+  const [viewCode, setViewCode] = useState<boolean>(false);
+  const [selectedRoomCodeId, setSelectedRoomCodeId] = useState<number>(0);
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
   const [alertData, setAlertData] = useState<any>(location.state?.alert || {});
   const [room, setRoom] = useState<RoomModel>({
@@ -44,6 +49,18 @@ const Room: React.FC = () => {
 
   const handleSnackbarClose = () => { setOpenSnackbar(false); }
 
+  const handleViewCodeClick = (roomId: number) => {
+    setSelectedRoomCodeId(roomId);
+    setViewCode(true);
+  }
+
+  const handleCopyCode = () => {
+    const code = `<iframe src="https://dev3.icreative.es/booking/${selectedRoomCodeId}" frameborder="0"></iframe>`;
+    navigator.clipboard.writeText(code);
+    setAlertData({ 'message': 'Código copiado al portapapeles', 'type': 'success' });
+    setOpenSnackbar(true);
+  }
+
   return (
     <div className="rooms contained">
 
@@ -59,6 +76,7 @@ const Room: React.FC = () => {
           <Button startIcon={<EditOutlinedIcon />} size="small" onClick={() => nav('/owner/rooms/edit/' + id)}>Editar</Button>
           <Button startIcon={<CalendarMonthOutlinedIcon />} size="small" onClick={() => nav('/booking/' + id)}>Reservar</Button>
           <Button startIcon={<BeachAccessOutlinedIcon />} size="small" onClick={() => nav('/owner/rooms/holidays/' + id)}>Vacaciones</Button>
+          <Button startIcon={<CodeIcon />} size="small" onClick={() => handleViewCodeClick(room.id)}>Código</Button>
         </div>
         <div className="form-group">
           <div className="col-label"><label>Duración</label></div>
@@ -109,6 +127,35 @@ const Room: React.FC = () => {
           </div>
         )}
       </div>
+
+      {viewCode && (
+        <div className='pop-overlay' onClick={() => setViewCode(false)}>
+          <div className='pop-content' onClick={(e) => e.stopPropagation()} style={{maxWidth: '400px'}}>
+            <div className="code-wrapper">
+              <h3>Instrucciones para integrar el widget de reservas en su web</h3>
+              <p>Para integrar el widget de reservas en su web, copie y pegue el siguiente código en la sección de su página donde desea que aparezca el formulario de reservas.</p>
+              <p style={{wordBreak: 'break-word', padding: '10px', backgroundColor: 'rgba(0,0,0,.08)', margin: '15px 0', fontFamily: 'monospace', fontSize: '14px'}}>
+                &lt;iframe src="https://dev3.icreative.es/booking/{selectedRoomCodeId}" frameborder="0"&gt;&lt;/iframe&gt;
+              </p>
+              <Button startIcon={<ContentCopyIcon />} size="small" onClick={handleCopyCode}>
+                Copiar Código
+              </Button>
+              <div className="form-actions">
+                <Button
+                  sx={{marginRight: '20px'}}
+                  type="button"
+                  color='primary'
+                  size='large'
+                  variant="contained"
+                  onClick={() => setViewCode(false)}
+                >
+                  Cerrar
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <Snackbar
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
