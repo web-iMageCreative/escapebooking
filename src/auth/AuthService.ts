@@ -108,4 +108,16 @@ export class AuthService {
         const user = localStorage.getItem('user');
         return user ? JSON.parse(user) : null;
     }
+
+    static async debugServer(): Promise<any> {
+        const res = await fetch(`${API_BASE_URL}/debug.php`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        const result = await res.json();
+        console.log(result);
+
+        return result;
+    }
 }

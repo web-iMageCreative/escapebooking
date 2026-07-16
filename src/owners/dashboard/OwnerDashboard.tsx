@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { AuthService } from '../../auth/AuthService';
 import { Owner } from '../../users/UserModel';
 import { useNavigate, useLocation } from 'react-router-dom';
-import  { Snackbar, Alert } from '@mui/material';
+import { Snackbar, Alert } from '@mui/material';
 import EscapeRoomList from '../escaperooms/components/EscapeRoom.List';
 
 
@@ -13,6 +13,7 @@ const OwnerDashboard: React.FC = () => {
   const nav = useNavigate();
   const location = useLocation();
   const [alertData, setAlertData] = useState<any>(location.state?.alert || {});
+  const [debugInfo, setDebugInfo] = useState<any>(null);
 
   useEffect(() => {
     if (alertData.type) {
@@ -25,10 +26,16 @@ const OwnerDashboard: React.FC = () => {
       return;
     }
 
-    const currentUser = AuthService.getCurrentUser();
-    setUser(currentUser);
+    setUser(AuthService.getCurrentUser());
+    
+    getDebugInfo();
     setLoading(false);
   }, []);
+
+  const getDebugInfo = async () => {
+    const d = await AuthService.debugServer();
+    setDebugInfo(d);
+  }
 
   const handleSnackbarClose = () => { setOpen(false); }
   
@@ -51,12 +58,10 @@ const OwnerDashboard: React.FC = () => {
           </p>
         </div>
         
-        { localStorage.getItem('auth_token') &&
+        { localStorage.getItem('auth_token') != null &&
           <EscapeRoomList />
         }
-      </div>
-
-      
+      </div>      
 
       <Snackbar
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}

@@ -125,7 +125,6 @@ const EscapeRoomList: React.FC = () => {
         <div className='list'>
         {!loading && data.length > 0 &&
             data.map(escaperoom => (
-              <>
               <Card key={escaperoom.id} elevation={5}>
                 <CardContent>
                   <Typography gutterBottom variant="subtitle2" component="div" data-id={escaperoom.id} onClick={() => nav('/owner/escape-room/' + escaperoom.id)}>
@@ -143,7 +142,6 @@ const EscapeRoomList: React.FC = () => {
                   <Button startIcon={<DeleteOutlineOutlinedIcon />} size="small" onClick={() => { setIdToDelete(escaperoom.id); setDialogOpen(true); }} color="error">Eliminar</Button>
                 </CardActions>
               </Card>
-              </>
             ))}
           </div>
       </div>

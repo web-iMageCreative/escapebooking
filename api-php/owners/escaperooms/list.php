@@ -2,7 +2,7 @@
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: http://localhost:3000'); // Específico
 header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type, Authorization');
+header('Access-Control-Allow-Headers: Content-Type, X-Auth-Token');
 header('Access-Control-Allow-Credentials: true');
 
 
@@ -17,16 +17,15 @@ require_once '../../shared/Database.php';
 $db = new Database();
 
 try {
-    if (function_exists('getallheaders')) {
-        $headers = getallheaders();
-        $token = str_replace('Bearer ', '', $headers['Authorization'] ?? '');
+    if ( isset ($_SERVER['HTTP_X_AUTH_TOKEN'])) {
+        $token = str_replace('Bearer ', '', $_SERVER['HTTP_X_AUTH_TOKEN'] ?? '');
         $token = base64_decode($token);
         $token = json_decode($token, true);
         $user_id = $token['user_id'];
     } 
     
     if (!isset($token) || !isset($user_id)) {
-        throw new Exception('Token de autorización no proporcionado: ' . json_encode($token));
+        throw new Exception('Token de autorización no proporcionado: ' . $token);
     }
 
     $userid = $_GET['userid'];

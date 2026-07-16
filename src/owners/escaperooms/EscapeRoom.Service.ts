@@ -11,13 +11,13 @@ export class EscapeRoomService {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'X-Auth-Token': `Bearer ${token}`
       },
       body: JSON.stringify(data)
     });
 
     if (!response.ok) {
-      const result = await response.json()
+      const result = await response.json();
       throw new Error(result.message);
     }
 
@@ -32,7 +32,7 @@ export class EscapeRoomService {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'X-Auth-Token': `Bearer ${token}`
       },
       body: JSON.stringify(data)
     });
@@ -54,7 +54,7 @@ export class EscapeRoomService {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'X-Auth-Token': `Bearer ${token}`
       },
       body: JSON.stringify(data)
     });
@@ -89,7 +89,7 @@ export class EscapeRoomService {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'X-Auth-Token': `Bearer ${token}`
       }
     });
     
@@ -109,7 +109,7 @@ export class EscapeRoomService {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'X-Auth-Token': `Bearer ${token}`
       }
     });
 

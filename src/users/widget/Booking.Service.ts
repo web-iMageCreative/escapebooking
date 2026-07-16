@@ -52,7 +52,7 @@ export class BookingService {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'X-Auth-Token': `Bearer ${token}`
             }
         });
         
@@ -73,7 +73,7 @@ export class BookingService {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'X-Auth-Token': `Bearer ${token}`
             },
             body: JSON.stringify(data)
         });
@@ -94,7 +94,7 @@ export class BookingService {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'X-Auth-Token': `Bearer ${token}`
             },
             body: JSON.stringify(data)
         });

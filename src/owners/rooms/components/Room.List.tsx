@@ -107,7 +107,7 @@ const RoomList: React.FC<any> = ({ id, escapeRoomName }) => {
   }
 
   const handleCopyCode = () => {
-    const code = `<iframe src="https://dev3.icreative.es/booking/${selectedRoomCodeId}" frameborder="0"></iframe>`;
+    const code = `<iframe src="http://localhost/booking/${selectedRoomCodeId}" frameborder="0"></iframe>`;
     navigator.clipboard.writeText(code);
     setAlertData({ 'message': 'Código copiado al portapapeles', 'type': 'success' });
     setOpenSnackbar(true);
@@ -177,7 +177,7 @@ const RoomList: React.FC<any> = ({ id, escapeRoomName }) => {
               <h3>Instrucciones para integrar el widget de reservas en su web</h3>
               <p>Para integrar el widget de reservas en su web, copie y pegue el siguiente código en la sección de su página donde desea que aparezca el formulario de reservas.</p>
               <p style={{wordBreak: 'break-word', margin: '15px 0', fontFamily: 'monospace', fontSize: '14px'}}>
-                &lt;iframe src="https://dev3.icreative.es/booking/{selectedRoomCodeId}" frameborder="0"&gt;&lt;/iframe&gt;
+                &lt;iframe src="http://localhost/booking/{selectedRoomCodeId}" frameborder="0"&gt;&lt;/iframe&gt;
                 <Button startIcon={<ContentCopyIcon />} size="small" onClick={handleCopyCode}>
                   Copiar Código
                 </Button>

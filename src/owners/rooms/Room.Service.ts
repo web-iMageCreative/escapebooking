@@ -11,7 +11,7 @@ export class RoomService {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'X-Auth-Token': `Bearer ${token}`
       }
     });
 
@@ -30,7 +30,7 @@ export class RoomService {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'X-Auth-Token': `Bearer ${token}`
       }
     });
 
@@ -50,7 +50,7 @@ export class RoomService {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'X-Auth-Token': `Bearer ${token}`
       },
       body: JSON.stringify(data)
     });
@@ -71,7 +71,7 @@ export class RoomService {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'X-Auth-Token': `Bearer ${token}`
       },
       body: JSON.stringify(data)
     });
@@ -93,7 +93,7 @@ export class RoomService {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'X-Auth-Token': `Bearer ${token}`
       },
       body: JSON.stringify(data)
     });
@@ -114,7 +114,7 @@ export class RoomService {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'X-Auth-Token': `Bearer ${token}`
       }
     }); 
 
@@ -134,7 +134,7 @@ export class RoomService {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'X-Auth-Token': `Bearer ${token}`
       },
       body: JSON.stringify(data)
     });
@@ -156,7 +156,7 @@ export class RoomService {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'X-Auth-Token': `Bearer ${token}`
       },
       body: JSON.stringify(data)
     });

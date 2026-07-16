@@ -2,7 +2,7 @@
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: http://localhost:3000');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
+header('Access-Control-Allow-Headers: Content-Type, X-Auth-Token, X-Requested-With');
 header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Max-Age: 86400');
 
@@ -17,20 +17,18 @@ require_once '../../../shared/Database.php';
 $db = new Database();
 
 try {
-  $data = json_decode(file_get_contents('php://input'), true);
-
-  if (function_exists('getallheaders')) {
-    $headers = getallheaders();
-    $token = str_replace('Bearer ', '', $headers['Authorization'] ?? '');
+  if ( isset ($_SERVER['HTTP_X_AUTH_TOKEN'])) {
+    $token = str_replace('Bearer ', '', $_SERVER['HTTP_X_AUTH_TOKEN'] ?? '');
     $token = base64_decode($token);
     $token = json_decode($token, true);
     $user_id = $token['user_id'];
   }
-
+    
   if (!isset($token) || !isset($user_id)) {
-    throw new Exception('Token de autorización no proporcionado: ' . json_encode($token));
+    throw new Exception('Token de autorización no proporcionado');
   }
-
+      
+  $data = json_decode(file_get_contents('php://input'), true);
   $id = $data['room_id'];
   $params = array('id' => $id);
   $query = "SELECT * FROM rooms r JOIN escaperooms e ON r.escaperoom_id = e.id WHERE r.id = :id ORDER BY r.name";

@@ -32,7 +32,7 @@ const Login: React.FC = () => {
         localStorage.setItem('user', JSON.stringify(res.data.user));
 
         if (res.data.user.role_name === 'owner') {
-          nav('/owner/dashboard', { state: { alert: { type: 'info', message: 'Usuario identificado. Bienvenido.' } } });
+          nav('/owner/dashboard', { state: { alert: { type: 'info', message: `Usuario identificado. Bienvenido: ${localStorage.getItem('auth_token')}` } } });
         }
       } else {
         setAlertData({type: 'error', message: res.message});
@@ -100,6 +100,7 @@ const Login: React.FC = () => {
                 email: e.target.value
               })}
               required
+              autoComplete="off"
             />
 
             <TextField
@@ -114,6 +115,7 @@ const Login: React.FC = () => {
                 password: e.target.value
               })}
               required
+              autoComplete="off"
             />
 
             <Button 

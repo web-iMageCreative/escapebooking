@@ -92,6 +92,7 @@ const OwnerBookings: React.FC = () => {
       if (!res.success) {
         setAlertData({ 'message': res.message, 'type': 'info' });
         setOpenSnackbar(true);
+        setBookings([]);
         return;
       } else {
         setBookings(res.data ?? []);
@@ -134,7 +135,6 @@ const OwnerBookings: React.FC = () => {
 
       if (res.success) {
         setIdToDelete(0);
-        // getEscaperooms();
         getBookings();
         setAlertData({ 'message': res.message, 'type': 'success' });
         setOpenSnackbar(true);
@@ -200,7 +200,7 @@ const OwnerBookings: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {bookings.length === 0
+            {bookings.length == 0
               ? (
                 <TableRow>
                   <TableCell colSpan={5}>No hay reservas.</TableCell>
